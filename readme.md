@@ -2,9 +2,9 @@
 
 ## Roles
 ### Scrum Master
-Zain Afzal
+* Zain Afzal
 
 ### Developers
-Brendan Coughlan
-Ellen Oates
-Hayden Le
+* Brendan Coughlan
+* Ellen Oates
+* Hayden Le
