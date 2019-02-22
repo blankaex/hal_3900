@@ -5,6 +5,6 @@
 * Zain Afzal
 
 ### Developers
-* Brendan Coughlan
 * Ellen Oates
 * Hayden Le
+* Yi Wang
