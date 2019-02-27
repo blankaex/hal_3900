@@ -10,7 +10,7 @@
 * Yi Wang
 
 ## Git Commands
-**local**: version on your computer
+**local**: version on your computer  
 **remote**: version on github
 
 Get a local copy of the repository:  
