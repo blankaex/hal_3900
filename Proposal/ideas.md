@@ -97,9 +97,9 @@ tutors don't have enough time ot answer all these admin questions,.
 # Epics
 
 - Have a bot that can help students learn and interact with a course 
-    - Bot can answer administrative questions with course
-    - Bot can answer questions about course content
-    - Bot can meaningfully quiz and interact with the student 
+    - Bot can answer administrative questions with course [YI]
+    - Bot can answer questions about course content [HAYDEN]
+    - Bot can meaningfully quiz and interact with the student [YI]
         - personalised
-    - Bot can inform course admin/staff about cohort 
-    - Bot can learn for more then one course without needing massive config
+    - Bot can inform course admin/staff about cohort [ZAIN]
+    - Bot can learn for more then one course without needing massive config (self learning) [ELLEN]
