@@ -66,6 +66,40 @@ adaptive and interactive.
 
 lots of others described here https://emerj.com/ai-sector-overviews/artificial-intelligence-tutor-current-possibilities-smart-virtual-learning/?fbclid=IwAR3kvts4N0sTmZav3kcJX-jNt2kQ7gTq6c0-D5eGJeA-0xmyKfEnN6fj2uM
 
+# Milestone 
 
+- basic bot you can talk to, has a concept of context of user (remembers name)
+    - can just be cli
+    - calculates basic math expressions
+    - reminders of deadlines
+    - spoiler option
+    - code rendering (maybe run code live?)
+- Be able to ingest data from basic sources (course pages)
+- Be able to ingest less formatted data (stack overflow, google, user input)
+- User interface built
+- Continious training 
+- admin setting/config page
+    - Generate reports / stats on bot performance and student cohort strengths/weaknesses
+- Interactive quizzing
+- student admin questions
+    - Assignment parsing / give interface to tell what student has submitted etc. 
+    - Can suggest a forum post and draft the post for a student
+        - webcms intergration?
+        - piazza?
+        - etc.
+- image searching / diagram creation
+- suggests further reading / links 
 
+# Aim 
 
+tutors don't have enough time ot answer all these admin questions,. 
+
+# Epics
+
+- Have a bot that can help students learn and interact with a course 
+    - Bot can answer administrative questions with course
+    - Bot can answer questions about course content
+    - Bot can meaningfully quiz and interact with the student 
+        - personalised
+    - Bot can inform course admin/staff about cohort 
+    - Bot can learn for more then one course without needing massive config
