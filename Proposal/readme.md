@@ -12,3 +12,9 @@
     * The final selection of the epics (e.g., based on sizing) for the final deliverables, and their justifications
 
 Epics (and later user stories) are expected to be captured using GitHub Project Board or Trello. 
+
+**LaTeX Syntax:**
+* `\` is a special character
+* `%` for comments
+* syntax is typically `\something{text}`
+* tbh just write words it's ez
