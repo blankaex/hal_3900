@@ -18,18 +18,18 @@ Have the bot listen in on conversations where a tutor is present to learn off th
 
 Will the bot post answers on the course forum, or answer questions in a chat dialogue? Or both?
 
-Can be an assistant to a tutor rather then a replacement
-    - Will remind people of deadlines
-    - Do basic math evalualations
-    - remember links to assignments
-        - hey bot when's the next assignment due?
-        - 5 weeks! it's a big assignment though so you want to start early
-    - stack overflow integration / can parse language docs?
-        - bot max size of a python integeer
-        - python doesn't have a max size, it will dynamically allocate memory
-    - how does X work
-        - Here's a userful diagram
-    - suggest further reading/questions to practice.
+Can be an assistant to a tutor rather then a replacement  
+    - Will remind people of deadlines  
+    - Do basic math evalualations  
+    - remember links to assignments  
+        - hey bot when's the next assignment due?  
+        - 5 weeks! it's a big assignment though so you want to start early  
+    - stack overflow integration / can parse language docs?  
+        - bot max size of a python integeer  
+        - python doesn't have a max size, it will dynamically allocate memory  
+    - how does X work  
+        - Here's a userful diagram  
+    - suggest further reading/questions to practice.  
 
 
 A good feature is being able to throw an assignment at it and it can handle questions via the spec (most questions tutors get are of this form)
