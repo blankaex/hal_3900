@@ -35,6 +35,11 @@ x/03/2019
 
 %-------------------------------------------------------------------------------------------------%
 
+\section{Glossary}
+\begin{align*}
+  \text{Missed Question}    \quad   &\text{A question which the chat bot was not able to answer}
+\end{align*}
+
 \section{Background}
 \subsection{The Problem}
 * could we survey lecturers and tutors to get an idea of the quantity of emails they get / 
@@ -89,6 +94,30 @@ delivery of the course.
 
 \subsection{Informs course admin/staff about cohort}
 
+This feature will allow the chat bot to maintain information about the questions users are asking and the performance of users in the excersizes the bot sets forward. This will be accessable from the admin web interface available to course staff.
+
+The main metrics that should be captured for a requested time frame are
+\begin{itemize}
+  \item A list of the most common questions asked and their relative frequency
+  \item A list of missed questions
+  \item A list of the questions or triggers which the bot had a low satisifaction rate for
+  \item A breakdown of every topic covered and it's retention rate amongst users (derived from interactive quizzing)
+  \item General statistics on the bot's usage rate, uptime and the average computation time taken for a response
+\end{itemize}
+
+The web interface will provide the ability to 
+\begin{itemize}
+  \item View interactive sortable tablular data for the followed metrics
+  \item View certain data such as usage rate and computation time as a graph against time
+  \item Export the metrics as csv or json
+  \item Register admin staff to be notified by email when certain conditions are met, i.e missed question rate rises past 50%
+\end{itemize}
+
+Out of scope will be any more advanced interaction with the data other then simple tabulation and graphing against time. More forms of data visualisation should be derferred to specialist tools. 
+
+In addition this is simply to inform users of the bots performance and will not provide features to adjust the paramaters of the bot, this will be defered to the second epic involving the bot's interaction with course content. 
+
+This will be a somewhat difficult set of features to implement, it's estimated difficulty score is 7/10 with a time estimate of 5 time units.
 
 \subsection{Learns for more then one course without needing massive config}
 The chat bot is able to adapt to other courses provided at UNSW and start providing student support quickly 
