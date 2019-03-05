@@ -66,21 +66,40 @@ places with their learning and often need more individualised support to learn e
 material to extend themselves. This is difficult to provide in a large class properly.
 
 \subsection{The Existing Solution}
-Currently at UNSW, learning support is provided to students through email, forums and help sessions. However many education
-platforms that are predominantly online, are using a format that includes chat bot as a teaching assistant.
-blah lots more .....
+
+Currently at UNSW, learning support is provided to students through email, forums and help sessions. This is very man hour heavy, requiring countless tutors to be on hand to answer questions which of themselves are quite repetitive. In addition as these courses become larger with increasing enrollment sizes it becomes more difficult to be able to give students individual attention and personalised education. 
+
+Another side effect of growing cohort sizes is the fact that many tutors and lecturers are forced to spend most of their time answering admin related questions and helping students to clarify their understanding, time that could be spent bettering the course and writing course material. Hiring more staff and offloading many questions to forums has been the current approach used by courses to handle this increasing load but forums are full of repeat questions and require many tutors to man them. 
+
+This growth is becoming unsustainable and with the rise of online education platforms many students are eager to interact with course material in a more interactive meaningful way which works with their scedule. Waiting for a tutor to respond to them often creates a distance between the inital question and the answer which limits the effectivenes of a response. That is if the tutor finds time to respond at all. 
+
+In some areas of education chat bots have been deployed which interact with students in meaningful ways out of class hours (create a reference to https://botsify.com/education-chatbot) and some have even been created to answer higher education questions (reference https://www.canberra.edu.au/about-uc/media/newsroom/2018/february/students-make-new-friend-in-lucy-the-chatbot). However these tools are not able to me easily mapped to a unsw university course, it's administration, assessments and can not utilise archives of previous iterations of the course to learn common questions and issues.
 
 \subsection{Our Solution}
-Our chat bot! * more to go ;)
-Our goal is to create a chat bot companion for students to enhance their learning experience. The chat bot will provide students with learning support 
-by responding to their questions about course administration and the content they are learning, in real time, and monitoring their understanding of the
-course content with follow up questions. The chat bot will assist students with revision, and will provide organizational support by keeping students 
+
+The goal is to create a chat bot companion for students to enhance their learning experience. The chat bot will provide students with learning support by responding to their questions about course administration and the content they are learning, in real time, and monitoring their understanding of the course content with follow up questions.
+
+The chat bot will assist students with revision, and will provide organizational support by keeping students 
 informed of their grades and upcoming due dates.
 
-Our chat bot will enhance course delivery by keeping staff informed of their students' learning needs and frequently asked questions. It will reduce the 
-load on lecturers, tutors and course administration staff by answering many of the questions that students have, allowing them to focus on the overall
-delivery of the course. 
+The chat bot will enhance course delivery by keeping staff informed of their students' learning needs and frequently asked questions. It will reduce the load on lecturers, tutors and course administration staff by answering many of the questions that students have, allowing them to focus on the overall delivery of the course. 
 
+\subsection{Technical Details}
+
+For this bot we will be building servals layers to form our technical stack.
+
+\begin{itemize}
+  \item A frontend will be build in Vue.js interaction with a Node.js backend via Websockets to provide a frontend to interact with the chatbot
+  \item Dialogflow will be used to parse user input and provide the natural language processing aspect of this project
+  \item Actions will be passed to the knowledge base of the bot, which built ontop of tensor flow which will utilise machine learning to classify data and form connections between a input query and the relevant data points.
+  \item Data will be stored in s3 buckets
+  \item Docker will be utilised to unify the several layers of this application into a holistic program. 
+\end{itemize}
+
+(( link in reference to architecture_diagram.png ))
+
+The scope of this program is to have a bot which can answer most basic administration questions such as when assignments are due and has at least a 50\% success rate with responding to direct questions with a simple data point response i.e 
+"how do you print with no new line in python" should respond with "you can use sys.stdout.write". In addition the bot should have the ability to quiz students from a lecturer defined set of questions, a stretch goal would be for the bot to autogenerate these.
 
 \section{Epics}
 \subsection{Answers administrative questions about course}
