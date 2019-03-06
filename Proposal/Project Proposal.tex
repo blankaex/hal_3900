@@ -35,25 +35,14 @@ x/03/2019
 
 %-------------------------------------------------------------------------------------------------%
 
-\section{Glossary}
-\begin{align*}
-  \text{Missed Question}    \quad   &\text{A question which the chat bot was not able to answer}
-\end{align*}
-
 \section{Background}
+
 \subsection{The Problem}
-* could we survey lecturers and tutors to get an idea of the quantity of emails they get / 
-how long they spend answering administrative questions per week? would this help our proposal?
+* could we survey lecturers and tutors to get an idea of the quantity of emails they get / how long they spend answering administrative questions per week? would this help our proposal?
 
-Online learning is changing the way students access and engage with higher education. Courses with 
-online delivery increase the flexibility and accessibility of courses by providing students
-with a platform to learn course content in their own time, at their own pace. Increasingly courses which are 
-taught face to face include some online content delivery, including course materials, quizzes, online lecture recordings,
-and forums to ask questions and discuss the course content outside of class.   
+Online learning is changing the way students access and engage with higher education. Courses with online delivery increase the flexibility and accessibility of courses by providing students with a platform to learn course content in their own time, at their own pace. Increasingly courses which are taught face to face include some online content delivery, including course materials, quizzes, online lecture recordings, and forums to ask questions and discuss the course content outside of class.   
 
-There is a delay between when students ask a question and when they get a response, and this can vary from hours to days.
-Answering individual student questions via email or on the forums requires a significant amount of time for tutors, course administrators and lecturers. 
-Often the same questions will be asked many times by different students, making it inefficient to have course staff respond to each one individually.
+There is a delay between when students ask a question and when they get a response, and this can vary from hours to days. Answering individual student questions via email or on the forums requires a significant amount of time for tutors, course administrators and lecturers. Often the same questions will be asked many times by different students, making it inefficient to have course staff respond to each one individually.
 
 ........ 
 
@@ -65,6 +54,7 @@ Lecturers and tutors want to know what their students need the most help with, t
 places with their learning and often need more individualised support to learn either the basic content, or suggestions of more advanced 
 material to extend themselves. This is difficult to provide in a large class properly.
 
+
 \subsection{The Existing Solution}
 
 Currently at UNSW, learning support is provided to students through email, forums and help sessions. This is very man hour heavy, requiring countless tutors to be on hand to answer questions which of themselves are quite repetitive. In addition as these courses become larger with increasing enrollment sizes it becomes more difficult to be able to give students individual attention and personalised education. 
@@ -75,14 +65,15 @@ This growth is becoming unsustainable and with the rise of online education plat
 
 In some areas of education chat bots have been deployed which interact with students in meaningful ways out of class hours (create a reference to https://botsify.com/education-chatbot) and some have even been created to answer higher education questions (reference https://www.canberra.edu.au/about-uc/media/newsroom/2018/february/students-make-new-friend-in-lucy-the-chatbot). However these tools are not able to me easily mapped to a unsw university course, it's administration, assessments and can not utilise archives of previous iterations of the course to learn common questions and issues.
 
+
 \subsection{Our Solution}
 
 The goal is to create a chat bot companion for students to enhance their learning experience. The chat bot will provide students with learning support by responding to their questions about course administration and the content they are learning, in real time, and monitoring their understanding of the course content with follow up questions.
 
-The chat bot will assist students with revision, and will provide organizational support by keeping students 
-informed of their grades and upcoming due dates.
+The chat bot will assist students with revision, and will provide organizational support by keeping students informed of their grades and upcoming due dates.
 
 The chat bot will enhance course delivery by keeping staff informed of their students' learning needs and frequently asked questions. It will reduce the load on lecturers, tutors and course administration staff by answering many of the questions that students have, allowing them to focus on the overall delivery of the course. 
+
 
 \subsection{Technical Details}
 
@@ -98,11 +89,13 @@ For this bot we will be building servals layers to form our technical stack.
 
 \includegraphics[width=\textwidth]{architecture_diagram.png}
 
-The scope of this program is to have a bot which can answer most basic administration questions such as when assignments are due and has at least a 50\% success rate with responding to direct questions with a simple data point response i.e 
-"how do you print with no new line in python" should respond with "you can use sys.stdout.write". In addition the bot should have the ability to quiz students from a lecturer defined set of questions, a stretch goal would be for the bot to autogenerate these.
+The scope of this program is to have a bot which can answer most basic administration questions such as when assignments are due and has at least a 50\% success rate with responding to direct questions with a simple data point response i.e "how do you print with no new line in python" should respond with "you can use sys.stdout.write". In addition the bot should have the ability to quiz students from a lecturer defined set of questions, a stretch goal would be for the bot to autogenerate these.
+
 
 \section{Epics}
+
 \subsection{Answers administrative questions about course}
+
 The chatbot will play the role of “Course administrator” and help students to efficiently manage their course. It will answer questions about the following information:
 \begin{itemize}
   \item Assignments management: includes the requirements of assignments, relevant dates (release date, deadlines), weighting, and materials provided by the lecturer.
@@ -114,6 +107,8 @@ The chatbot will play the role of “Course administrator” and help students t
 This epic aims to help students to access the course administrative information, which is mostly gained from the course outline. It will be limited to answer questions about existing information which is already provided by the course homepage. Questions about further information such as detailed course context will not be included in this epic.
 
 This epic has an estimated difficulty score of 4/10, due to the workload is not large, and a time estimate of 5 units.
+
+
 \subsection{Answers questions about course content}
 This is the next major category that student questions will fall into. Although questions in this category may be less common for course administrators compared to queries such as "when is assignment 2 due?", they make up a significant proportion of questions directed to tutors. Implementing this feature in this chat bot will remedy a number of problems that this poses.
 
@@ -130,6 +125,7 @@ The bot's knowledge base can be built from a number of sources. Apart from manua
 Information not directly related to the course content should be considered out of scope. However as there is no clear divide between what constitutes course content and what doesn't, there will be some degree of leniency as to what is included.
 
 As one of the primary features, it has an estimated difficulty score of 8/10 with a time estimate of 5 time units. That said, the actual implimentation is not unlike that of epic 1, so there is potential for this epic to be developed alongside epic 1 as the functionality may be shared.
+
 
 \subsection{Meaningfully quizzes and interacts with students}
 The chatbot will be continuous trained and personalized to fit student’s needs, as well as provide meaningful quizzes to students. Therefore, the chatbot will provide answers with increasing accuracy, meanwhile, students can conveniently examine their selves, and compensate their weakness
@@ -172,13 +168,16 @@ In addition this is simply to inform users of the bots performance and will not 
 
 This will be a somewhat difficult set of features to implement, it's estimated difficulty score is 7/10 with a time estimate of 5 time units.
 
+
 \subsection{Learns for more then one course without needing massive config} % this title needs work tbh
+
 The chat bot is able to adapt to other courses provided at UNSW and start providing student support quickly 
 Course admin gets a really easy setup wizard?? think about.... 
 (make it plug and play basically)   will improve the wording on this
 
 
 \section{Epic Selection}
+
 Of the proposed epics, the following epics will be delivered in the final release:
 \begin{itemize}
   \item Answers administrative questions about course
@@ -198,7 +197,15 @@ The remaining epics are:
 
 These epics go hand in hand to an extent, and while the features they provide are definitely useful, they are not essential to the basic functionality and upkeep of the chat bot. As such, they will be considered stretch goals which will be implemented if the scope of the project allows.
 
+
 \section{Summary}
+
 This project aims to deliver a chat bot that students can use as an assistant while taking certain courses. It will be implemented as a web application to provide an easy-to-use interface and developer-friendly code base to allow for extensibility. 
+
+\section{Glossary}
+
+\begin{align*}
+  \text{Missed Question}    \quad   &\text{A question which the chat bot was not able to answer}
+\end{align*}
 
 \end{document}
