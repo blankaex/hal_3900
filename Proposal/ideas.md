@@ -102,4 +102,5 @@ tutors don't have enough time ot answer all these admin questions,.
     - Bot can meaningfully quiz and interact with the student 
         - personalised
     - Bot can inform course admin/staff about cohort 
-    - Bot can learn for more then one course without needing massive config
+
+    - Bot learns to service new courses with a minimal setup process
