@@ -35,6 +35,9 @@ x/03/2019
 
 %-------------------------------------------------------------------------------------------------%
 
+\tableofcontents 
+\newpage
+ 
 \section{Background}
 
 \subsection{The Problem}
@@ -63,7 +66,7 @@ Another side effect of growing cohort sizes is the fact that many tutors and lec
 
 This growth is becoming unsustainable and with the rise of online education platforms many students are eager to interact with course material in a more interactive meaningful way which works with their scedule. Waiting for a tutor to respond to them often creates a distance between the inital question and the answer which limits the effectivenes of a response. That is if the tutor finds time to respond at all. 
 
-In some areas of education chat bots have been deployed which interact with students in meaningful ways out of class hours (create a reference to https://botsify.com/education-chatbot) and some have even been created to answer higher education questions (reference https://www.canberra.edu.au/about-uc/media/newsroom/2018/february/students-make-new-friend-in-lucy-the-chatbot). However these tools are not able to me easily mapped to a unsw university course, it's administration, assessments and can not utilise archives of previous iterations of the course to learn common questions and issues.
+In some areas of education chat bots have been deployed which interact with students in meaningful ways out of class hours\footnote{https://botsify.com/education-chatbot} and some have even been created to answer higher education questions\footnote{https://www.canberra.edu.au/about-uc/media/newsroom/2018/february/students-make-new-friend-in-lucy-the-chatbot}. However these tools are not able to me easily mapped to a unsw university course, it's administration, assessments and can not utilise archives of previous iterations of the course to learn common questions and issues.
 
 
 \subsection{Our Solution}
@@ -98,10 +101,10 @@ The scope of this program is to have a bot which can answer most basic administr
 
 The chatbot will play the role of “Course administrator” and help students to efficiently manage their course. It will answer questions about the following information:
 \begin{itemize}
-  \item Assignments management: includes the requirements of assignments, relevant dates (release date, deadlines), weighting, and materials provided by the lecturer.
-  \item General information: includes locations of the lectures, timetables, information of lecturers (e-mails, details etc.), notices, course schedule, teaching strategies, assumed knowledge, student learning outcomes and homepage address.
-  \item Assessment details: includes items with their weightings, due dates, and calculation method of the final score.
-  \item Textbooks: includes the list of textbooks as well as pages addresses of them if it is.
+  \item \textbf{Assignments management:} includes the requirements of assignments, relevant dates (release date, deadlines), weighting, and materials provided by the lecturer.
+  \item \textbf{General information:} includes locations of the lectures, timetables, information of lecturers (e-mails, details etc.), notices, course schedule, teaching strategies, assumed knowledge, student learning outcomes and homepage address.
+  \item \textbf{Assessment details:} includes items with their weightings, due dates, and calculation method of the final score.
+  \item \textbf{Textbooks:} includes the list of textbooks as well as pages addresses of them if it is.
 \end{itemize}
 
 This epic aims to help students to access the course administrative information, which is mostly gained from the course outline. It will be limited to answer questions about existing information which is already provided by the course homepage. Questions about further information such as detailed course context will not be included in this epic.
@@ -124,6 +127,7 @@ The bot's knowledge base can be built from a number of sources. Apart from manua
 
 Information not directly related to the course content should be considered out of scope. However as there is no clear divide between what constitutes course content and what doesn't, there will be some degree of leniency as to what is included.
 
+% this should be coordinated with above
 As one of the primary features, it has an estimated difficulty score of 8/10 with a time estimate of 5 time units. That said, the actual implimentation is not unlike that of epic 1, so there is potential for this epic to be developed alongside epic 1 as the functionality may be shared.
 
 
@@ -202,10 +206,10 @@ These epics go hand in hand to an extent, and while the features they provide ar
 
 This project aims to deliver a chat bot that students can use as an assistant while taking certain courses. It will be implemented as a web application to provide an easy-to-use interface and developer-friendly code base to allow for extensibility. 
 
-\section{Glossary}
+\section{Glossary} % necessary?
 
 \begin{align*}
-  \text{Missed Question}    \quad   &\text{A question which the chat bot was not able to answer}
+  \textbf{Missed Question}    \quad   &\text{A question which the chat bot was not able to answer}
 \end{align*}
 
 \end{document}
