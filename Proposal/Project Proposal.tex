@@ -102,12 +102,31 @@ The scope of this program is to have a bot which can answer most basic administr
 
 \section{Epics}
 \subsection{Answers administrative questions about course}
+The chatbot will play the role of “Course administrator” and help students to efficiently manage their course. It will answer questions about the following information:
+	Assignments management: includes the requirements of assignments, relevant dates (release date, deadlines), weighting, and materials provided by the lecturer.
+	General information: includes locations of the lectures, timetables, information of lecturers (e-mails, details etc.), notices, course schedule, teaching strategies, assumed knowledge, student learning outcomes and homepage address.
+	Assessment details: includes items with their weightings, due dates, and calculation method of the final score.
+	Textbooks: includes the list of textbooks as well as pages addresses of them if it is.
+
+This epic aims to help students to access the course administrative information, which is mostly gained from the course outline. It will be limited to answer questions about existing information which is already provided by the course homepage. Questions about further information such as detailed course context will not be included in this epic.
+
+This epic has an estimated difficulty score of 4/10, due to the workload is not large, and a time estimate of 5 units.
+
 
 
 \subsection{Answers questions about course content}
 
 
 \subsection{Meaningfully quizzes and interacts with students}
+The chatbot will be continuous trained and personalized to fit student’s needs, as well as provide meaningful quizzes to students. Therefore, the chatbot will provide answers with increasing accuracy, meanwhile, students can conveniently examine their selves, and compensate their weakness
+
+The epic includes 2 important fields:
+	Statistics: the chatbot will gather questions which the student has asked, to analyze the learning status of the student in fields included by the course. According to the analysis, the weakness of the student will be figured out to help formed quizzes content. Those quizzes will be provided when they were asked. On the other hand, a statistics conclusion will also be provided to students, which will be helpful for their final review.
+	Personalization: the chatbot will interact with the student and trained itself according to the feedback. This process will help students to personalize their chatbots, to make the chatbots be more familiar with the users’ language habits. Therefore, chatbots can provide progressively more accurate answers. 
+
+The scope of the epic is limited to face to only one student, and all happened conversations will be treated as information from one person. Moreover, the quizzes questions will from a preset database, further questions will not be included.
+
+This epic has an estimated difficulty score of 7/10, and a time estimate of 8 units.
 
 
 \subsection{Informs course admin/staff about cohort}
