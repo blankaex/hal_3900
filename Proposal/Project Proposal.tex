@@ -3,8 +3,8 @@
 \usepackage{lmodern}
 \usepackage{amsmath}
 \usepackage{parskip}
-% \usepackage{graphicx}
-% \graphicspath{ {./} }
+\usepackage{graphicx}
+\graphicspath{ {./} }
 \title{Hal\_3900 Proposal}
 \begin{document}
 \begin{LARGE}
@@ -96,7 +96,7 @@ For this bot we will be building servals layers to form our technical stack.
   \item Docker will be utilised to unify the several layers of this application into a holistic program. 
 \end{itemize}
 
-(( link in reference to architecture_diagram.png ))
+\includegraphics[width=\textwidth]{architecture_diagram.png}
 
 The scope of this program is to have a bot which can answer most basic administration questions such as when assignments are due and has at least a 50\% success rate with responding to direct questions with a simple data point response i.e 
 "how do you print with no new line in python" should respond with "you can use sys.stdout.write". In addition the bot should have the ability to quiz students from a lecturer defined set of questions, a stretch goal would be for the bot to autogenerate these.
