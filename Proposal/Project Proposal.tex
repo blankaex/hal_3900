@@ -44,9 +44,9 @@ Hal\_3900 Proposal
 \section{Background}
 
 \subsection{The Problem}
+Online learning is changing the way students access and engage with higher education. Courses with online delivery increase the flexibility and accessibility of education by providing students with a platform to learn course content in their own time, at their own pace. Increasingly courses which are taught face to face include some online content delivery, including course materials, quizzes, online lecture recordings, and forums to ask questions and discuss the course content outside of class. Because online learning is so prevalent in higher education, it is crucial for universities to ensure student satisfaction with their learning experience remains strong. 
 
-Online learning is changing the way students access and engage with higher education. Courses with online delivery increase the flexibility and accessibility of courses by providing students with a platform to learn course content in their own time, at their own pace. Increasingly courses which are taught face to face include some online content delivery, including course materials, quizzes, online lecture recordings, and forums to ask questions and discuss the course content outside of class. Because online learning is so prevalent in higher education, it is crucial for universities to ensure student satisfaction with their learning experience remains strong. 
-
+%redundant maybe, also described in existing solution
 There is a delay between when students ask a question and when they get a response, and this can vary from hours to days. Answering individual student questions via email or on the forums requires a significant amount of time for tutors, course administrators and lecturers. Often the same questions will be asked many times by different students, making it inefficient to have course staff respond to each one individually.
 
 Some key factors that contribute to student satisfaction in the online learning space are:
@@ -64,13 +64,14 @@ Additionally to student satisfaction, lecturers and tutors are concerned with th
 
 \subsection{The Existing Solution}
 
+%would "many" be ok instead of "countless"
 Currently at UNSW, learning support is provided to students through email, forums and help sessions. This is very man hour heavy, requiring countless tutors to be on hand to answer questions which of themselves are quite repetitive. In addition as these courses become larger with increasing enrollment sizes it becomes more difficult to be able to give students individual attention and personalised education. 
 
 Another side effect of growing cohort sizes is the fact that many tutors and lecturers are forced to spend most of their time answering admin related questions and helping students to clarify their understanding, time that could be spent bettering the course and writing course material. Hiring more staff and offloading many questions to forums has been the current approach used by courses to handle this increasing load but forums are full of repeat questions and require many tutors to man them. 
 
 This growth is becoming unsustainable and with the rise of online education platforms many students are eager to interact with course material in a more interactive meaningful way which works with their schedule. Waiting for a tutor to respond to them often creates a distance between the initial question and the answer which limits the effectiveness of a response. That is if the tutor finds time to respond at all. 
 
-In some areas of education chat bots have been deployed which interact with students in meaningful ways out of class hours\footnote{\url{https://botsify.com/education-chatbot}} and some have even been created to answer higher education questions\footnote{\url{https://www.canberra.edu.au/about-uc/media/newsroom/2018/february/students-make-new-friend-in-lucy-the-chatbot}}. However these tools are not able to me easily mapped to a UNSW university course, it's administration, assessments and can not utilise archives of previous iterations of the course to learn common questions and issues.
+In some areas of education chat bots have been deployed which interact with students in meaningful ways out of class hours\footnote{\url{https://botsify.com/education-chatbot}} and some have even been created to answer higher education questions\footnote{\url{https://www.canberra.edu.au/about-uc/media/newsroom/2018/february/students-make-new-friend-in-lucy-the-chatbot}}. However these tools are not able to be easily mapped to a UNSW university course, it's administration, assessments and can not utilise archives of previous iterations of the course to learn common questions and issues.
 
 
 \subsection{Our Solution}
@@ -79,7 +80,7 @@ The goal is to create a chat bot companion for students to enhance their learnin
 
 The chat bot will assist students with revision of course content, and will help to individualise student learning by providing resources at the level required by the individual student.
 
-The chat bot will provide organizational support by keeping students informed of their grades and upcoming due dates. This is expected to increase learning outcomes by boosting students' motivation to study and their supplementing their organisational skills.
+The chat bot will provide organizational support by keeping students informed of their grades and upcoming due dates. This is expected to increase learning outcomes by boosting students' motivation to study and supplementing their organisational skills.
 
 The chat bot will enhance course delivery by keeping staff informed of their students' learning needs and frequently asked questions. It will reduce the load on lecturers, tutors and course administration staff by answering many of the questions that students have, allowing them to focus on the overall delivery of the course. 
 
@@ -89,16 +90,18 @@ The chat bot will enhance course delivery by keeping staff informed of their stu
 For this bot we will be building several layers to form our technical stack.
 
 \begin{itemize}
-  \item A frontend will be built in \texttt{Vue.js} interaction with a \texttt{Node.js} backend via \texttt{Websockets} to provide a frontend to interact with the chatbot.
+  \item A frontend will be built in \texttt{Vue.js} interacting with a \texttt{Node.js} backend via \texttt{Websockets} to provide a frontend to interact with the chatbot.
   \item \texttt{Dialogflow} will be used to parse user input and provide the natural language processing aspect of this project.
-  \item Actions will be passed to the knowledge base of the bot, which built on top of \texttt{TensorFlow} which will utilise machine learning to classify data and form connections between a input query and the relevant data points.
+  \item Actions will be passed to the knowledge base of the bot, which will be built on top of \texttt{TensorFlow} and will use machine learning to classify data and form connections between an input query and the relevant data points.
   \item Data will be stored on \texttt{Amazon} S3 buckets.
-  \item \texttt{Docker} will be utilised to unify the several layers of this application into a holistic program. 
+  \item \texttt{Docker} will be used to unify the several layers of this application into a holistic program. %not sure if holistic the right word here. 
 \end{itemize}
 
 % need to modify tensorflow spelling
+% the diagram is very beautiful :D
 \includegraphics[width=\textwidth]{architecture_diagram.png}
 
+%whai have the curly bois gone weird in the pdf? " " 
 The scope of this program is to have a bot which can answer most basic administration questions such as when assignments are due and has at least a 50\% success rate with responding to direct questions with a simple data point response i.e "how do you print with no new line in python" should respond with "you can use \texttt{sys.stdout.write()}". In addition the bot should have the ability to quiz students from a lecturer defined set of questions, a stretch goal would be for the bot to automatically generate these.
 
 
