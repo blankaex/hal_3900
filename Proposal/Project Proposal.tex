@@ -94,7 +94,7 @@ For this bot we will be building several layers to form our technical stack.
   \item \texttt{Dialogflow} will be used to parse user input and provide the natural language processing aspect of this project.
   \item Actions will be passed to the knowledge base of the bot, which will be built on top of \texttt{TensorFlow} and will use machine learning to classify data and form connections between an input query and the relevant data points.
   \item Data will be stored on \texttt{Amazon} S3 buckets.
-  \item \texttt{Docker} will be used to unify the several layers of this application into a holistic program. %not sure if holistic the right word here. 
+  \item \texttt{Docker} will be used to unify the several layers of this application into a holistic program. %not sure if holistic the right word here. maybe coherent?
 \end{itemize}
 
 % need to modify tensorflow spelling
@@ -114,12 +114,12 @@ The chatbot will play the role of “Course administrator” and help students t
   \item \textbf{Assignments management:} includes the requirements of assignments, relevant dates (release date, deadlines), weighting, and materials provided by the lecturer.
   \item \textbf{General information:} includes locations of the lectures, timetables, information of lecturers (e-mails, details etc.), notices, course schedule, teaching strategies, assumed knowledge, student learning outcomes and homepage address.
   \item \textbf{Assessment details:} includes items with their weightings, due dates, and calculation method of the final score.
-  \item \textbf{Textbooks:} includes the list of textbooks as well as pages addresses of them if it is.
+  \item \textbf{Textbooks:} includes the list of textbooks as well as webpage links to where they can be purchased.
 \end{itemize}
 
 This epic aims to help students to access the course administrative information, which is mostly gained from the course outline. It will be limited to answer questions about existing information which is already provided by the course homepage. Questions about further information such as detailed course context will not be included in this epic.
 
-This epic has an estimated difficulty score of 4/10, due to the workload is not large, and a time estimate of 5 units.
+This epic has an estimated difficulty score of 4/10, because the workload is not large, and a time estimate of 5 units.
 
 
 \subsection{Answers questions about course content}
@@ -130,7 +130,7 @@ This is the next major category that student questions will fall into. Although 
   \item Reduces workload of tutors, who are typically only paid for one hour of associated work.
   \item Can answer questions beyond the scope of tutors' knowledge.
   \item Discourages plagiarism by providing an officially endorsed information bank.
-  \item Offers an outlet for shy students to ask individual questions.
+  \item Offers an outlet for shy students to ask individual questions. %for students to ask individual questions in private
 \end{itemize}
 
 The bot's knowledge base can be built from a number of sources. Apart from manual input, this can also include information scraped from appropriate sources such as course syllabus, lecture slides and past assignment submissions.
@@ -142,15 +142,16 @@ As one of the primary features, it has an estimated difficulty score of 8/10 wit
 
 
 \subsection{Meaningfully quizzes and interacts with students}
-The chatbot will be continuous trained and personalized to fit student’s needs, as well as provide meaningful quizzes to students. Therefore, the chatbot will provide answers with increasing accuracy, meanwhile, students can conveniently examine their selves, and compensate their weakness
+The chatbot will be continuously trained and personalized to fit students' needs, as well as provide meaningful quizzes to students. Students can conveniently examine themselves and compensate their weakness.%not quite sure how to word this
+The chatbot's answers will increase in accuracy as it learns.
 
 The epic includes 2 important fields:
 \begin{itemize}
-  \item \textbf{Statistics:} the chatbot will gather questions which the student has asked, to analyze the learning status of the student in fields included by the course. According to the analysis, the weakness of the student will be figured out to help formed quizzes content. Those quizzes will be provided when they were asked. On the other hand, a statistics conclusion will also be provided to students, which will be helpful for their final review.
-  \item \textbf{Personalization:} the chatbot will interact with the student and trained itself according to the feedback. This process will help students to personalize their chatbots, to make the chatbots be more familiar with the users’ language habits. Therefore, chatbots can provide progressively more accurate answers. 
+  \item \textbf{Statistics:} the chatbot will gather questions which the student has asked, to analyze the learning status of the student in topics included in the course. According to the analysis, the student's areas of weakness will be figured out to help form the content of future quizzes. These quizzes will be provided when they are asked for by the student. Additionally, a statistics conclusion will also be provided to students, which will be helpful for their final review.
+  \item \textbf{Personalization:} the chatbot will interact with the student and train itself according to the feedback it receives. This process will help students to personalize their chatbots, to make the chatbots be more familiar with the users’ language habits. Therefore, chatbots can provide progressively more accurate answers. 
 \end{itemize}
 
-The scope of the epic is limited to face to only one student, and all happened conversations will be treated as information from one person. Moreover, the quizzes questions will from a preset database, further questions will not be included.
+The scope of the epic is limited to provide this learning for only one student, and all conversations that occur will be treated as information from one person. Moreover, the quizzes questions will come from a preset database, further questions will not be included.
 
 This epic has an estimated difficulty score of 7/10, and a time estimate of 8 units.
 
@@ -164,7 +165,7 @@ The main metrics that should be captured for a requested time frame are:
   \item A list of the most common questions asked and their relative frequency.
   \item A list of missed questions.
   \item A list of the questions or triggers which the bot had a low satisfaction rate for.
-  \item A breakdown of every topic covered and it's retention rate amongst users (derived from interactive quizzing).
+  \item A breakdown of every topic covered and its retention rate amongst users (derived from interactive quizzing).
   \item General statistics on the bot's usage rate, uptime and the average computation time taken for a response.
 \end{itemize}
 
@@ -180,11 +181,11 @@ Out of scope will be any more advanced interaction with the data other then simp
 
 In addition this is simply to inform users of the bots performance and will not provide features to adjust the parameters of the bot, this will be deferred to the second epic involving the bot's interaction with course content. 
 
-This will be a somewhat difficult set of features to implement, it's estimated difficulty score is 7/10 with a time estimate of 5 time units.
+This will be a somewhat difficult set of features to implement, its estimated difficulty score is 7/10 with a time estimate of 5 time units.
 
 \subsection{Learns to service new courses with a minimal setup process}
 
-This feature will allow a course administrator to set up the chat bot to service the students in a given course, with minimal configuration.
+This feature will allow a course administrator to set up the chatbot to service the students in a given course, with minimal configuration.
 The course administrator will be able to walk through a short setup process to provide the chat bot with access to course materials.
 This will allow the chat bot to learn from the course materials provided and start giving students support for that course. 
 
@@ -195,7 +196,9 @@ The information provided by course administrators during setup will be:
   \item Enrolment information for students in the course to facilitate student login.
 \end{itemize}
 
-This epic has an estimated difficulty score of 3/10, as it will combine significantly with the main implementation of the bot, and a time estimate of 4 units.
+Following the administrator completing this setup process, the chatbot program will start ingesting the data itself and no further setup will be required by the course administrator. 
+
+This epic has an estimated difficulty score of 3/10, as it will combine significantly with the main implementation of the bot in epics 1 and 2, and a time estimate of 4 units.
 
 \section{Epic Selection}
 
