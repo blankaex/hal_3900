@@ -3,8 +3,11 @@
 \usepackage{lmodern}
 \usepackage{amsmath}
 \usepackage{parskip}
+\usepackage[hyphens]{url}
 \usepackage{graphicx}
-\graphicspath{ {./} }
+\graphicspath{{./}}
+\setlength{\skip\footins}{1cm}
+\newcommand{\code}[1]{\colorbox{gray}{\texttt{#1}}}
 \title{Hal\_3900 Proposal}
 \begin{document}
 \begin{LARGE}
@@ -27,7 +30,7 @@ Hal\_3900 Proposal
 
 \rule[4.5pt]{0.61\textwidth}{0.3pt}
 
-x/03/2019
+08/03/2019
 
 \end{center}
 \end{LARGE}
@@ -49,8 +52,8 @@ There is a delay between when students ask a question and when they get a respon
 Some key factors that contribute to student satisfaction in the online learning space are:
 \begin{itemize}
   \item Students preference for actively participating in learning, rather than passive learning styles.
-  \item Students expectation on instructors to facilitate their learning by organising their resources and learning experiences. \footnote{https://www.researchgate.net/publication/282699144_Student_Satisfaction_with_Online_Learning_Is_it_a_Psychological_Contract}
-  \item The amount of interaction students have, and the availability of their instructor, contributes significantly to student satisfaction.\footnote{'Key Factors for Determining Student Satisfaction in Online Courses' - src: http://scholar.google.com.au/scholar_url?url=https://www.learntechlib.org/primary/p/2226/article_2226.pdf&hl=en&sa=X&scisig=AAGBfm2hL81KBP4evNpArXmyIqwWIeSpzA&nossl=1&oi=scholarr}
+  \item Students expectation on instructors to facilitate their learning by organising their resources and learning experiences.\footnote{\url{https://www.researchgate.net/publication/282699144_Student_Satisfaction_with_Online_Learning_Is_it_a_Psychological_Contract}}
+  \item The amount of interaction students have, and the availability of their instructor, contributes significantly to student satisfaction.\footnote{'Key Factors for Determining Student Satisfaction in Online Courses': \url{https://www.learntechlib.org/primary/p/2226/article_2226.pdf}}
   \item Students require strong administrative support when using online learning tools to ensure they are able to access the resources 
   they need, and to clarify questions about assessments and learning expectations.
   \item Organization and motivation play a key role in success of students using online learning tools.
@@ -65,9 +68,9 @@ Currently at UNSW, learning support is provided to students through email, forum
 
 Another side effect of growing cohort sizes is the fact that many tutors and lecturers are forced to spend most of their time answering admin related questions and helping students to clarify their understanding, time that could be spent bettering the course and writing course material. Hiring more staff and offloading many questions to forums has been the current approach used by courses to handle this increasing load but forums are full of repeat questions and require many tutors to man them. 
 
-This growth is becoming unsustainable and with the rise of online education platforms many students are eager to interact with course material in a more interactive meaningful way which works with their scedule. Waiting for a tutor to respond to them often creates a distance between the inital question and the answer which limits the effectivenes of a response. That is if the tutor finds time to respond at all. 
+This growth is becoming unsustainable and with the rise of online education platforms many students are eager to interact with course material in a more interactive meaningful way which works with their schedule. Waiting for a tutor to respond to them often creates a distance between the initial question and the answer which limits the effectiveness of a response. That is if the tutor finds time to respond at all. 
 
-In some areas of education chat bots have been deployed which interact with students in meaningful ways out of class hours\footnote{https://botsify.com/education-chatbot} and some have even been created to answer higher education questions\footnote{https://www.canberra.edu.au/about-uc/media/newsroom/2018/february/students-make-new-friend-in-lucy-the-chatbot}. However these tools are not able to me easily mapped to a unsw university course, it's administration, assessments and can not utilise archives of previous iterations of the course to learn common questions and issues.
+In some areas of education chat bots have been deployed which interact with students in meaningful ways out of class hours\footnote{\url{https://botsify.com/education-chatbot}} and some have even been created to answer higher education questions\footnote{\url{https://www.canberra.edu.au/about-uc/media/newsroom/2018/february/students-make-new-friend-in-lucy-the-chatbot}}. However these tools are not able to me easily mapped to a UNSW university course, it's administration, assessments and can not utilise archives of previous iterations of the course to learn common questions and issues.
 
 
 \subsection{Our Solution}
@@ -83,19 +86,20 @@ The chat bot will enhance course delivery by keeping staff informed of their stu
 
 \subsection{Technical Details}
 
-For this bot we will be building servals layers to form our technical stack.
+For this bot we will be building several layers to form our technical stack.
 
 \begin{itemize}
-  \item A frontend will be build in Vue.js interaction with a Node.js backend via Websockets to provide a frontend to interact with the chatbot
-  \item Dialogflow will be used to parse user input and provide the natural language processing aspect of this project
-  \item Actions will be passed to the knowledge base of the bot, which built ontop of tensor flow which will utilise machine learning to classify data and form connections between a input query and the relevant data points.
-  \item Data will be stored in s3 buckets
-  \item Docker will be utilised to unify the several layers of this application into a holistic program. 
+  \item A frontend will be built in \texttt{Vue.js} interaction with a \texttt{Node.js} backend via \texttt{Websockets} to provide a frontend to interact with the chatbot.
+  \item \texttt{Dialogflow} will be used to parse user input and provide the natural language processing aspect of this project.
+  \item Actions will be passed to the knowledge base of the bot, which built on top of \texttt{TensorFlow} which will utilise machine learning to classify data and form connections between a input query and the relevant data points.
+  \item Data will be stored on \texttt{Amazon} S3 buckets.
+  \item \texttt{Docker} will be utilised to unify the several layers of this application into a holistic program. 
 \end{itemize}
 
+% need to modify tensorflow spelling
 \includegraphics[width=\textwidth]{architecture_diagram.png}
 
-The scope of this program is to have a bot which can answer most basic administration questions such as when assignments are due and has at least a 50\% success rate with responding to direct questions with a simple data point response i.e "how do you print with no new line in python" should respond with "you can use sys.stdout.write". In addition the bot should have the ability to quiz students from a lecturer defined set of questions, a stretch goal would be for the bot to autogenerate these.
+The scope of this program is to have a bot which can answer most basic administration questions such as when assignments are due and has at least a 50\% success rate with responding to direct questions with a simple data point response i.e "how do you print with no new line in python" should respond with "you can use \texttt{sys.stdout.write()}". In addition the bot should have the ability to quiz students from a lecturer defined set of questions, a stretch goal would be for the bot to automatically generate these.
 
 
 \section{Epics}
@@ -131,7 +135,7 @@ The bot's knowledge base can be built from a number of sources. Apart from manua
 Information not directly related to the course content should be considered out of scope. However as there is no clear divide between what constitutes course content and what doesn't, there will be some degree of leniency as to what is included.
 
 % this should be coordinated with above
-As one of the primary features, it has an estimated difficulty score of 8/10 with a time estimate of 5 time units. That said, the actual implimentation is not unlike that of epic 1, so there is potential for this epic to be developed alongside epic 1 as the functionality may be shared.
+As one of the primary features, it has an estimated difficulty score of 8/10 with a time estimate of 5 time units. That said, the actual implementation is not unlike that of epic 1, so there is potential for this epic to be developed alongside epic 1 as the functionality may be shared.
 
 
 \subsection{Meaningfully quizzes and interacts with students}
@@ -139,8 +143,8 @@ The chatbot will be continuous trained and personalized to fit student’s needs
 
 The epic includes 2 important fields:
 \begin{itemize}
-  \item Statistics: the chatbot will gather questions which the student has asked, to analyze the learning status of the student in fields included by the course. According to the analysis, the weakness of the student will be figured out to help formed quizzes content. Those quizzes will be provided when they were asked. On the other hand, a statistics conclusion will also be provided to students, which will be helpful for their final review.
-  \item Personalization: the chatbot will interact with the student and trained itself according to the feedback. This process will help students to personalize their chatbots, to make the chatbots be more familiar with the users’ language habits. Therefore, chatbots can provide progressively more accurate answers. 
+  \item \textbf{Statistics:} the chatbot will gather questions which the student has asked, to analyze the learning status of the student in fields included by the course. According to the analysis, the weakness of the student will be figured out to help formed quizzes content. Those quizzes will be provided when they were asked. On the other hand, a statistics conclusion will also be provided to students, which will be helpful for their final review.
+  \item \textbf{Personalization:} the chatbot will interact with the student and trained itself according to the feedback. This process will help students to personalize their chatbots, to make the chatbots be more familiar with the users’ language habits. Therefore, chatbots can provide progressively more accurate answers. 
 \end{itemize}
 
 The scope of the epic is limited to face to only one student, and all happened conversations will be treated as information from one person. Moreover, the quizzes questions will from a preset database, further questions will not be included.
@@ -150,28 +154,28 @@ This epic has an estimated difficulty score of 7/10, and a time estimate of 8 un
 
 \subsection{Informs course admin/staff about cohort}
 
-This feature will allow the chat bot to maintain information about the questions users are asking and the performance of users in the excersizes the bot sets forward. This will be accessable from the admin web interface available to course staff.
+This feature will allow the chat bot to maintain information about the questions users are asking and the performance of users in the exercises the bot sets forward. This will be accessible from the admin web interface available to course staff.
 
-The main metrics that should be captured for a requested time frame are
+The main metrics that should be captured for a requested time frame are:
 \begin{itemize}
-  \item A list of the most common questions asked and their relative frequency
-  \item A list of missed questions
-  \item A list of the questions or triggers which the bot had a low satisifaction rate for
-  \item A breakdown of every topic covered and it's retention rate amongst users (derived from interactive quizzing)
-  \item General statistics on the bot's usage rate, uptime and the average computation time taken for a response
+  \item A list of the most common questions asked and their relative frequency.
+  \item A list of missed questions.
+  \item A list of the questions or triggers which the bot had a low satisfaction rate for.
+  \item A breakdown of every topic covered and it's retention rate amongst users (derived from interactive quizzing).
+  \item General statistics on the bot's usage rate, uptime and the average computation time taken for a response.
 \end{itemize}
 
-The web interface will provide the ability to 
+The web interface will provide the ability to:
 \begin{itemize}
-  \item View interactive sortable tablular data for the followed metrics
-  \item View certain data such as usage rate and computation time as a graph against time
-  \item Export the metrics as csv or json
-  \item Register admin staff to be notified by email when certain conditions are met, i.e missed question rate rises past 50%
+  \item View interactive sortable tablular data for the followed metrics.
+  \item View certain data such as usage rate and computation time as a graph against time.
+  \item Export the metrics as \texttt{csv} or \texttt{json}.
+  \item Register admin staff to be notified by email when certain conditions are met, i.e missed question rate rises past 50\%.
 \end{itemize}
 
-Out of scope will be any more advanced interaction with the data other then simple tabulation and graphing against time. More forms of data visualisation should be derferred to specialist tools. 
+Out of scope will be any more advanced interaction with the data other then simple tabulation and graphing against time. More forms of data visualisation should be deferred to specialist tools. 
 
-In addition this is simply to inform users of the bots performance and will not provide features to adjust the paramaters of the bot, this will be defered to the second epic involving the bot's interaction with course content. 
+In addition this is simply to inform users of the bots performance and will not provide features to adjust the parameters of the bot, this will be deferred to the second epic involving the bot's interaction with course content. 
 
 This will be a somewhat difficult set of features to implement, it's estimated difficulty score is 7/10 with a time estimate of 5 time units.
 
@@ -183,9 +187,9 @@ This will allow the chat bot to learn from the course materials provided and sta
 
 The information provided by course administrators during setup will be:
 \begin{itemize}
-  \item Access to all course materials available to students
-  \item Student timetable and handbook information
-  \item Enrolment information for students in the course to facilitate student login
+  \item Access to all course materials available to students.
+  \item Student timetable and handbook information.
+  \item Enrolment information for students in the course to facilitate student login.
 \end{itemize}
 
 This epic has an estimated difficulty score of 3/10, as it will combine significantly with the main implementation of the bot, and a time estimate of 4 units.
@@ -194,9 +198,9 @@ This epic has an estimated difficulty score of 3/10, as it will combine signific
 
 Of the proposed epics, the following epics will be delivered in the final release:
 \begin{itemize}
-  \item Answers administrative questions about course
-  \item Answers questions about course content
-  \item Learns to service new courses with a minimal setup process
+  \item Answers administrative questions about course.
+  \item Answers questions about course content.
+  \item Learns to service new courses with a minimal setup process.
 \end{itemize}
 
 Considering the goals of this project, these epics clearly outline the core functionality that should be achieved to deliver a minimum viable product. The main goal is to have a chat bot that students can direct questions to, and the epics were chosen accordingly.
@@ -205,8 +209,8 @@ The first two epics that were chosen directly correlate with the intended final 
 
 The remaining epics are:
 \begin{itemize}
-  \item Meaningfully quizzes and interacts with students
-  \item Informs course admin/staff about cohort
+  \item Meaningfully quizzes and interacts with students.
+  \item Informs course admin/staff about cohort.
 \end{itemize}
 
 These epics go hand in hand to an extent, and while the features they provide are definitely useful, they are not essential to the basic functionality and upkeep of the chat bot. As such, they will be considered stretch goals which will be implemented if the scope of the project allows.
