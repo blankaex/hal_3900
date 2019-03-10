@@ -2,20 +2,18 @@
 
 ## Quick Start
 ```bash
-# Ensure node.js v8.10.0 is installed
+# Ensure node.js/npm versions match
 $ node -v
-v8.10.0
-
-# Ensure npm v3.5.2 is installed
+v11.11.0
 $ npm -v
-3.5.2
+6.7.0
 
 # Install dependencies
 $ npm install
 
-# Serve on localhost:9447
-$ npm start
-
-# Run with nodemon
+# Serve on localhost:9447 for dev
 $ npm run dev
+
+# Serve for production
+$ npm start
 ```
