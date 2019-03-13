@@ -4,9 +4,22 @@ const rp = require('request-promise');
 const cheerio = require('cheerio');
 
 const baseURL = 'https://webcms3.cse.unsw.edu.au/';
+
+let seenSet = new Set();
+
 // const outlineURL = 'outline';
 
 const getPageData = async (linkInfo) => {
+    if (seenSet.has(linkInfo.linkURL)) {
+        console.log("already seen " + linkInfo.title);
+        return;
+    }
+
+    seenSet.add(linkInfo.linkURL);
+
+
+    console.log("scraping... " + linkInfo.linkURL);
+    // seenSet.add(linkInfo.linkURL);
 
     const html = await rp(baseURL + linkInfo.linkURL);
     // fs.writeFileSync("output.html", html);   -- use this to output HTML file and examine
@@ -15,76 +28,75 @@ const getPageData = async (linkInfo) => {
 
     // GET ALL TABLES DATA
     const allTables = [];
-    $("table").map((index, element)=> {
+    $("table").map((index, element) => {
         // TODO ideally we want the table's name/heading too.
         const type = "table";
         let tableRows = [];
-        $(element).find("tr").map((i,e)=> {
+        $(element).find("tr").map((i, e) => {
             // get the tablerow text, strip whitespace to singles
-            const text = $(e).text().replace(/\s+/g,' ');
-            // tableRows.push($(e).text().replace(/\s+/g,' '));
+            const text = $(e).text().replace(/\s+/g, ' ');
             // construct js object
             tableRows.push({text});
-            // console.log(tableRows[i]);
         });
         allTables.push({type, tableRows});
     });
 
     // GET ALL PARAGRAPHS DATA
     const allParagraphs = [];
-    $("p").map((index, element)=> {
+    $("p").map((index, element) => {
         const type = "paragraph";
         // paragraph with stripped whitespace. could break them up further if needed
-        const text = $(element).text().replace(/\s+/g,' ');
+        const text = $(element).text().replace(/\s+/g, ' ');
         allParagraphs.push({type}, text);
     });
 
-    // WRITE OUT TO JSON
-    const name = linkInfo.title.replace(/\s+/g,'-');
-    return {name, allTables, allParagraphs};
-};
-
-const scrapePages = async ()=> {
-    // setup: init queue for graph BFS "seen" set for web crawling
-    // MIGHT BE ABLE TO LIMIT DEPTH TO AVOID THE LITTLE LINKS WE DON'T WANT
-    // ONLY USE LINKS GOING TO OUR PAGES, AVOID OUTSIDE -> STARTING WITH "/"
-    let seenSet = new Set();
-    const addressList = []; // use a queue library for this to avoid it being inefficient??
-
-    const homePage = "COMP1521/18s2/";
-    const forumBase = "COMP1521/18s2/forums/";
-    // step 1: get first URLS to follow
-    let html;
-    try {
-        html = await rp(baseURL + homePage);
-    } catch (err){
-        console.log('Http Error');
-        return;
-    }
-    // fs.writeFileSync("home.html", html);
-    var $ = cheerio.load(html);
-    $("a").map((index, element)=> {
+    // GET ALL LINKS DATA
+    const allLinks = [];
+    $("a").map((index, element) => {
         const link = $(element).attr("href");
-        if (link.toString().startsWith("/COMP1521/18s2/")){
-            addressList.push({
+        if (link.toString().startsWith("/COMP1521/18s2/") && !seenSet.has(link.toString())) {
+            allLinks.push({
                 title: $(element).text(),
                 linkURL: $(element).attr("href").toString()
             });
         }
     });
-    console.log(addressList);
-    // step 2: follow links in BFS pattern
-    for (let i=0; i<addressList.length; i++){
-            getPageData(addressList[i]).then(result =>
+    // console.log(allLinks);
+
+    // WRITE OUT TO JSON
+    const name = linkInfo.title.replace(/\s+/g, '-');
+
+    const results = {name, allTables, allParagraphs};
+
+    for (let i = 0; i < allLinks.length; i++) {
+        getPageData(allLinks[i])
+            .then(result =>
                 fs.writeFileSync("src///data///" + result.name + ".json", JSON.stringify(result)))
-                .catch( err =>
-                    console.log("couldn't read page " + addressList[i].linkURL));
+            .catch(err => console.log("couldn't read page " + allLinks[i].linkURL));
     }
 
+    return results;
 };
 
-scrapePages();
+const scrapePages = async () => {
 
-// getPageData().then(result => {
-//     fs.writeFileSync(result.name + ".json", JSON.stringify(result));
-// });
+    const homePage = "COMP1521/18s2/";
+    const html = await rp(baseURL + homePage);
+
+    const toScrape = {
+        title: "home",
+        linkURL: homePage
+    };
+    // seenSet.add(homePage);
+
+    getPageData(toScrape).then(result =>
+            fs.writeFileSync("src///data" + toScrape.title + ".json", JSON.stringify(result)))
+        .catch(err => console.log("couldn't read page: " + toScrape.linkURL));
+
+    return html;
+};
+
+scrapePages()
+    .then(result => fs.writeFileSync("src///data///home.html", result))
+    .catch(err => console.log("home page invalid"));
+
