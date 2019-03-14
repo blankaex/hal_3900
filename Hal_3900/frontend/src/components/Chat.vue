@@ -19,17 +19,49 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
+
+interface BotResponse {
+  text?: string,
+  error: false,
+  type: 'message'|'error'
+}
+
 @Component
 export default class Chat extends Vue {
   draft: string = '';
+  socket: WebSocket|null = null;
 
-  send () {
-    if (this.draft.trim() === '') return
-    this.$store.commit('sendMessage', this.draft)
-    this.draft = ''
+  scrollEnd () {
     const container = this.$el.querySelector('#messages')
     if (container === null) return
     container.scrollTop = container.scrollHeight
+  }
+  send () {
+    if (this.draft.trim() === '') return
+    if (!this.socket) return // TODO: actually throw a error here
+    this.$store.commit('sendMessage', this.draft)
+    this.socket.send(JSON.stringify({
+      type: 'message',
+      error: false,
+      text: this.draft
+    }))
+    this.draft = ''
+    this.scrollEnd()
+  }
+  recv (res: MessageEvent) {
+    const resObj:BotResponse = JSON.parse(res.data)
+    // TODO: Error handling
+    this.$store.commit('recvMessage', resObj.text)
+    this.$nextTick(function () {
+      this.scrollEnd()
+    })
+  }
+  mounted () {
+    this.$nextTick(function () {
+      const host = window.location.host;
+      this.socket = new WebSocket(`ws://${host}/talk`)
+      this.socket.onmessage = this.recv;
+    })
   }
 }
 </script>

@@ -21,6 +21,13 @@ export default new Vuex.Store({
         from: 'user',
         text: payload
       })
+    },
+    recvMessage (state, payload) {
+      state.messages.push({
+        id: moment().unix(),
+        from: 'bot',
+        text: payload
+      })
     }
   },
   actions: {

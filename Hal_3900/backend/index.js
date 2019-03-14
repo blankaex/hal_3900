@@ -1,6 +1,6 @@
 const express = require('express');
-
 const app = express();
+const wsApp = require('express-ws')(app);
 
 // Get routes
 require('./router')(app);
