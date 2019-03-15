@@ -1,0 +1,73 @@
+#### Check up on progress
+
+- ELLEN:
+	- Web scraper
+		- Works on certain sections of tests
+		- Async is causing headaches
+		    - Could use python? prob ok to stick to js
+		    - @Zain look through admin webcms and send useful think to ellen
+		- Current issue: follow through web graph
+		- Works mostly pretty well
+		- Next task: chuck @ google cloud to classify
+		- Using cheerio (scraping toolset)
+- YI:
+	- ML information retrieval vs generative
+		- Information Retrieval
+			- Works by qurying from user and converting to a DB data set retrivial
+			- Need enough querys for every example so we can answer it
+			- Easier to do
+			- Less "smart"
+		- Generative
+			- Every word is a vector 
+			- Calculare a score of each sentence
+			- Use algorithm to match, can give more meaningful responses even with less direct matched questions
+			- Much more difficult to implement
+		- Thoughts
+			- Dataset might be just too small for generative
+			- Worry is that by the time we get to training we realise it won't work with our data set and we are too far in to piviot
+			- Lets stick with Information Retrieval to get a base working
+			- Can augment it a lot as time goes by
+				- add some back learning
+				- can focus to NLP side if be
+			- Kinda requires some level of handling queries
+- HAYDEN:
+	- Setup backend boilerplate with `Node.js`
+	- Basic boilerplate in pure `Node.js` (refer to previous commit)
+	- Wrote basic quickstart steps in `/Hal_3900/readme.md` 
+	- Redid boilerplate with `express` to manage routing, content-type checking, etc.
+	- Routes specified in `/Hal_3900/routes.js`
+	- Serves static `.html` files from `/public`
+	- Development mode server runs with `nodemon` (automatically restarts server on file touch)
+
+	- Need a frontend to interact with `Node.js`
+	- Getting the right versions of `Node.js` and `@vue-cli` took over 3 hours 
+		- SocketIO is possible    
+		- `TensorFlow 2.0` came out a few days ago, we should use it
+		- Resources
+			- extra stuff in github to help us learnding
+- ZAIN:
+	- Frontend framework is set up 
+		- Need to talk hayden to interact with backend
+
+#### Plan what to get done by friday
+
+- ZAIN:
+	- Get frontend working frontend up by friday
+	- Get backend interaction by friday
+	- Start dockerising
+	- Send any relevant web scraper tips to ellen (chuck them on the card)
+	- IF POSSIBLE: take a look at the web scraping code
+	- Set up milestones
+- ELLEN:
+	- Continue with web scraping
+	- Start looking into tag data with google tag stuff
+- YI: 
+	- Start to code information retrival
+	- Use test data if needed.
+- HAYDEN:
+	- Implement `MongoDB` support for persistent storage
+	- Figure out how frontend and backend are supposed to interact
+		- Somehow I feel like serving static files won't quite cut it
+		- ZAIN: we just need a basic api for this sprint and a home page
+	- Add some other standard middleware like body-parser, cors, etc
+		- we can do this as the need arrives from features
