@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const cors = require('cors');
 const bot = require('./bot');
 const hal = new bot()
 
@@ -7,6 +8,9 @@ module.exports = function(app)
 {
     // Returns any static files in frontend `/dist`
     app.use(express.static(path.join(__dirname, '../frontend/dist')))
+
+    // Middleware
+    app.use(cors());
 
     // Web socket connection
     app.ws('/talk', function(ws, req) {
