@@ -1,0 +1,19 @@
+{
+  "name": "hal_3900",
+  "version": "1.0.0",
+  "description": "Chat bot to help students",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^1.18.10"
+  },
+  "dependencies": {
+    "express": "^4.16.4",
+    "express-ws": "^4.0.0"
+  }
+}
