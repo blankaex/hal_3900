@@ -8,11 +8,6 @@ module.exports = function(app)
     // Returns any static files in frontend `/dist`
     app.use(express.static(path.join(__dirname, '../frontend/dist')))
 
-    // index
-    app.get('/', (_, res) =>
-      res.sendFile(path.join(__dirname, 'dist', 'index.html'))
-    );
-
     // Web socket connection
     app.ws('/talk', function(ws, req) {
       ws.on('message', function(msg) {
@@ -35,6 +30,6 @@ module.exports = function(app)
 
     // 404 catch all
     app.get('*', (_, res) =>
-      res.sendFile(path.join(__dirname, 'public', '404.html'))
+      res.sendFile(path.join(__dirname, '../frontend/dist', '404.html'))
     );    
 }
