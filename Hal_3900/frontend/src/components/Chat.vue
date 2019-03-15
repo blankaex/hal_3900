@@ -6,11 +6,11 @@
       'user':message.from === 'user'
       }" v-for="message in $store.state.messages" :key="message.id">
         <img v-if="message.from === 'bot'" src="../assets/hal.png">
-        <div class="text">{{message.text}}</div>
+        <div class="text" :style="{'background': getGradient(message.from)}">{{message.text}}</div>
         <img v-if="message.from === 'user'" src="../assets/user.png">
     </div>
   </div>
-  <div class="input" v-on:keydown.enter="send">
+  <div class="input" v-on:keydown.enter="send" >
     <input type="text" v-model="draft"/>
     <i class="mdi mdi-send" @click="send"></i>
   </div>
@@ -24,6 +24,12 @@ interface BotResponse {
   text?: string,
   error: false,
   type: 'message'|'error'
+}
+interface Theme {
+  primary: string,
+  secondary: string,
+  primaryGradient: string[],
+  secondaryGradient: string[]
 }
 
 @Component
@@ -56,11 +62,21 @@ export default class Chat extends Vue {
       this.scrollEnd()
     })
   }
+  getGradient (who:string) {
+    const theme = this.$store.state.theme
+    const pg = theme.primaryGradient
+    const sg = theme.secondaryGradient
+    if (who === 'user') {
+      return `linear-gradient(to right, ${pg[0]}, ${pg[1]})`
+    } else {
+      return `linear-gradient(to right, ${sg[0]}, ${sg[1]})`
+    }
+  }
   mounted () {
     this.$nextTick(function () {
-      const host = window.location.host;
+      const host = window.location.host
       this.socket = new WebSocket(`ws://${host}/talk`)
-      this.socket.onmessage = this.recv;
+      this.socket.onmessage = this.recv
     })
   }
 }
@@ -71,7 +87,7 @@ export default class Chat extends Vue {
   @extend %flex-col
   margin-top: 2rem
   height: calc(100vh - 2rem)
-  width: calc(60% - 2rem)
+  width: calc(100% - 2rem)
   margin-left: 1rem
   margin-right: 1rem
 .messages
@@ -132,12 +148,4 @@ export default class Chat extends Vue {
   justify-content: flex-start
 .user
   justify-content: flex-end
-.bot .text
-  background: #457fca
-  background: -webkit-linear-gradient(to right, #5691c8, #457fca)
-  background: linear-gradient(to right, #5691c8, #457fca)
-.user .text
-  background: #fd746c
-  background: -webkit-linear-gradient(to right, #ff9068, #fd746c)
-  background: linear-gradient(to right, #ff9068, #fd746c)
 </style>
