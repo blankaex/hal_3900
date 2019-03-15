@@ -1,0 +1,12 @@
+version: '3'
+services:
+  backend:
+    build: ./backend
+    restart: always
+    ports:
+      - 0.0.0.0:9447:9447
+  frontend:
+    build: ./frontend
+    restart: always
+    ports:
+      - 0.0.0.0:8080:8080
