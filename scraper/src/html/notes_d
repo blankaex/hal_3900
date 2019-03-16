@@ -1,0 +1,352 @@
+<html>
+<head>
+<title>D: Computer Systems Architecture</title>
+<link href='notes.css' rel='stylesheet' type='text/css'>
+</head>
+<body>
+<p><span class='title'>D: Computer Systems Architecture</span><p>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='heading'>Computer Systems Architecture</span></td><td align='right'><small>1/21</small></td></tr></table>
+<p>
+<p><div class='center'>
+<img alt="[Diagram:Pics/opsys/layers-small.png]" src="Pics/opsys/layers-small.png">
+</div><p>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='heading'>Evolution of Operating Systems (OSs)</span></td><td align='right'><small>2/21</small></td></tr></table>
+<p>
+1940's (e.g. ENIAC)
+<ul>
+<li> no OS ... one program at a time, manually loaded
+<li> programs had to take account of details of machine/devices
+</ul>
+1950's (e.g. Whirlwind)
+<ul>
+<li> batch processing ... load several programs at once, run in sequence
+<li> programs had to take account of details of machine/devices
+</ul>
+1960's (e.g. IBM360)
+<ul>
+<li> computers proliferate ... programmers want to transport code
+<li> having to cope with different config on each machine was tedious
+<li> solution: layer of software between raw machine and user programs
+</ul>
+Nice example of using abstraction to enhance code portability
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='cont'>... Evolution of Operating Systems (OSs)</span></td><td align='right'><small>3/21</small></td></tr></table>
+<p>
+1970's (e.g. PDP-11)
+<ul>
+<li> computers become smaller and faster (but still fridge-size)
+<li> complexity of 1960's OSs drove Bell Labs researchers to
+<ul>
+<li> develop a small OS core, written mostly in HLL
+<li> with a set of simple tools and ways of combining them
+<li> led to the Unix programming environment
+</ul>
+<li> writing OS core in HLL made it portable
+<ul>
+<li> same OS environment provided on many different machines
+</ul>
+</ul>
+Other less-portable OSs came and went ...
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='cont'>... Evolution of Operating Systems (OSs)</span></td><td align='right'><small>4/21</small></td></tr></table>
+<p>
+1980's - present
+<ul>
+<li> Unix and variants ported to wide variety of architectures
+<ul>
+<li> BSD, SysV, Linux, OS X, Android all based on Unix approach
+</ul>
+<li> developments in hardware/software led to more OS services
+<ul>
+<li> databases, O-O programming, GUI interfaces, games
+<li> networking, multi-CPU systems, mobile devices, etc.
+</ul>
+</ul>
+Today: very large installed base of Unix systems
+<ul>
+<li> embedded systems, phones, workstations, servers, ...
+</ul>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='heading'>Operating Systems</span></td><td align='right'><small>5/21</small></td></tr></table>
+<p>
+Modern computer: devices connected via a system bus ...
+<p><br>
+<p><div class='center'>
+<img alt="[Diagram:Pics/opsys/hardware-small.png]" src="Pics/opsys/hardware-small.png">
+</div><p>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='cont'>... Operating Systems</span></td><td align='right'><small>6/21</small></td></tr></table>
+<p>
+Operating systems (OSs)
+<ul>
+<li> provide an abstraction layer on top of hardware
+<li> i.e. same view available regardless of underlying hardware
+</ul>
+Some characteristics of OSs
+<ul>
+<li> have <em>privileged</em> access to the raw machine
+<li> <em>manage</em> use of machine resources (CPU, disk, memory, etc.)
+<li> provide uniform interface to access machine-level operations
+<li> arrange for controlled execution of user programs
+<li> provide multi-tasking and (pseudo) parallelism
+</ul>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='cont'>... Operating Systems</span></td><td align='right'><small>7/21</small></td></tr></table>
+<p>
+Some different flavours of OSs ...
+<ul>
+<li> <em>batch</em> &nbsp;<small>(e.g. Eniac, early IBM OSs)</small>
+<ul>
+<li> computational jobs run one-at-a-time via a queue
+</ul>
+<li> <em>multi-user</em> &nbsp;<small>(e.g. Multics, Unix/Linux, OSX, Windows)</small>
+<ul>
+<li> mulitple jobs (appear to) run in parallel
+</ul>
+<li> <em>embedded</em> &nbsp;<small>(e.g. Android, iOS, ...)</small>
+<ul>
+<li> small(ish), cut-down OS embedded in a device
+</ul>
+<li> <em>real-time</em> &nbsp;<small>(e.g. RTLinux, DuinOS, ...)</small>
+<ul>
+<li> specialised OS with time guarantees on job completion
+</ul>
+</ul>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='cont'>... Operating Systems</span></td><td align='right'><small>8/21</small></td></tr></table>
+<p>
+Abstractions provided by modern OSs
+<ul>
+<li> users ... who can access (login to) the system
+<li> access rights ... what users are allowed to do
+<li> file system ... how data is organised on storage devices
+<li> input/output ... transferring data to/from devices
+<li> processes ... active "computational entities" on the system
+<li> communication ... how processes interact
+<li> networking ... how the system talks to other systems
+</ul>
+Core OS functions form the operating system <em>kernel</em>.
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='cont'>... Operating Systems</span></td><td align='right'><small>9/21</small></td></tr></table>
+<p>
+<p><div class='center'>
+<img alt="[Diagram:Pics/opsys/os-core-small.png]" src="Pics/opsys/os-core-small.png">
+</div><p>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='cont'>... Operating Systems</span></td><td align='right'><small>10/21</small></td></tr></table>
+<p>
+Critical to OS development: execution modes
+<p>
+CPUs can typically run in two modes:
+<ul>
+<li> <em>privileged</em> mode
+<ul>
+<li> full access to all machine operations and memory regions
+</ul>
+<li> <em>non-privileged</em> (<em>user</em>) mode
+<ul>
+<li> a limited set of operations <small>(but still Turing complete)</small>
+<li> access to only part of the memory
+</ul>
+</ul>
+System calls allow programs ...
+<ul>
+<li> to cross the privileged/user boundary
+<li> in a controlled manner, via well-defined requests
+</ul>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='heading'>System Calls</span></td><td align='right'><small>11/21</small></td></tr></table>
+<p>
+SPIM has no OS, but provides a simple set of "system calls"
+<ul>
+<li> primarily for i/o (read/write) on various types
+<li> also memory allocation and process exit
+</ul>
+An OS like Unix/Linux provides 100's of system calls
+<ul>
+<li> process management &nbsp; <small>(e.g. <large><code>fork()</code></large>, <large><code>exec()</code></large>, <large><code>_exit()</code></large>, ...)</small>
+<li> file management &nbsp; <small>(e.g. <large><code>open()</code></large>, <large><code>read()</code></large>, <large><code>fstat()</code></large>, ...)</small>
+<li> device management &nbsp; <small>(e.g. <large><code>ioctl()</code></large>, ...)</small>
+<li> information maintenance &nbsp; <small>(e.g. <large><code>settimeofday()</code></large>, <large><code>getuid()</code></large>, ...)</small>
+<li> communication &nbsp; <small>(e.g. <large><code>pipe()</code></large>, <large><code>connect()</code></large>, <large><code>send()</code></large>, ...)</small>
+</ul>
+User programs invoke sys calls through an API (POSIX + Linux)
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='cont'>... System Calls</span></td><td align='right'><small>12/21</small></td></tr></table>
+<p>
+<p><div class='center'>
+<img alt="[Diagram:Pics/opsys/os-syscalls-small.png]" src="Pics/opsys/os-syscalls-small.png">
+</div><p>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='heading'>Libraries</span></td><td align='right'><small>13/21</small></td></tr></table>
+<p>
+User programs can request services via system calls
+<ul>
+<li> but system calls provide relatively low-level operations
+</ul>
+To simplify programming, provide <em>libraries</em>
+<ul>
+<li> collections of useful functions
+<li> referenced from within user programs as C functions
+<li> defined by &nbsp;<large><font color="#008800"><b><code>#include &lt;xxx.h&gt;</code></b></font></large>
+<li> integrated with user code at "link time"
+</ul>
+Examples of libraries:
+<ul>
+<li> <large><code>stdio.h</code></large> ... text-oriented, formatted input/output
+<li> <large><code>stdlib.h</code></large> ... wide range of functions, <small>e.g. &nbsp;<large><code>rand()</code></large>, &nbsp;<large><code>malloc()</code></large></small>
+</ul>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='cont'>... Libraries</span></td><td align='right'><small>14/21</small></td></tr></table>
+<p>
+<p><div class='center'>
+<img alt="[Diagram:Pics/opsys/libraries-small.png]" src="Pics/opsys/libraries-small.png">
+</div><p>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='heading'>Applications</span></td><td align='right'><small>15/21</small></td></tr></table>
+<p>
+User-level programs which perform some useful task
+<ul>
+<li> possibly supplied with system <small>e.g. &nbsp;<large><code>ls</code></large>, &nbsp;<large><code>vim</code></large>, &nbsp;<large><code>gcc</code></large></small>
+<li> possibly implemented by users <small>e.g. &nbsp;<large><code>dcc</code></large>, &nbsp;<large><code>check</code></large>, &nbsp;<large><code>Webcms3</code></large></small>
+</ul>
+Applications live in &nbsp;<large><code>/bin</code></large>, &nbsp;<large><code>/usr/bin</code></large>, etc &nbsp;(via <large><code>PATH</code></large>)
+<p>
+Applications are generally built using libraries
+<ul>
+<li> but may also make direct use of system calls
+</ul>
+Unix was unusual in having a command interpreter (<large><code>bash</code></large>)
+<ul>
+<li> that runs as a user-level process <small>(not privileged)</small>
+<li> but can invoke other user-level processes
+</ul>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='cont'>... Applications</span></td><td align='right'><small>16/21</small></td></tr></table>
+<p>
+<p><div class='center'>
+<img alt="[Diagram:Pics/opsys/apps-small.png]" src="Pics/opsys/apps-small.png">
+</div><p>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='cont'>... Applications</span></td><td align='right'><small>17/21</small></td></tr></table>
+<p>
+System calls are invoked ...
+<ul>
+<li> directly, through a library of system calls
+<ul>
+<li> documented in Unix Programmers Manual section 2 <br> (e.g. <large><code>man 2 open</code></large>)
+</ul>
+<li> indirectly, through functions in the C libraries
+<ul>
+<li> documented in Unix Programmers Manual section 3 <br> (e.g. <large><code>man 3 fopen</code></large>)
+</ul>
+</ul>
+Example of system call library vs C library
+<ul>
+<li> file descriptors, <large><code>open()</code></large>, <large><code>close()</code></large>, <large><code>read()</code></large>, <large><code>write()</code></large> <br> <small>(via <large><code>#include &lt;unistd.h&gt;</code></large>)</small>
+<li> file pointers (<large><code>FILE*</code></large>), <large><code>fopen()</code></large>, <large><code>fclose</code></large>, <large><code>scanf()</code></large>, <large><code>printf()</code></large> <br> <small>(via <large><code>#include &lt;stdio.h&gt;</code></large>)</small>
+</ul>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='cont'>... Applications</span></td><td align='right'><small>18/21</small></td></tr></table>
+<p>
+System calls attempt to perform actions, but may fail
+<p>
+User programs can detect this in several ways
+<ul>
+<li> check return value of sys call function &nbsp;<small>(-1 typically flags an error)</small>
+<li> check global variable <large><font color="#008800"><b><code>errno</code></b></font></large> &nbsp;<small>(contains specific error)</small>
+</ul>
+C programs need to check and handle errors themselves
+<ul>
+<li> unlike other languages, C provides no exception handling
+</ul>
+Note: successful system calls generally return 0
+<ul>
+<li> unless the sysetm call has a result value &nbsp;<small>(e.g. #bytes read)</small>
+</ul>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='cont'>... Applications</span></td><td align='right'><small>19/21</small></td></tr></table>
+<p>
+Action in response to failed system call is often e.g.
+<p><pre>
+fprintf(stderr, "Can't do %s", <i>Something</i>);
+exit(1);
+</pre><p>
+<br>
+Can give more precise feedback via library functions, e.g.
+<ul>
+<li> <large><font color="#008800"><b><code>void perror(char *</code></b></font></large><i>Message</i><large><font color="#008800"><b><code>)</code></b></font></large>
+<li> if <i>Message</i> not <large><code>NULL</code></large>, write to <large><code>stderr</code></large>
+<li> write standard message corresponding to <large><code>errno</code></large>
+</ul>
+Could then do &nbsp;<large><font color="#008800"><b><code>exit(errno);</code></b></font></large>&nbsp; to send precise error to shell.
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='cont'>... Applications</span></td><td align='right'><small>20/21</small></td></tr></table>
+<p>
+Linux library function to make it easy to report errors and exit
+<ul>
+<li> <large><font color="#008800"><b><code>error(</code></b></font></large><i>Status</i>, <i>ErrNum</i>, <i>Format</i>, <i>Expressions</i>, ...<large><font color="#008800"><b><code>)</code></b></font></large>
+<li> print error message using prog name, <i>Format</i> and <i>Expressions</i>
+<li> if <i>Status</i> is non-zero, invoke <large><code>exit(</code></large><i>Status</i><large><code>)</code></large> after printing message
+<li> if <i>ErrNum</i> is non-zero, also print standard system error message
+</ul>
+Example:
+<p><pre>
+error(1, errno, "Can't do %s", <i>Something</i>);
+</pre><p>
+vs
+<p><pre>
+char errmsg[BUFSIZ];
+sprintf(errmsg, "Can't do %s", <i>Something</i>);
+perror(errmsg);
+exit(1);
+</pre><p>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='heading'>Roadmap</span></td><td align='right'><small>21/21</small></td></tr></table>
+<p>
+Following sections consider OS modules:
+<ul>
+<li> <em>storage management</em>
+<ul>
+<li> disk storage, filesystems, Unix file system interface
+</ul>
+<li> <em>memory management</em>
+<ul>
+<li> RAM, physical/virtual/process memory space, page faults
+</ul>
+<li> <em>process management</em>
+<ul>
+<li> creating processes, process hierarchy, signals
+</ul>
+<li> <em>device management</em>
+<ul>
+<li> control registers, data transfer, interrupts
+</ul>
+</ul>
+<p><hr><p>
+<small><small>Produced: 8 Apr 2018</small></small>
+</body>
+</html>

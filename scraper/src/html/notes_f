@@ -1,0 +1,1046 @@
+<html>
+<head>
+<title>F: Network Architecture</title>
+<link href='notes.css' rel='stylesheet' type='text/css'>
+</head>
+<body>
+<p><span class='title'>F: Network Architecture</span><p>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='section'>Networks</span></td><td align='right'></td></tr></table>
+<p>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='heading'>Networks</span></td><td align='right'><small>2/52</small></td></tr></table>
+<p>
+<em>Network</em> = interconnected collection of computers
+<p>
+Flavours of networks:
+<ul>
+<li> <em>local area networks</em> ... within an organisation/physical location
+<li> <em>wide area networks</em> ... geographically dispersed (WAN)
+<li> <em>Internet</em> ... global set of interconnected WANs
+</ul>
+Why do we need networks?
+<ul>
+<li> previously ... transfer data, send text-based emails
+<li> nowadays ... communication, communication, communication
+<li> sharing resources e.g. printers, large storage devices, ...
+</ul>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='cont'>... Networks</span></td><td align='right'><small>3/52</small></td></tr></table>
+<p>
+What are the basic requirements for a network?
+<ul>
+<li> get data from machine A to machine B
+<li> A and B may be separated by 100's of networks and devices
+</ul>
+How to achieve this?  &nbsp;&nbsp; <font color='#999999'><small>(using postal service analogy)</small></font>
+<ul>
+<li> need a unique address for destination
+<li> identify a route &nbsp;&nbsp; <font color='#999999'><small>(first post office)</small></font>
+<li> process at intermediate nodes &nbsp; <font color='#999999'><small>(other post offices)</small></font>
+<li> follow certain protocols &nbsp;&nbsp; <font color='#999999'><small>(envelopes, stamps fees)</small></font>
+</ul>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='heading'>Overview of Network Communication</span></td><td align='right'><small>4/52</small></td></tr></table>
+<p>
+How a file is sent over the network:
+<ul>
+</ul>
+<li> File data divided into <em>packets</em> by source device
+<small>
+<ul>
+<li> packets are small fixed-size chunks of data, with headers
+</ul>
+</small>
+<li> Passed across <em>physical link</em> &nbsp;<small>(wire, radio, optic fibre)</small>
+<li> Passing through multiple <em>nodes</em> &nbsp;<small>(routers, switches)</small>
+<small>
+<ul>
+<li> each node decides where to send it next &nbsp;<small>(for best route)</small>
+</ul>
+</small>
+<li> Packets reach destination device
+<li> Re-ordering, error-checking, buffering
+<li> File received by receiving process/user
+</ul>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='heading'>The Internet</span></td><td align='right'><small>5/52</small></td></tr></table>
+<p>
+<table cellpadding="6">
+<tr><td>
+Components of the Internet ...
+<ul>
+<li> millions of <em>connected devices</em>
+<small>
+<ul>
+<li> e.g PC, server, laptop, smartphone
+<li> <em>host</em> = end system, running network apps
+</ul>
+</small>
+<li> <em>communication links</em>
+<small>
+<ul>
+<li> e.g. fibre, copper, radio, satellite
+<li> bandwidth = transmission rate
+</ul>
+</small>
+<li> <em>packet switches</em>
+<small>
+<ul>
+<li> e.g. routers, network switches
+<li> compute next hop, forward packets
+</ul>
+</small>
+</ul>
+</td>
+<td> &nbsp;&nbsp;&nbsp; </td>
+<td>
+<img src="Pics/misc/internet-small.png">
+</td></tr>
+</table>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='cont'>... The Internet</span></td><td align='right'><small>6/52</small></td></tr></table>
+<p>
+Internet communications are based on a 5-layer "stack":
+<ul>
+<li> <em>Physical layer:</em> bits on wires or fibre optics or radio
+<li> <em>Link layer:</em> ethernet, MAC addressing, CSMA etc.
+<li> <em>Network layer:</em> routing protocols, IP
+<li> <em>Transport layer:</em> process-process data transfer, TCP/UDP
+<li> <em>Application layer:</em> DNS, HTTP, email, Skype, torrents, FTP etc.
+</ul>
+Typical packet encapsulates data from all lower layers
+<p>
+Why so many layers (of abstraction)?
+<ul>
+<li> each layer encapsulates one aspect of network transport
+<li> provides layered <em>reference model</em> for discussion
+<li> modularization eases maintenance/updating
+<small>
+<ul>
+<li> e.g. changing implementation of one layer doesn't affect other layers
+</ul>
+</small>
+</ul>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='cont'>... The Internet</span></td><td align='right'><small>7/52</small></td></tr></table>
+<p>
+Path of data through network layers
+<p><div class='center'>
+<img alt="[Diagram:Pics/networks/transport-small.png]" src="Pics/networks/transport-small.png">
+</div><p>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='heading'>Protocols</span></td><td align='right'><small>8/52</small></td></tr></table>
+<p>
+<em>Network protocols</em> govern all communication activity on the network
+<p>
+<em>Protocols</em> provide communication rules ...
+<ul>
+<li> format and order of messages sent/received
+<li> actions taken on message transmission/receipt 
+</ul>
+Protocols are defined in all of the layers, e.g.
+<ul>
+<li> link layer: PPP (point-to-point protocol), ...
+<li> network layer: IP (internet protoocol), ...
+<li> transport layer: TCP <small>(transmission control)</small>, UDP <small>(user datagram)</small>
+<li> application layer: HTTP, FTP, SSH, POP, SMTP, ...
+</ul>
+Typically more protocols in the higher-level layers
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='heading'>Network Application Layer</span></td><td align='right'><small>9/52</small></td></tr></table>
+<p>
+The application layer directly supports the apps we interact with, e.g.
+<ul>
+<li> e-mail
+<li> web
+<li> text messaging
+<li> remote login
+<li> P2P file sharing
+<li> multi-user network games
+<li> streaming stored video (YouTube, Hulu, Netflix) 
+<li> voice over IP (e.g., Skype)
+<li> real-time video conferencing
+<li> social networking
+</ul>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='heading'>Client-Server Architecture</span></td><td align='right'><small>10/52</small></td></tr></table>
+<p>
+<em>Client-server</em> = common way of structuring network communication
+<p>
+<em>Server</em> is a data provider
+<ul>
+<li> process that waits for requests
+<li> always-on host, with permanent IP address
+<li> possibly using data centers / multiple CPUs for scaling
+</ul>
+<em>Client</em> is a data consumer
+<ul>
+<li> sends requests to server; collects response
+<li> may be intermittently connected, may have dynamic IP address
+<li> does not communicate directly with other clients
+</ul>
+<small>
+<br>
+Aside: peer-to-peer (P2P) systems run both client and server processes on each host
+</small>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='heading'>Addressing</span></td><td align='right'><small>11/52</small></td></tr></table>
+<p>
+Server processes must have a unique Internet-wide <em>address</em>
+<ul>
+<li> part of address is <em>IP address</em> of host machine
+<li> other part of address is <em>port number</em> where server listens
+</ul>
+Example: <large><code><font color='#009900'>128.119.245.12</font>:<font color='#0000CC'>80</font></code></large>
+<ul>
+<li> address of web server on gaia.cs.umass.edu
+</ul>
+Some standard port numbers
+<ul>
+<li> 22 ... ssh &nbsp; (Secure Shell)
+<li> 25 ... smtp &nbsp; (Simple Mail Transfer Protocol)
+<li> 53 ... dns &nbsp; (Domain Name System)
+<li> 80 ... http &nbsp; (Web server)
+<li> 389 ... ldap &nbsp; (Lightweight Directory Access Protocol)
+<li> 443 ... https &nbsp; (Web server (encrypted))
+<li> 5432 ... PostgreSQL database server
+</ul>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='heading'>IP Addresses</span></td><td align='right'><small>12/52</small></td></tr></table>
+<p>
+<em>IP Address</em> = unique identifier for host on network
+<ul>
+<li> given as a 32-bit identifier (dotted quad), e.g. 129.94.242.20
+<li> special case: &nbsp; 127.0.0.1 &nbsp; <small>(loopback address referring to local host)</small>
+<li> IP addresses are assigned by
+<ul>
+<li> sys admin entering into local registry (for "permanent" addresses)
+<li> dynamically, by getting a temporary address from DHCP server
+</ul>
+</ul>
+<br>
+Note: the world is runnning out of 32-bit IP addresses
+<ul>
+<li> why? Internet of Things ... <i>every</i> networked device needs an IP
+<li> IPv6 uses 128-bit addresses e.g. 2001:388:c:4193:129:94:242:20
+<li> distinct addresses: &nbsp; IPv4 4&times;10<sup>9</sup>, &nbsp; IPv6 3&times;10<sup>38</sup>
+</ul>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='heading'>Application-layer Protocols</span></td><td align='right'><small>13/52</small></td></tr></table>
+<p>
+Each application-layer protocol defines
+<ul>
+<li> <em>types</em> of messages
+<ul>
+<li> different types of requests and responses
+</ul>
+<li> message <em>syntax</em>
+<ul>
+<li> what fields are in messages; how fields are delineated
+</ul>
+<li> message <em>semantics</em>
+<ul>
+<li> meaning of information in fields
+</ul>
+<li> processing <em>rules</em>
+<ul>
+<li> when and how processes respond to messages
+</ul>
+</ul>
+<br>
+Protocols can be <em>open</em> (e.g. HTTP) or <em>proprietary</em> (e.g. Skype)
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='heading'>The HTTP Protocol</span></td><td align='right'><small>14/52</small></td></tr></table>
+<p>
+<em>HTTP</em> = HyperText Transfer Protocol
+<ul>
+<li> an extremely important protocol (drives the Web)
+<li> message types: URLs (requests) and Web pages (responses)
+<li> message syntax: headers + data <small>(see details later)</small>
+</ul>
+URLs are the primary type of request
+<p><div class='center'>
+<img alt="[Diagram:Pics/networks/url-small.png]" src="Pics/networks/url-small.png">
+</div><p>
+Web pages are the primary type of response
+<ul>
+<li> contain HTML; may contain references to other types of objects
+<li> all objects are addressable via a URL
+</ul>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='cont'>... The HTTP Protocol</span></td><td align='right'><small>15/52</small></td></tr></table>
+<p>
+<table>
+<tr>
+<td>
+Application-layer protocol for the Web
+<p>
+Client-server model:
+<ul>
+<li> client = <em>Web browser</em> <small>(e.g. Chrome)</smalL>
+<ul>
+<li> sends HTTP requests
+<li> receives HTTP responses
+<li> shows response as web page
+</ul>
+<li> server = <em>Web server</em> <small>(e.g. Apache)</small>
+<ul>
+<li> receives HTTP requests
+<li> sends HTTP responses
+</ul>
+</ul>
+</td>
+<td>&nbsp;&nbsp;&nbsp;</td>
+<td>
+<img src="Pics/networks/http-overview-small.png">
+</td>
+</table>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='cont'>... The HTTP Protocol</span></td><td align='right'><small>16/52</small></td></tr></table>
+<p>
+Transport layer view of HTTP application layer
+<ul>
+<li> using TCP
+<li> client initiates TCP connection (socket) to server, port 80
+<li> server accepts TCP connection from client
+<li> client sends HTTP request messages (e.g. GET)
+<li> server responds with HTTP messages (e.g. HTML)
+<li> interaction completes, connection (socket) closed
+</ul>
+<p><div class='center'>
+<img alt="[Diagram:Pics/networks/http-conn-small.png]" src="Pics/networks/http-conn-small.png">
+</div><p>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='cont'>... The HTTP Protocol</span></td><td align='right'><small>17/52</small></td></tr></table>
+<p>
+HTTP request message <small>(ascii text)</small>
+<br>
+<p><div class='center'>
+<img alt="[Diagram:Pics/networks/http-request-small.png]" src="Pics/networks/http-request-small.png">
+</div><p>
+URL can also include a <em>query string</em>, e.g.
+<p><div class='center'>
+<img alt="[Diagram:Pics/networks/http-query-small.png]" src="Pics/networks/http-query-small.png">
+</div><p>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='cont'>... The HTTP Protocol</span></td><td align='right'><small>18/52</small></td></tr></table>
+<p>
+First line of HTTP request contains (method, path, protocol), e.g.
+<p><div class='center'>
+<img alt="[Diagram:Pics/networks/http-req-head-small.png]" src="Pics/networks/http-req-head-small.png">
+</div><p>
+<ul>
+<li> no need to mention host, since connection already established
+<li> <large><font color="#008800"><b><code>GET</code></b></font></large> requests data from resource specified by path 
+<ul>
+<li> query string is included in the path
+</ul>
+<li> <large><font color="#008800"><b><code>POST</code></b></font></large> submitd data to be processed by specified resource
+<ul>
+<li> query string is included in the body
+</ul>
+<li> <large><font color="#008800"><b><code>HEAD</code></b></font></large> same as <large><code>GET</code></large>, but returns only header (no data)
+</ul>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='cont'>... The HTTP Protocol</span></td><td align='right'><small>19/52</small></td></tr></table>
+<p>
+HTTP response message <small>(ascii text)</small>
+<br><br>
+<p><div class='center'>
+<img alt="[Diagram:Pics/networks/http-response-small.png]" src="Pics/networks/http-response-small.png">
+</div><p>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='cont'>... The HTTP Protocol</span></td><td align='right'><small>20/52</small></td></tr></table>
+<p>
+Response status codes appear in first line of HTTP response
+<ul>
+<li> <large><font color="#008800"><b><code>202 OK</code></b></font></large> ... succesful request
+<li> <large><font color="#008800"><b><code>301 Moved Permanently</code></b></font></large> ... requested object moved
+<small>
+<ul>
+<li> returns new URL for client to use in future requests
+</ul>
+</small>
+<li> <large><font color="#008800"><b><code>400 Bad Request</code></b></font></large> ... request cannot be processed
+<small>
+<ul>
+<li> possible reasons: bad request syntax, request size too large, ...
+</ul>
+</small>
+<li> <large><font color="#008800"><b><code>403 Forbidden</code></b></font></large> ... valid request cannot be processed
+<small>
+<ul>
+<li> possible reasons: user does not have permission for operation
+</ul>
+</small>
+<li> <large><font color="#008800"><b><code>404 Not Found</code></b></font></large> ... path does not exist on server
+<li> <large><font color="#008800"><b><code>500 Internal Server Error</code></b></font></large> ... server cannot complete request
+<small>
+<ul>
+<li> possible reasons: server side script fails, database not accessible, ...
+</ul>
+</small>
+</ul>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='heading'>Server Addresses (DNS)</span></td><td align='right'><small>21/52</small></td></tr></table>
+<p>
+Network requests typically use server <em>names</em>, e.g.
+<ul>
+<li> <large><code>http://</code></large><large><font color="#008800"><b><code>www.cse.unsw.edu.au</code></b></font></large><large><code>/~cs1521/17s2/</code></large>
+</ul>
+Setting up a TCP connection needs an IP address, not a name
+<p>
+<em>Domain Name System</em> provides name&rarr;IP address mapping
+<p>
+Can access this on Unix/Linux via the <large><code>host</code></large> command, e.g.
+<p><pre>
+$ <b>host www.cse.unsw.edu.au</b>
+www.cse.unsw.edu.au has address 129.94.242.51
+$ <b>host a.b.c.com</b>
+Host a.b.c.com not found: 3(NXDOMAIN)
+</pre><p>
+assumes that you have a network connection
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='cont'>... Server Addresses (DNS)</span></td><td align='right'><small>22/52</small></td></tr></table>
+<p>
+In real life, often have one object referenced by many names, e.g.
+<ul>
+<li> a person: &nbsp; <i>name</i>, &nbsp;SSN, &nbsp;TFN, &nbsp;passport #, ...
+</ul>
+On the Internet, each <em>host</em> has ...
+<ul>
+<li> one or more symbolic names, &nbsp; unique IP address
+<li> symbolic: <large><code>www.cse.unsw.edu.au</code></large>, &nbsp; IP: <large><code>129.94.242.51</code></large>
+</ul>
+Note:
+<ul>
+<li> a given IP address may be reachable via several names
+<li> a given name may map to several IPs &nbsp;<small>(e.g. for load distribution)</small>
+</ul>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='cont'>... Server Addresses (DNS)</span></td><td align='right'><small>23/52</small></td></tr></table>
+<p>
+<em>Domain Name System</em> (DNS)
+<ul>
+<li> effectively a distributed database of name&rarr;IP mappings
+<li> implemented across a hierarchy of <em>name servers</em>
+<li> name servers cooperate to <em>resolve</em> names to IP addresses
+</ul>
+This is an extremely important core function on the Internet
+<p>
+<br>
+Why not centralize DNS?
+<ul>
+<li> central point of failure, high traffic volume
+<li> distant database (lag), maintenance of very large DB
+</ul>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='cont'>... Server Addresses (DNS)</span></td><td align='right'><small>24/52</small></td></tr></table>
+<p>
+<p><div class='center'>
+<img alt="[Diagram:Pics/networks/dns-tree-small.png]" src="Pics/networks/dns-tree-small.png">
+</div><p>
+Resolving <large><code>www.amazon.com</code></large> in this system
+<ul>
+<li> contact a root DNS server to find <large><code>.com</code></large> DNS server
+<li> contact <large><code>.com</code></large> DNS server to get <large><code>amazon.com</code></large> DNS server
+<li> contact <large><code>amazon.com</code></large> DNS server to get IP of their web server
+</ul>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='cont'>... Server Addresses (DNS)</span></td><td align='right'><small>25/52</small></td></tr></table>
+<p>
+Two styles of name resolution
+<ul>
+<li> <em>iterated query</em> ... work done by client
+<ul>
+<li> client contacts name server X
+<li> gets response "I don't know, but ask name server Y"
+<li> OR gets response "Here is the IP address"
+<li> client repeats above steps until name resolved
+</ul>
+<li> <em>recursive query</em> ... work done by name servers
+<ul>
+<li> client contacts name server X
+<li> X contacts name server Y, Y contacts Z, ...
+<li> query propagates until name resolved
+</ul>
+</ul>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='cont'>... Server Addresses (DNS)</span></td><td align='right'><small>26/52</small></td></tr></table>
+<p>
+How are the various DNS servers structured/managed?
+<ul>
+<li> <em>top-level domain</em> (TLD) name servers
+<ul>
+<li> <b>.com</b>, <b>.org</b>, <b>.edu</b> and all country-level domains (e.g. <b>.uk</b>)
+<li> Network Solutions maintains servers for <b>.com</b>
+<li> AusRegistry maintains servers for <b>.au</b>
+</ul>
+<li> <em>authoritative</em> name servers
+<ul>
+<li> maintains mappings from names to IP within an organisation
+<li> all hosts within the organisation are registered here
+</ul>
+<li> <em>local</em> (default) name servers
+<ul>
+<li> maintains cache of name&rarr;IP mappings
+<li> starting point for DNS queries, forward to TLD server <small>(if !cached)</small>
+</ul>
+</ul>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='heading'>Network Architecture</span></td><td align='right'><small>27/52</small></td></tr></table>
+<p>
+Five layer model:
+<ul>
+<li> lowest (least abstract) level
+<li> <em>physical layer</em> ... bits on wires
+<li> <em>link layer</em> ... e.g. ethernet, MAC
+<li> <em>network layer</em> ... e.g. IP
+<li> <em>transport layer</em> ... e.g. TCP/UDP
+<li> <em>application layer</em> ... e.g. HTTP, email
+<li> highest (most abstract) level
+</ul>
+<br>
+Packets at each level incorporate headers from lower levels
+<p>
+Software at each level uses headers appropriate for its purpose
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='heading'>Transport Layer</span></td><td align='right'><small>28/52</small></td></tr></table>
+<p>
+Transport layer deals with ...
+<ul>
+<li> <em>data integrity</em>
+<small>
+<ul>
+<li> some apps (e.g. file transfer) require 100% reliable transfer
+<li> other apps (e.g. audio streaming) can tolerate some loss
+</ul>
+</small>
+<li> <em>timing</em>
+<small>
+<ul>
+<li> some apps (e.g. networked games) require low transmission delay
+</ul>
+</small>
+<li> <em>throughput</em>
+<small>
+<ul>
+<li> some apps (e.g. multimedia) require minimum throughput
+<li> other apps ("elastic apps") can use whatever is available
+</ul>
+</small>
+<li> <em>security</em>
+<small>
+<ul>
+<li> some apps (e.g. web services) require encrypted transmission
+</ul>
+</small>
+</ul>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='cont'>... Transport Layer</span></td><td align='right'><small>29/52</small></td></tr></table>
+<p>
+Properties of some common apps ...
+<ul>
+<li> file transfer: &nbsp;no loss, &nbsp;elastic, &nbsp;not time sensitive
+<li> email: &nbsp;no loss, &nbsp;elastic, &nbsp;not time sensitive
+<li> web/http: &nbsp;no loss, &nbsp;elastic, &nbsp;not time sensitive
+<li> audio: &nbsp;loss-tolerant, &nbsp;5Kbps-1Mbps, &nbsp;few ms delay ok
+<li> video: &nbsp;loss-tolerant, &nbsp;10Kbps-5Mbps, &nbsp;few ms delay ok
+<li> games: &nbsp;loss-tolerant, &nbsp;5Kbps-5Mbps, &nbsp;few secs delay ok
+<li> texting: &nbsp;no loss, &nbsp;elastic, &nbsp;few ms delay ok
+</ul>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='heading'>Transport Layer Protocols</span></td><td align='right'><small>30/52</small></td></tr></table>
+<p>
+Transport layer protocols provide
+<ul>
+<li> <em>logical communication</em> between processes on different hosts
+<li> transport protocols run within end-point processes
+<ul>
+<li> sender: splits messages into <em>segments</em>, passes to network layer
+<li> receiver: reassembles segments into messages, passes to app layer
+</ul>
+</ul>
+<br>
+Two main transport layer protocols on Internet
+<ul>
+<li> TCP ... reliable, connection-oriented protocol, byte-stream
+<li> UDP ... unreliable, simple, connectionless protocol, segments
+</ul>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='cont'>... Transport Layer Protocols</span></td><td align='right'><small>31/52</small></td></tr></table>
+<p>
+<em>TCP</em> (Transmission Control Protocol) provides ...
+<ul>
+<li> <em>reliable transport</em>: data flow between sender/receiver
+<li> <em>flow control</em>: sender doesn't overwhelm receiver
+<li> <em>congestion control</em>: slow sender if network congested
+<li> <em>connection-oriented</em>: setup required between client/server
+</ul>
+Does not provide: <small>timing/throughput guarantees, security</small>
+<p><br>
+<em>UDP</em> (User Datagram Protocol) provides ...
+<ul>
+<li> fast (for sender), but unreliable data transfer
+</ul>
+Does not provide: <small>reliability, flow control, timing/throughput guarantees, security</small>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='cont'>... Transport Layer Protocols</span></td><td align='right'><small>32/52</small></td></tr></table>
+<p>
+TCP is typically layered on top of IP protocol
+<ul>
+<li> IP is an unreliable network-layer protocol
+<li> TCP provides reliable stream of data on top of IP
+</ul>
+How TCP works ...
+<ul>
+<li> set up connection between sender and receiver
+<li> sender transmits a pipeline of segments
+<li> expect ACK for each segment
+<li> retransmissions triggered by timeouts and duplicate ACKs
+<li> receiver manages receipt and collation of segments
+</ul>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='cont'>... Transport Layer Protocols</span></td><td align='right'><small>33/52</small></td></tr></table>
+<p>
+Above comments makes UDP sound "sub-standard"
+<p>
+However, it has a number of advantages (over TCP) ...
+<ul>
+<li> small segment headers, no connection setup costs
+<li> UDP senders can transmit segments as fast as they like
+<li> segments are handled independently of each other
+</ul>
+Effective for low-latency apps that can tolerate lost/damaged packets
+<p>
+Error detection requires use of <em>checksum</em>
+<ul>
+<li> sender and receiver treat segment data as sequence of ints
+<li> sender: compute sum of ints, store in header
+<li> receiver: compute sum of ints, compare to checksum
+</ul>
+Important applications that use UDP: &nbsp;DNS, &nbsp;TFTP, &nbsp;RTSP
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='heading'>Network Layer</span></td><td align='right'><small>34/52</small></td></tr></table>
+<p>
+Transport layer provides a way for app processes to communicate
+<p>
+Network layer provides communication between <em>hosts</em>
+<ul>
+<li> hosts specified by IP addresses (e.g. 129.94.242.19)
+</ul>
+Basic functions of network layer (Internet layer)
+<ul>
+<li> for outgoing packets:
+<ul>
+<li> select the next-hop host
+<li> pass packet to link layer to transmit to host
+</ul>
+<li> for incoming packets:
+<ul>
+<li> if reached destination: extract payload, pass to transport layer
+<li> if not reached destination, treat as outgoing packet
+</ul>
+<li> for all packets/transmissions: error detection, diagnostics
+<li> may also split "oversize" segments into smaller packets
+</ul>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='heading'>Network Layer Protocol</span></td><td align='right'><small>35/52</small></td></tr></table>
+<p>
+IP (Internet Protocol) is a network layer protocol that provides ...
+<ul>
+<li> host addressing and routing of packets
+<li> splitting and reassembly of large packets
+</ul>
+Routing is one of the most important functions
+<ul>
+<li> each host maintains a <em>routing table</em> &nbsp;<small>(maps &nbsp;address&rarr;next-hop)</small>
+<li> uses <em>subnets</em> to reduce table size
+<ul>
+<li> all hosts in a subnet have common prefix
+	&nbsp;<small>(e.g. CSE 129.94.2xx.xxx)</small>
+<li> all IP addresses with common prefix sent to same host (gateway)
+</ul>
+<li> routing table maintained dynamically
+<ul>
+<li> hosts transmit "active" signals to each other periodically
+</ul>
+</ul>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='cont'>... Network Layer Protocol</span></td><td align='right'><small>36/52</small></td></tr></table>
+<p>
+Simplified routing algorithm (IP forwarding)
+<p><pre><small>
+Inputs: D = destination IP address
+        N = network prefix (of IP address)
+
+if (N matches a directly connected network address)
+   send packet over link to D
+else if (routing table contains a route for N)
+   send packet to next-hop address given in routing table
+else if (default route exists in routing table)
+   send packet to the default route
+else
+   can't find route; transmit error message to sender
+</small></pre><p>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='heading'>Link Layer</span></td><td align='right'><small>37/52</small></td></tr></table>
+<p>
+Link layer takes packets from network layer and transmits them
+<ul>
+<li> every host on network has network layer implementation
+<li> implemented as a combination of hardware/software
+<li> each host contains a <em>network interface card</em> (NIC)
+<li> connected to system bus as i/o device
+</ul>
+Services provided by link layer
+<ul>
+<li> <em>flow control</em> ... <small>pacing between adjacent sending and receiving nodes</small>
+<li> <em>error detection</em> ... <small>detects transmission errors; flags error to network layer</small>
+<li> <em>error correction</em> ... <small>can identify and correct single bit errors</small>
+</ul>
+If error corrected, no retransmission; if not correctable, request retransmission
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='heading'>Ethernet</span></td><td align='right'><small>38/52</small></td></tr></table>
+<p>
+<em>Ethernet</em> is an example of link layer implementation
+<ul>
+<li> ethernet is a cable physically connecting multiple hosts
+<li> data broadcast onto cable, tagged with receiver MAC address
+<li> devices recognise their own data using MAC address
+</ul>
+<p><div class='center'>
+<img alt="[Diagram:Pics/networks/ethernet-small.png]" src="Pics/networks/ethernet-small.png">
+</div><p>
+<small>MAC address = Media Access Control address, &nbsp;stored in NIC</small>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='cont'>... Ethernet</span></td><td align='right'><small>39/52</small></td></tr></table>
+<p>
+Ethernet is a shared broadcast medium, and so ...
+<ul>
+<li> <em>interference</em>: two different packets broadcast at same time
+<li> <em>collision</em>: node receives two or more signals at same time
+</ul>
+<em>Multiple access protocols</em> handle this, <small>but cannot also use ethernet</small>
+<p>
+Example multiple access protocols
+<ul>
+<li> <em>channel partitioning</em>
+<small>
+<ul>
+<li> partition channel based on time-slices/frequency-bands/...
+<li> allocate one partition to each node for exclusive use
+</ul>
+</small>
+<li> <em>random access</em>
+<small>
+<ul>
+<li> allow collisions; need mechanisms to recover from collisions
+</ul>
+</small>
+<li> <em>taking turns</em>
+<small>
+<ul>
+<li> nodes take turns; nodes with more to send get longer turns
+</ul>
+</small>
+</ul>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='cont'>... Ethernet</span></td><td align='right'><small>40/52</small></td></tr></table>
+<p>
+A random access transmission protocol (CSMA)
+<ol>
+<li> NIC receives packet from network layer and creates frame
+<li> if NIC senses channel idle, start frame transmission
+<li> if channel busy, wait until channel idle and go to step 2
+<li> if entire frame transmitted without interference, go to step 8
+<li> if NIC detects interference while transmitting, abort transmission
+<li> after abort, choose "random" delay time <small>(longer if more collisions)</small>
+<li> after waiting, go to step 2
+<li> mission accomplished (frame transmitted)
+</ol>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='heading'>Wireless Sensor Network Security</span></td><td align='right'><small>41/52</small></td></tr></table>
+<p>
+What is WSN?
+<p>
+A <em>wireless sensor network</em> (WSN) is a wireless network consisting of spatially distributed autonomous devices using sensors to cooperatively monitor physical or environmental conditions, such as temperature, sound, vibration, pressure, motion or pollutants, at different locations.
+<ul>
+<li> large number of  autonomous sensors
+<li> one or multiple, Base station, Mobile or Static
+<li> reasons for popularity: 
+<small>
+<ul>
+<li> low cost
+<li> ability to solve and interact with real world problems and challenges
+</ul>
+</small>
+</ul>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='cont'>... Wireless Sensor Network Security</span></td><td align='right'><small>42/52</small></td></tr></table>
+<p>
+Security of Wireless Sensor Networks
+<small>
+<ul>
+<li> operate in <em>unattended</em> and <em>hostile</em> environments
+<li> potentially, interact with sensitive data
+</ul>
+</small>
+<p>
+WSNs operate under <em>resource constraints</em>
+<p>
+Applications
+<small>
+<ul>
+<li> Environmental/Habitat monitoring 
+<li> Acoustic detection 
+<li> Seismic Detection 
+<li> Military surveillance  
+<li> Inventory tracking 
+<li> Medical monitoring 
+<li> Smart spaces 
+<li> Process Monitoring  
+</ul>
+</small>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='cont'>... Wireless Sensor Network Security</span></td><td align='right'><small>43/52</small></td></tr></table>
+<p>
+Main aspects to discuss ...
+<ol>
+<li> obstacles to sensor network security
+<li> requirements of a secure wireless sensor network
+<li> attacks
+<li> defensive measures
+</ol>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='cont'>... Wireless Sensor Network Security</span></td><td align='right'><small>44/52</small></td></tr></table>
+<p>
+Obstacles to Sensor Network Security
+<ul>
+<li> Difficult to apply existing approaches to WSN Security
+<li> Very Limited Resources
+<small>
+<ul>
+<li> Limited Memory and Storage Space
+<li> Power Limitation
+</ul>
+</small>
+<li> Unreliable Communication
+<small>
+<ul>
+<li> Unreliable Transfer &nbsp;(Connectionless routing, Packet loss/Error handling)
+<li> Conflicts &nbsp;(Packet collision)
+<li> Latency &nbsp;(Multihop routing/network congestion/node processing)
+</ul>
+</small>
+<li> Unattended Operation
+<small>
+<ul>
+<li> Exposure to Physical Attacks &nbsp;(Bad weather etc)
+<li> Managed Remotely &nbsp;(Physical tampering)
+<li> No Central Management point
+</ul>
+</small>
+</ul>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='cont'>... Wireless Sensor Network Security</span></td><td align='right'><small>45/52</small></td></tr></table>
+<p>
+Security Requirements of a Wireless Sensor Network
+<ul>
+<li> Data Confidentiality
+<small>
+<ul>
+<li> Military Sensitive Data
+<li> Encryption
+</ul>
+</small>
+<li> Data Integrity
+<li> Data Freshness
+<small>
+<ul>
+<li> Important because of shared key strategies
+</ul>
+</small>
+<li> Availability
+<li> Self Organization
+<li> Authentication
+</ul>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='heading'>WSN Attacks</span></td><td align='right'><small>46/52</small></td></tr></table>
+<p>
+Types of Attacks:
+<ul>
+<li> Denial of service attack
+<li> The Sybil attack
+<small>
+<ul>
+<li> Malicious device taking on multiple identities (Voting systems)
+</ul>
+</small>
+<li> Traffic Analysis Attack
+<li> Node Replication Attacks
+<li> Attacks against Privacy
+<small>  
+<ul>
+<li> Monitor and Eavesdropping, Traffic Analysis, Camouflage
+</ul>
+</small>
+<li> Physical Attacks
+</ul>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='cont'>... WSN Attacks</span></td><td align='right'><small>47/52</small></td></tr></table>
+<p>
+<em>Denial of service (DoS) attack</em>
+<ul>
+<li> any event that diminishes or eliminates network's capacity to perform its expected function
+</ul>
+<p>
+Constraints
+<ul>
+<li> Computational Overhead in WSN
+<li> Critical applications
+</ul>
+Types of DoS
+<ul>
+<li> Intermittent Jamming
+<li> Constant Jamming
+<li> Link Layer Attacks (Collision)
+</ul>
+</ul>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='cont'>... WSN Attacks</span></td><td align='right'><small>48/52</small></td></tr></table>
+<p>
+<em>Sybil Attack</em>
+<ul>
+<li> Malicious device illegitimately taking on multiple identities
+</ul>
+Effective against:
+<ul>
+<li> Routing algorithms, Data Aggregation, Voting
+<li> Fair resource allocation and foiling misbehavior detection
+</ul>
+Example: Sensor Network Voting Scheme
+<ul>
+<li> Multiple votes registered using multiple identities
+</ul>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='cont'>... WSN Attacks</span></td><td align='right'><small>49/52</small></td></tr></table>
+<p>
+<em>Node Replication Attacks</em>
+<ul>
+<li> Add another node to sensor network by replicating node ID
+</ul>
+Can lead to:
+<ul>
+<li> packet corruption
+<li> incorrect packet routing
+</ul>
+Insert a node at strategic points
+<ul>
+<li> to manipulate a specific segment of the network 
+</ul>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='cont'>... WSN Attacks</span></td><td align='right'><small>50/52</small></td></tr></table>
+<p>
+<em>Physical Attacks</em>
+<ul>
+<li> Destruction, tampering with circuitry or modification of programming
+</ul>
+Causes:
+<ul>
+<li> nodes operate in hostile outdoor environments
+<li> small form factor
+<li> unattended nature of deployment
+</ul>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='cont'>... WSN Attacks</span></td><td align='right'><small>51/52</small></td></tr></table>
+<p>
+Other kinds of attack:
+<ul>
+<li> Modification attack
+<small>
+<ul>
+<li> Malicious node modifies data in transit between source and destination
+</ul>
+</small>
+<li> Selective forwarding attack
+<small> 
+<ul>
+<li> Malicious node intends to selectively drop some packets
+</ul>
+</small>
+<li> Black-hole attack
+<small> 
+<ul>
+<li> Malicious node intend to refuse routing and drop all packets through
+</ul>
+</small>
+</ul>
+<p><hr><p>
+<table width='100%' cellpadding='0'>
+<tr valign='top'><td align='left'><span class='cont'>... WSN Attacks</span></td><td align='right'><small>52/52</small></td></tr></table>
+<p>
+Defense strategies ...
+<ul>
+<li> Encryption
+<li> Multipath Routing
+<li> Overhearing
+<li> Concealed data aggregation
+<li> More!!!
+</ul>
+<p><hr><p>
+<small><small>Produced: 2 May 2018</small></small>
+</body>
+</html>
