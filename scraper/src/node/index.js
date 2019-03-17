@@ -17,11 +17,19 @@ const analyze = require('./analyze.js');
 // scraper.scrapeSpecified("./pagesToScrape.json");
 
 // TO PROCESS HTML FILES INTO JSON DATA
-// TODO improve data extraction and JSON structure
-process.processFiles("../html/", "../data/");
+// process.processFiles("../html/", "../data/");
+
+// TO PROCESS SINGLE HTML FILE INTO JSON
+// const html = fs.readFileSync("../html/course_outline.html");
+// const data = process.parseData(html);
+// fs.writeFileSync("../data/test.json", JSON.stringify(data));
+
 
 // TO ANALYZE DATA WITH GOOGLE CLOUD, ADD TAGS TO JSON STRUCTURE
 // TODO
-// analyze.analyzeAll();
+analyze.analyzeFile("../data/assignment_1.json")
+    .then(object => fs.writeFileSync("../data/test.json", JSON.stringify(object)))
+    .catch(err => console.log(err.message));
+
 
 

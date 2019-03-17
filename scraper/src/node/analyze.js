@@ -19,21 +19,41 @@ const analyze = async (text) => {
     return res;
 };
 
-const analyzeAll = () => {
+const analyzeFile = async (fileName) => {
 
     // TODO get texts from JSON files
     // TODO add new tags, save to JSON file
 
-    analyze(text).then(res => {
-        console.log(res[0]);
-        // print details of each entity
-        res[0].entities.forEach(entity => {
-            console.log(entity.name);
-            console.log(` - Type: ${entity.type}, Salience: ${entity.salience}`);
+    // object.grouped. => tags, items[text, text]
+    // object.block => tags, text
 
-        });
+    let object = require(fileName);
 
-    }).catch(err => console.log(err.message));
+    object.grouped.forEach(group => {
+        group.items.forEach(item => {
+            analyze(item.text).then(res => {
+                // console.log(res[0]);
+                // print details of each entity
+                res[0].entities.forEach(entity => {
+                    group.tags.push(entity.name);
+                    // TODO could also give salience score
+                    // console.log(` - Type: ${entity.type}, Salience: ${entity.salience}`);
+                });
+            }).catch(err => console.log(err.message));
+        })
+    });
+
+    object.block.forEach(item => {
+        // console.log(item.text);
+        analyze(item.text).then(res => {
+            // console.log(res[0]);
+            res[0].entities.forEach(entity => {
+                // TODO could also give salience score
+                item.tags.push(entity.name);
+            })
+        })
+    });
+
 };
 
-module.exports = {analyze, analyzeAll};
+module.exports = {analyze, analyzeFile};

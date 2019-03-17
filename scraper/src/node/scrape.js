@@ -16,6 +16,10 @@ const myCookie = "";
 let seenSet = new Set();
 
 const recursiveDataScrape = async (linkInfo) => {
+
+    // TODO note this function might be broken
+    // also scrapes
+
     // ensure we don't scrape each page more than once.
     if (seenSet.has(linkInfo.linkURL)) {
         return;
@@ -83,7 +87,7 @@ const scrapeSpecified = (fileName) => {
     pages.list.forEach(page => {
         console.log("scraping " + page.address);
         getPage(page)
-            .then(result => fs.writeFileSync("../html/" + page.name.replace(/\s+/g, '-'), result))
+            .then(result => fs.writeFileSync("../html/" + page.name.replace(/\s+/g, '-') + ".html", result))
             .catch(err => console.log(err.message));
     });
 };
