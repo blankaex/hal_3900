@@ -26,10 +26,14 @@ const analyze = require('./analyze.js');
 
 
 // TO ANALYZE DATA WITH GOOGLE CLOUD, ADD TAGS TO JSON STRUCTURE
-// TODO
-analyze.analyzeFile("../data/assignment_1.json")
+
+// ANALYSIS OF SINGLE FILE
+analyze.analyzeFile("../data/assignment_2.json")
     .then(object => fs.writeFileSync("../data/test.json", JSON.stringify(object)))
     .catch(err => console.log(err.message));
 
+//ANALYSIS OF ALL FILES IN DIRECTORY
 
+// YOU MAY RUN INTO QUOTA PROBLEMS
+// analyze.analyzeAll("../data/");
 
