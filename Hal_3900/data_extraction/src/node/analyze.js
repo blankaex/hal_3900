@@ -8,6 +8,8 @@ const language = require('@google-cloud/language');
 
 const client = new language.LanguageServiceClient();
 
+// Entity Analysis on a single text with Google Cloud NLP,
+// returns analysis as object
 const analyze = async (text) => {
     // Prepares a document, representing the provided text
     const document = {
@@ -17,65 +19,58 @@ const analyze = async (text) => {
     // Detects entities in the document
     const res = await client.analyzeEntities({document});
 
-
     return res;
 };
 
+
+const tagItem = async (item, index) => {
+    // runs analysis, await ensures return value promise resolved before continuing
+    const text = item.text;
+    const tagArray = item.tags;
+    // store all new entities in newTags array
+    // console.log(item);
+    const tags = await analyze(text).then(res => {
+        res[0].entities.forEach(entity => {
+            const name = entity.name.toLowerCase();
+            const salience = entity.salience;
+            tagArray.push({name, salience});
+        });
+        return tagArray;
+    });
+    return {tags, text};
+};
+
+// Calls entity analysis on each object in a single json file,
+// Returns a json object with the new entity tags added
 const analyzeFile = async (fileName) => {
 
-    const object = require(fileName);
-    // console.log("hello");
-    const groupedList = async () => {
-        const groupMap = object.grouped.map(async (group, index) => {
-            // console.log(group);
-            const text = group.text;
-            const textMap = group.items.map(async (item, index) => {
-                // runs analysis,
-                const res = await analyze(item.text);
-                const newTags = [];
-                res[0].entities.forEach(entity => {
-                        newTags.push(entity.name.toLowerCase());
-                        // TODO could also give salience score
-                        // console.log(` - Type: ${entity.type}, Salience: ${entity.salience}`);
-                });
-                // console.log(newTags);
-                return newTags;
-            });
-            let allTags = await Promise.all(textMap);
-            const tags = group.tags;
-            allTags.forEach(array => {
-                array.forEach(tag => {
-                    if (! tags.includes(tag)){
-                        tags.push(tag);
-                    }
-                })
-            });
-            // tags = tags + group.tags;
+    const pageData = require(fileName);
 
-            // console.log({tags, text});
-            return {tags, text};
+    const groupedList = async () => {
+
+        // returns promise of array of "group" type data items
+        const groupMap = pageData.grouped.map(async (group, index) => {
+            // get tags for each group item
+            const itemMap = group.items.map( (item, index) => {
+                return tagItem(item, index);
+            });
+
+            let items = await Promise.all(itemMap);     // await ensures all items finished in itemMap before proceeding
+            const tags = group.tags;                    // original group tags array
+            return {tags, items};
         });
         return Promise.all(groupMap);
     };
 
+    // returns promise of array of "block" type data items
     const blockList = async () => {
-        const blockMap = object.block.map(async (item, index) => {
-            // console.log(item);
-            // console.log(item.text);
-            const text = item.text;
-            const tagArray = item.tags;
-            const tags = await analyze(text).then(res => {
-                res[0].entities.forEach(entity => {
-                    // TODO could also give salience score
-                    tagArray.push(entity.name);
-                });
-                return tagArray;
-            });
-            return {tags, text};
+        const blockMap = pageData.block.map((item, index) => {
+            return tagItem(item, index)
         });
         return Promise.all(blockMap);
     };
 
+    // await used to ensure all analysis and tagging complete before returning the result
     const grouped = await groupedList();
     const block = await blockList();
 
@@ -83,17 +78,18 @@ const analyzeFile = async (fileName) => {
 
 };
 
+// Runs analysis on all files found in the directory
 const analyzeAll = (directory) => {
-    // OPEN FILES FROM DATA FOLDER ONE AT A TIME
+    // read file entries from directory one at a time
     fs.readdir(directory, function (err, items) {
-        // console.log(items);
+
         items.forEach(i => {
             analyzeFile(directory + i)
-            // NOTE: overwrites old file, use with caution
+            // NOTE: overwrites old file with updated object. Adds tag info only, no deletion of data
                 .then(object => fs.writeFileSync(directory + i, JSON.stringify(object)))
                 .catch(err => console.log(err.message));
         });
     });
 };
 
-module.exports = {analyze, analyzeFile, analyzeAll};
+module.exports = {analyzeFile, analyzeAll};

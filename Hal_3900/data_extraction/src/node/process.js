@@ -5,15 +5,11 @@ const cheerio = require('cheerio');
 
 const parseData = (html) => {
 
-    // TODO trial possible headers tagging improvement: try going by header and finding all elem up to next header
-
-
     let $ = cheerio.load(html);
 
     // GET ALL TABLES DATA
     const grouped = [];
     $("table").each((index, element) => {
-        // TODO ideally we want the table's name/heading too.
         const items = [];
         const tags = [];
         tags.push("table");
@@ -25,15 +21,15 @@ const parseData = (html) => {
         $(element).find("tr").map((i, e) => {
             // get the tablerow text, strip whitespace to singles
             const text = $(e).text().replace(/\s+/g, ' ');
+            const tags = []; // these tags will extract from text
             // construct js object
-            items.push({text});
+            items.push({tags, text});
         });
         grouped.push({tags, items});
     });
 
     // GET ALL LIST DATA
     $("ul").map((index, element) => {
-        // TODO get headers
         let items = [];
         const tags = [];
         tags.push("list");
@@ -45,7 +41,8 @@ const parseData = (html) => {
         $(element).find("li").each((i, e) => {
             // paragraph with stripped whitespace. could break them up further if needed
             const text = $(e).text().replace(/\s+/g, ' ');
-            items.push({text});
+            const tags = []; // these tags will extract from data
+            items.push({tags, text});
         });
         grouped.push({tags, items});
     });
@@ -70,17 +67,17 @@ const parseData = (html) => {
 };
 
 
+
+
 // GET ALL LINKS FROM PAGE
 const parseLinks = (html) => {
     const allLinks = [];
 
     let $ = cheerio.load(html);
 
-    //TODO: filter which links more carefully
-
     $("a").map((index, element) => {
         const link = $(element).attr("href");
-        if (link.toString().startsWith("/COMP1521/18s2/") && !seenSet.has(link.toString())
+        if (link.toString().startsWith("/COMP1521/18s2/")
             && !link.toString().includes("groups/")
             && !link.toString().includes("admin/")
             && !link.toString().includes("classes/")) {
@@ -90,6 +87,7 @@ const parseLinks = (html) => {
             });
         }
     });
+
 };
 
 // PROCESS HTML FILES
