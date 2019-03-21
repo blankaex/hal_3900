@@ -4,47 +4,58 @@
     <div :class="{'msg':true,
       'bot':message.from === 'bot',
       'user':message.from === 'user'
-      }" v-for="message in $store.state.messages" :key="message.id">
+      }" v-for="message in $store.state.messages" :key="message.id+'-'+message.from">
         <img v-if="message.from === 'bot'" src="../assets/hal.png">
         <div class="text" :style="{'background': getGradient(message.from)}">{{message.text}}</div>
         <img v-if="message.from === 'user'" src="../assets/user.png">
     </div>
   </div>
   <div class="input" v-on:keydown.enter="send" >
-    <input type="text" v-model="draft"/>
-    <i class="mdi mdi-send" @click="send"></i>
+    <input type="text"
+      v-model="draft"
+      :style="inputColor"
+      @focus="inputFocused = true"
+      @blur="inputFocused = false"
+    />
+    <ThemedIcon name="send" @click="send"></ThemedIcon>
   </div>
 </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
+import { BotResponse, Theme } from './types'
+import ThemedIcon from './ThemedIcon.vue'
 
-interface BotResponse {
-  text?: string,
-  error: false,
-  type: 'message'|'error'
-}
-interface Theme {
-  primary: string,
-  secondary: string,
-  primaryGradient: string[],
-  secondaryGradient: string[]
-}
-
-@Component
+@Component({
+  components: {
+    ThemedIcon
+  }
+})
 export default class Chat extends Vue {
-  draft: string = '';
-  socket: WebSocket|null = null;
+  draft: string = ''
+  socket: WebSocket|null = null
+  inputFocused: Boolean = false
+
+  get inputColor () {
+    if (!this.inputFocused) {
+      return {}
+    }
+    return {
+      'borderColor': this.$store.state.theme.primary,
+      'color': this.$store.state.theme.primary
+    }
+  }
 
   scrollEnd () {
     const container = this.$el.querySelector('#messages')
     if (container === null) return
     container.scrollTop = container.scrollHeight
   }
+
   send () {
     if (this.draft.trim() === '') return
-    if (!this.socket) return // TODO: actually throw a error here
+    if (!this.socket) throw Error("Socket hasn't been connected yet!")
     this.$store.commit('sendMessage', this.draft)
     this.socket.send(JSON.stringify({
       type: 'message',
@@ -54,16 +65,21 @@ export default class Chat extends Vue {
     this.draft = ''
     this.scrollEnd()
   }
+
   recv (res: MessageEvent) {
     const resObj:BotResponse = JSON.parse(res.data)
-    // TODO: Error handling
     this.$store.commit('recvMessage', resObj.text)
     this.$nextTick(function () {
       this.scrollEnd()
     })
   }
+
+  socketErr () {
+    // TODO: i dunno crash lol
+  }
+
   getGradient (who:string) {
-    const theme = this.$store.state.theme
+    const theme:Theme = this.$store.state.theme
     const pg = theme.primaryGradient
     const sg = theme.secondaryGradient
     if (who === 'user') {
@@ -72,11 +88,17 @@ export default class Chat extends Vue {
       return `linear-gradient(to right, ${sg[0]}, ${sg[1]})`
     }
   }
+
   mounted () {
     this.$nextTick(function () {
-      const host = window.location.host
+      // Are we running in dev mode?
+      let host = 'backend.hal-3900.com'
+      if (window.location.href !== 'hal-3900.com') {
+        host = 'localhost:9447'
+      }
       this.socket = new WebSocket(`ws://${host}/talk`)
       this.socket.onmessage = this.recv
+      this.socket.onerror = this.socketErr
     })
   }
 }
@@ -99,19 +121,6 @@ export default class Chat extends Vue {
   @extend %flex-center
   width: 100%
   height: 5rem
-.input i
-  margin-left: 1rem
-  padding-top: 0.5rem
-  padding-bottom: 0.5rem
-  padding-right: 0.5rem
-  padding-left: 0.75rem
-  font-size: 1.5rem
-  color: #777
-  border-radius: 50%
-  cursor: pointer
-.input i:hover
-  color: #ff9068
-  background: rgba(255, 144, 104,0.1)
 .input input
   height: 2rem
   border: 2px solid #EBEBEB

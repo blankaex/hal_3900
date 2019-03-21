@@ -1,9 +1,7 @@
 <template>
 <div :class="{'sidebar':true,'open': open}">
   <div class="menu">
-    <i class="mdi mdi-menu" @click="open=!open"></i>
-
-    <!-- TODO: support for non latest chrome -->
+    <ThemedIcon @click="open=!open" name="menu"></ThemedIcon>
     <div class="themes">
       <div v-for="theme in $store.state.themes"
         :key="theme.primary"
@@ -19,8 +17,14 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
+import { Theme } from './types'
+import ThemedIcon from './ThemedIcon.vue'
 
-@Component
+@Component({
+  components: {
+    ThemedIcon
+  }
+})
 export default class Sidebar extends Vue {
   open:boolean = false
 }

@@ -5,6 +5,8 @@ services:
     restart: always
     ports:
       - 0.0.0.0:9447:9447
+    enviornment:
+      - BACKEND_URL="backend.hal-3900.ml"
   frontend:
     build: ./frontend
     restart: always

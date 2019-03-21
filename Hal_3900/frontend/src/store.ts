@@ -1,15 +1,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import moment from 'moment'
+import { Theme } from '@/components/types'
 
 Vue.use(Vuex)
-
-interface Theme {
-  primary: string,
-  secondary: string,
-  primaryGradient: string[],
-  secondaryGradient: string[]
-}
 
 export default new Vuex.Store({
   state: {
