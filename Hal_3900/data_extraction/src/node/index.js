@@ -8,7 +8,7 @@ const analyze = require('./analyze.js');
 // ------ SCRAPING FROM WEB ------
 
 // TO SCRAPE PAGES LISTED IN pagesToScrape.json
-// scraper.scrapeSpecified("./pagesToScrape.json");
+scraper.scrapeSpecified("./pagesToScrape.json");
 
 // ------ PROCESSING HTML FILES ------
 
@@ -23,14 +23,51 @@ const analyze = require('./analyze.js');
 // ------ ANALYZE TEXT WITH GOOGLE CLOUD NLP ------
 
 // ANALYSIS OF SINGLE FILE
-const filename = "../data/notes_e.json";
+// const filename = "../data/notes_e.json";
+// notes_e, notes_f, notes_g not done, QUOTA problems.
+// data is fairly trashy here, needs a lot of work to improve
+// needs more grouping which will also reduce number of small NLP calls
 
-analyze.analyzeFile(filename)
-    .then(object => fs.writeFileSync(filename, JSON.stringify(object)))
-    .catch(err => console.log(err.message));
+
+// analyze.analyzeFile(filename)
+//     .then(object => fs.writeFileSync(filename, JSON.stringify(object)))
+//     .catch(err => console.log(err.message));
 
 //ANALYSIS OF ALL FILES IN DIRECTORY
 
 // YOU MAY RUN INTO QUOTA PROBLEMS -> THIS NEEDS SOME EXPLORATION
 // analyze.analyzeAll("../data/");
 
+// const test = async () => {
+//     const questionPage = await scraper.getPage({"address":"https://webcms3.cse.unsw.edu.au/COMP1521/18s2/forums/2714116"});
+//     fs.writeFileSync("test.html", questionPage);
+//     console.log( process.getForumPostObject(questionPage, []));
+//
+// };
+
+//
+// const test = async () => {
+//     // Get forum id from last part of URL
+//     const url = "https://webcms3.cse.unsw.edu.au/COMP1521/18s2/forums/2714116";
+//     const tokens = url.split("/");
+//     const id = tokens[tokens.length-1];
+//     const address = `https://webcms3.cse.unsw.edu.au/messages/?type_id=${id}&type=message&limit=100&cursor=&depth=0`;
+//     console.log(address);
+//
+//     try {
+//         // parse in forum id as type_id
+//         // lol Michael reckons this is vulnerable to cross site scripting attacks
+//
+//         // const questionPage = await getPage({address});
+//         const apiResponse = await scraper.getPage({address});
+//         const responseObject = JSON.parse(apiResponse);
+//         // console.log(apiResponse);
+//         console.log(process.getForumPostObject(responseObject, ["hello World"]));
+//     } catch (err) {
+//         console.error(err);
+//     }
+// };
+//
+// test();
+
+// process.getForumPostObject(html, tags);
