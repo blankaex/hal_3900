@@ -8,7 +8,7 @@ const analyze = require('./analyze.js');
 // ------ SCRAPING FROM WEB ------
 
 // TO SCRAPE PAGES LISTED IN pagesToScrape.json
-scraper.scrapeSpecified("./pagesToScrape.json");
+// scraper.scrapeSpecified("./pagesToScrape.json");
 
 // ------ PROCESSING HTML FILES ------
 
@@ -44,30 +44,3 @@ scraper.scrapeSpecified("./pagesToScrape.json");
 //     console.log( process.getForumPostObject(questionPage, []));
 //
 // };
-
-//
-// const test = async () => {
-//     // Get forum id from last part of URL
-//     const url = "https://webcms3.cse.unsw.edu.au/COMP1521/18s2/forums/2714116";
-//     const tokens = url.split("/");
-//     const id = tokens[tokens.length-1];
-//     const address = `https://webcms3.cse.unsw.edu.au/messages/?type_id=${id}&type=message&limit=100&cursor=&depth=0`;
-//     console.log(address);
-//
-//     try {
-//         // parse in forum id as type_id
-//         // lol Michael reckons this is vulnerable to cross site scripting attacks
-//
-//         // const questionPage = await getPage({address});
-//         const apiResponse = await scraper.getPage({address});
-//         const responseObject = JSON.parse(apiResponse);
-//         // console.log(apiResponse);
-//         console.log(process.getForumPostObject(responseObject, ["hello World"]));
-//     } catch (err) {
-//         console.error(err);
-//     }
-// };
-//
-// test();
-
-// process.getForumPostObject(html, tags);
