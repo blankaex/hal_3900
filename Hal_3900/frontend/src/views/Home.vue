@@ -24,4 +24,6 @@ export default class Home extends Vue {}
 .home
   @extend %flex-row
   background: #FAFAFA
+  width: 100vw
+  overflow-x: hidden
 </style>

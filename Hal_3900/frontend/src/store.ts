@@ -4,6 +4,13 @@ import moment from 'moment'
 
 Vue.use(Vuex)
 
+interface Theme {
+  primary: string,
+  secondary: string,
+  primaryGradient: string[],
+  secondaryGradient: string[]
+}
+
 export default new Vuex.Store({
   state: {
     messages: [
@@ -11,6 +18,26 @@ export default new Vuex.Store({
         id: 0,
         from: 'bot',
         text: 'Hello, welcome back!'
+      }
+    ],
+    theme: {
+      primary: '#fd746c',
+      secondary: '#457fca',
+      primaryGradient: ['#ff9068', '#fd746c'],
+      secondaryGradient: ['#5691c8', '#457fca']
+    },
+    themes: [
+      {
+        primary: '#fd746c',
+        secondary: '#457fca',
+        primaryGradient: ['#ff9068', '#fd746c'],
+        secondaryGradient: ['#5691c8', '#457fca']
+      },
+      {
+        secondary: '#fd746c',
+        primary: '#457fca',
+        secondaryGradient: ['#ff9068', '#fd746c'],
+        primaryGradient: ['#5691c8', '#457fca']
       }
     ]
   },
@@ -28,6 +55,10 @@ export default new Vuex.Store({
         from: 'bot',
         text: payload
       })
+    },
+    changeTheme (state, payload) {
+      const theme = state.themes.filter((x:Theme) => x.primary === payload)[0]
+      state.theme = theme
     }
   },
   actions: {
