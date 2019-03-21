@@ -17,9 +17,7 @@ const analyze = async (text) => {
         type: 'PLAIN_TEXT',
     };
     // Detects entities in the document
-    const res = await client.analyzeEntities({document});
-
-    return res;
+    return await client.analyzeEntities({document});
 };
 
 

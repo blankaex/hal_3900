@@ -12,11 +12,12 @@ const parseData = (html) => {
     $("table").each((index, element) => {
         const items = [];
         const tags = [];
-        tags.push("table");
+        tags.push({"name":"table"});
         const prev = $(element).prev();
         if (prev.is("h1") ||  prev.is("h2") || prev.is("h3")
             || prev.is("h4") || prev.is("h5") || prev.is("h6")){
-            tags.push(prev.text().replace(/\s+/g, ' '));
+            const name = prev.text().replace(/\s+/g, ' ');
+            tags.push({name});
         }
         $(element).find("tr").map((i, e) => {
             // get the tablerow text, strip whitespace to singles
@@ -32,11 +33,12 @@ const parseData = (html) => {
     $("ul").map((index, element) => {
         let items = [];
         const tags = [];
-        tags.push("list");
+        tags.push({"name" : "list"});
         const prev = $(element).prev();
         if (prev.is("h1") ||  prev.is("h2") || prev.is("h3")
             || prev.is("h4") || prev.is("h5") || prev.is("h6")){
-            tags.push(prev.text().replace(/\s+/g, ' '));
+            const name = prev.text().replace(/\s+/g, ' ');
+            tags.push({name});
         }
         $(element).find("li").each((i, e) => {
             // paragraph with stripped whitespace. could break them up further if needed
@@ -51,11 +53,12 @@ const parseData = (html) => {
     const block = [];
     $("p").map((index, element) => {
         const tags = [];
-        tags.push("paragraph");
+        tags.push({"name" : "paragraph"});
         const prev = $(element).prev();
         if (prev.is("h1") ||  prev.is("h2") || prev.is("h3")
             || prev.is("h4") || prev.is("h5") || prev.is("h6")){
-            tags.push(prev.text().replace(/\s+/g, ' '));
+            const name = prev.text().replace(/\s+/g, ' ');
+            tags.push({name});
         }
         // paragraph with stripped whitespace. could break them up further if needed
         const text = $(element).text().replace(/\s+/g, ' ');
@@ -65,9 +68,6 @@ const parseData = (html) => {
     return {grouped, block};
 
 };
-
-
-
 
 // GET ALL LINKS FROM PAGE
 const parseLinks = (html) => {
@@ -87,7 +87,83 @@ const parseLinks = (html) => {
             });
         }
     });
+};
 
+
+// feed me the html for the root forum page
+const getForumTopicPages = (forumRootHtml) => {
+    // array of each item to be {topic name, url}
+
+    //TODO refactor to use Promise.all() to create array
+    const topicPages = [];
+    const baseURL = "https://webcms3.cse.unsw.edu.au";
+
+
+    let $ = cheerio.load(forumRootHtml);
+
+    $("tr").map((index, element) => {
+        const address = baseURL + $(element).find("td").eq(0).find("a").attr("href");
+        const name = $(element).find("td").eq(0).text().replace(/\s+/g, ' ').replace(":", "/");
+        const numPosts = $(element).find("td").eq(1).text().replace(/\s+/g, ' ');
+            if (parseInt(numPosts) !== 0 && name !== ""){
+                topicPages.push({name, address, numPosts});
+            }
+    });
+    return topicPages;
+};
+
+// feed me html object for a topic listing page
+const getForumPages = (html) => {
+    const baseURL = "https://webcms3.cse.unsw.edu.au";
+
+    let $ = cheerio.load(html);
+    const addressList = [];
+    const tags = [];
+    // Get each <tr>
+    $("tr").map((index, element) =>{
+        // get its first <td>
+        // get the a.href within that, this is the link
+        const address = baseURL + $(element).find("td").eq(0).find("a").attr("href");
+        // console.log(address);  // TODO some of these addresses are finding undefined
+        addressList.push(address);
+    });
+
+    $(".breadcrumb").find("li").map((index, element) => {
+        tags.push({"name": $(element).text().replace(/\s+/g, ' ')});
+    });
+
+    const topic = $(".active").text().replace(/\s+/g, ' ');
+
+    return {tags, topic, addressList};
+};
+
+const extractMessage = (messageItem) => {
+    const text = messageItem.body.replace(/<(?:.|\n)*?>/gm, '').replace(/\s+/g, ' ');
+    console.log(text);
+    const childResults = [];
+    childResults.push(text);
+    messageItem.children.forEach(child => {
+        childResults.push(extractMessage(child));
+    });
+    console.log(childResults);
+    return childResults;
+};
+
+const getForumPostObject = (apiResponseObject, tags) => {
+
+    // console.log("getting forum post object");
+    const question = apiResponseObject.result.messages[0].body.replace(/<(?:.|\n)*?>/gm, '').replace(/\s+/g, ' ');
+    const answers = [];
+    apiResponseObject.result.messages[0].children.forEach(child => {
+        const results = extractMessage(child);
+        results.forEach(result => {
+            if (result != null){
+                answers.push(result);
+            }
+        });
+    });
+
+    return {tags, question, answers};
 };
 
 // PROCESS HTML FILES
@@ -107,5 +183,4 @@ const processFiles = (directory, destination) => {
 
 };
 
-
-module.exports = {parseData, parseLinks, processFiles};
+module.exports = {parseData, parseLinks, processFiles, getForumTopicPages, getForumPages, getForumPostObject};

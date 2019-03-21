@@ -1,0 +1,1 @@
+{"posts":[null,{"tags":[{"name":"Forums"},{"name":"Tutors' Weekly"},{"name":"Tute Exercises with Solutions"},{"name":"Week 01: Introduction, C Revision"}],"question":" minor correction for Q 4b *p.x++ is interpreted as *((p.x)++) (post-fix operators have higher precedence than pre-fix) ","answers":[" Ok ... I'll take your word for it ... fixed in the solutions. "]}]}
