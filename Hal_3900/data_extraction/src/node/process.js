@@ -143,7 +143,6 @@ const extractMessage = (messageItem) => {
     const childResults = [];
     childResults.push(text);
     messageItem.children.forEach(child => {
-        console.log("Exctracting child");
         childResults.push(extractMessage(child));
     });
     console.log(childResults);
@@ -158,7 +157,9 @@ const getForumPostObject = (apiResponseObject, tags) => {
     apiResponseObject.result.messages[0].children.forEach(child => {
         const results = extractMessage(child);
         results.forEach(result => {
-            answers.push(result);
+            if (result != null){
+                answers.push(result);
+            }
         });
     });
 
@@ -181,6 +182,5 @@ const processFiles = (directory, destination) => {
     });
 
 };
-
 
 module.exports = {parseData, parseLinks, processFiles, getForumTopicPages, getForumPages, getForumPostObject};

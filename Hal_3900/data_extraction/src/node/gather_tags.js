@@ -1,31 +1,34 @@
 const fs = require("fs");
 
-// write list of tags to file. omg
+// write list of tags to file.
 // OPEN FILES FROM HTML FOLDER ONE AT A TIME
-fs.writeFileSync("../tags.txt", "Tags List\n");
-fs.readdir("../data/", function (err, items) {
-    // console.log(items);
+const writeTagsToFile = () => {
 
-    items.forEach(i => {
-        const data = require("../data/" +i);
-        // get block tags
-        data.block.forEach(item => {
-            item.tags.forEach(tag => {
-                fs.appendFileSync("../tags.txt", JSON.stringify(tag) + "\n");
-            })
-        });
+    fs.writeFileSync("../tags.txt", "Tags List\n");
+    fs.readdir("../data/", function (err, items) {
+        // console.log(items);
 
-        data.grouped.forEach(item => {
-            item.tags.forEach(tag => {
-                fs.appendFileSync("../tags.txt", JSON.stringify(tag) + "\n");
+        items.forEach(i => {
+            const data = require("../data/" + i);
+            // get block tags
+            data.block.forEach(item => {
+                item.tags.forEach(tag => {
+                    fs.appendFileSync("../tags.txt", JSON.stringify(tag) + "\n");
+                })
             });
-            item.items.forEach(item => {
+
+            data.grouped.forEach(item => {
                 item.tags.forEach(tag => {
                     fs.appendFileSync("../tags.txt", JSON.stringify(tag) + "\n");
                 });
+                item.items.forEach(item => {
+                    item.tags.forEach(tag => {
+                        fs.appendFileSync("../tags.txt", JSON.stringify(tag) + "\n");
+                    });
+                })
             })
-        })
 
 
+        });
     });
-});
+}
