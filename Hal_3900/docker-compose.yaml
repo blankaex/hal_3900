@@ -1,14 +1,19 @@
 version: '3'
 services:
+  database:
+    build: ./database
+    restart: always
   backend:
     build: ./backend
     restart: always
+    depends_on:
+      - database
     ports:
       - 0.0.0.0:9447:9447
-    enviornment:
-      - BACKEND_URL="backend.hal-3900.ml"
   frontend:
     build: ./frontend
     restart: always
+    depends_on:
+      - backend
     ports:
       - 0.0.0.0:8080:8080

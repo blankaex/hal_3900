@@ -4,6 +4,12 @@
 
 > make sure you are running latest node version
 
+_launch the database_
+```
+cd database
+docker build -t mongodb .
+docker run -p 27017:27017 -d mongodb
+```
 
 _in one terminal launch frontend_
 ```

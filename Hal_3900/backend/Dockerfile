@@ -6,5 +6,6 @@ WORKDIR /app/web
 RUN npm install
 
 EXPOSE 9447
+ENV PRODUCTION='1'
 
 ENTRYPOINT npm run dev

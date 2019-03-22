@@ -1,11 +1,11 @@
 FROM node:11
 
 COPY . /app/web
-WORKDIR /app/web
+WORKDIR /app/web/dist
 
 RUN npm install
 RUN npm run build
 
 EXPOSE 8080
 
-ENTRYPOINT npm run serve
+ENTRYPOINT python3 -m http.server 8080
