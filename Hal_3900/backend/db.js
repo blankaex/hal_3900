@@ -57,13 +57,13 @@ module.exports = class DB {
 
     async initData () {
         // TODO move data out of src!
-        const dataDir = "../data_extraction/src/data";
-        const forumDir = "../data_extraction/src/data_forum";
+        const dataDir = "../data_extraction/src/data/";
+        const forumDir = "../data_extraction/src/data_forum/";
         // GET FORUM POSTS
         fs.readdir(forumDir, async (err, items) => {
             // put forum post array from each file into the db
             items.forEach(i => {
-                const forum = require(i);
+                const forum = require(forumDir + i);
                 // dump into db
                 this.addToCollection(forum.posts, 'forum');
             });
@@ -71,7 +71,7 @@ module.exports = class DB {
         // GET BLOCK AND GROUPED
         fs.readdir(dataDir, async (err, items) => {
             items.forEach(i => {
-                const dataObject = require(i);
+                const dataObject = require(dataDir + i);
                 // dump into db
                 this.addToCollection(dataObject.grouped, 'grouped');
                 this.addToCollection(dataObject.block, 'block');

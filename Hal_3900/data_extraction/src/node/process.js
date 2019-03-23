@@ -98,7 +98,6 @@ const getForumTopicPages = (forumRootHtml) => {
     const topicPages = [];
     const baseURL = "https://webcms3.cse.unsw.edu.au";
 
-
     let $ = cheerio.load(forumRootHtml);
 
     $("tr").map((index, element) => {
@@ -113,7 +112,8 @@ const getForumTopicPages = (forumRootHtml) => {
 };
 
 // feed me html object for a topic listing page
-const getForumPages = (html) => {
+// returns list of links from this topic page
+const getForumPages = (html, topicPageId) => {
     const baseURL = "https://webcms3.cse.unsw.edu.au";
 
     let $ = cheerio.load(html);
@@ -132,20 +132,18 @@ const getForumPages = (html) => {
         tags.push({"name": $(element).text().replace(/\s+/g, ' ')});
     });
 
-    const topic = $(".active").text().replace(/\s+/g, ' ');
+    // const topic = $(".active").text().replace(/\s+/g, ' ');
 
-    return {tags, topic, addressList};
+    return {tags, topicPageId, addressList};
 };
 
 const extractMessage = (messageItem) => {
     const text = messageItem.body.replace(/<(?:.|\n)*?>/gm, '').replace(/\s+/g, ' ');
-    console.log(text);
     const childResults = [];
     childResults.push(text);
     messageItem.children.forEach(child => {
         childResults.push(extractMessage(child));
     });
-    console.log(childResults);
     return childResults;
 };
 

@@ -8,7 +8,7 @@ const analyze = require('./analyze.js');
 // ------ SCRAPING FROM WEB ------
 
 // TO SCRAPE PAGES LISTED IN pagesToScrape.json
-// scraper.scrapeSpecified("./pagesToScrape.json");
+scraper.scrapeSpecified("./pagesToScrape.json");
 
 // ------ PROCESSING HTML FILES ------
 

@@ -14,9 +14,9 @@ module.exports = class Bot {
 				}
 			]);
 
-			this.db.forum.insertMany(/*array of forum objects*/);
-			this.db.block.insertMany(/*array of block objects*/);
-			this.db.group.insertMany(/*array of group objects*/);
+			// Run INIT DATA here once established working
+			console.log("Initialising db with data");
+			this.db.initData();
 
 		})
 	}

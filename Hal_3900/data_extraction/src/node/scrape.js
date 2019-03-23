@@ -6,7 +6,7 @@ const process = require('./process.js');
 
 const getPage = async (linkInfo) => {
 
-    const myCookie = ""; // login session cookie
+    const myCookie = "session=.eJwljsEOwiAQRP9lzz1QhC3bnyEUFiUqNUBPjf_uqqeZTOZN5gSfG_cbrKMdPIEvCVYIlgKmmBZaeFabckobo5GsSAyRYYLYW_Zjv3OVvo7ZoqM5kXGbWaLVOQm5XUxAFEKmiNFY4crzxa3vNQwWUIK9lWup4eGPzu0ffd3viFXkHOH7Ax7IMa8.D3eD9Q.JEkhxp1em2xgd63BPvzK7Mo41EQ; Domain=.webcms3.cse.unsw.edu.au; HttpOnly; Path=/"; // login session cookie
 
     // This fetches the html from the page specified
     const html = await rp({
@@ -36,7 +36,11 @@ const scrapeForum = async (forumRoot) => {
     const topicPageLinks = topicPages.map(async (linkInfo, index) => {
         try {
             const topicPage = await getPage(linkInfo);
-            return process.getForumPages(topicPage);
+
+            const tokens = linkInfo.address.split("/");
+            const topicPageId = tokens[tokens.length-1];
+
+            return process.getForumPages(topicPage, topicPageId);
         } catch (err){
             console.error(err);
         }
@@ -70,13 +74,15 @@ const scrapeForum = async (forumRoot) => {
         });
 
         // GETS ARRAY OF POST OBJECTS FROM THE MAP
-        const posts = await Promise.all(postObjects);
+        const postsArray = await Promise.all(postObjects);
+
+        // FILTER NULL RESULTS
+        const posts = posts.filter(item => item != null);
 
         // SAVE JSON TO FILE
-        fs.writeFileSync("../data_forum/" + pageList.topic.replace(/\s+/g, '-') + ".json", JSON.stringify({posts}));
+        fs.writeFileSync("../data_forum/" + pageList.topicPageId + ".json", JSON.stringify({posts}));
 
     });
-
 };
 
 const scrapeSpecified = (fileName) => {
