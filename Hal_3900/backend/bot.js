@@ -12,10 +12,15 @@ module.exports = class Bot {
 					type: "text",
 					content: "hi it's me!"
 				}
-			])
+			]);
+
+			this.db.forum.insertMany(/*array of forum objects*/);
+			this.db.block.insertMany(/*array of block objects*/);
+			this.db.group.insertMany(/*array of group objects*/);
+
 		})
 	}
 	query(msg) {
-		return "lol i dunno"
+		return "lol i dunno";
 	}
-}
+};
