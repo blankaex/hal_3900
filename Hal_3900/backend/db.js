@@ -1,5 +1,6 @@
 const MongoClient = require('mongodb').MongoClient;
 const fs = require('fs');
+const query = require('./db_query');
 
 module.exports = class DB {
     constructor (dbUrl, dbName) {
@@ -56,11 +57,10 @@ module.exports = class DB {
     }
 
     async initData () {
-        // TODO move data out of src!
-        const dataDir = "../data_extraction/src/data/";
-        const forumDir = "../data_extraction/src/data_forum/";
+        const dataDir = "../data_extraction/data_page/";
+        const forumDir = "../data_extraction/data_forum/";
         // GET FORUM POSTS
-        fs.readdir(forumDir, async (err, items) => {
+        await fs.readdir(forumDir, async (err, items) => {
             // put forum post array from each file into the db
             items.forEach(i => {
                 const forum = require(forumDir + i);
@@ -69,16 +69,14 @@ module.exports = class DB {
             });
         });
         // GET BLOCK AND GROUPED
-        fs.readdir(dataDir, async (err, items) => {
-            items.forEach(i => {
+        await fs.readdir(dataDir, async (err, items) => {
+            items.forEach(async (i) => {
                 const dataObject = require(dataDir + i);
                 // dump into db
-                this.addToCollection(dataObject.grouped, 'grouped');
-                this.addToCollection(dataObject.block, 'block');
-            })
-        })
-
-
+                await this.addToCollection(dataObject.grouped, 'grouped');
+                await this.addToCollection(dataObject.block, 'block');
+            });
+        });
     };
 
 };

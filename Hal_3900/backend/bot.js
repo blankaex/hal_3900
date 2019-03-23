@@ -7,17 +7,16 @@ module.exports = class Bot {
 		// Async connection
 		this.db.connect().then(_=>{
 			// you can submit documents like this
-			this.db.dump([
-				{
-					type: "text",
-					content: "hi it's me!"
-				}
-			]);
-
-			// Run INIT DATA here once established working
+			// this.db.dump([
+			// 	{
+			// 		type: "text",
+			// 		content: "hi it's me!"
+			// 	}
+			// ]);
+			//
+			// // Run INIT DATA here once established working
 			console.log("Initialising db with data");
 			this.db.initData();
-
 		})
 	}
 	query(msg) {
