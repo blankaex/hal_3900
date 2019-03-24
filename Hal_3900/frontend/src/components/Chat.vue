@@ -17,7 +17,10 @@
       @focus="inputFocused = true"
       @blur="inputFocused = false"
     />
-    <ThemedIcon name="send" @click="send"></ThemedIcon>
+    <ThemedIcon
+      name="send"
+      padding="0.5rem 0.5rem 0.5rem 0.75rem"
+      @click="send"></ThemedIcon>
   </div>
 </div>
 </template>

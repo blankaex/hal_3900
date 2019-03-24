@@ -7,7 +7,7 @@ module.exports = class DB {
         this.dbName = dbName
     }
 
-    async connect(dbUrl,dbName) {
+    async connect() {
         const mongoConfig = {
             useNewUrlParser: true
         }

@@ -2,7 +2,8 @@
     <i :class="`mdi mdi-${name}`"
       :style="color"
       @mouseenter="hovered = true"
-      @mouseleave="hovered = false">
+      @mouseleave="hovered = false"
+      @click="$emit('click')">
     </i>
 </template>
 
@@ -13,11 +14,16 @@ import { BotResponse, Theme } from './types'
 @Component
 export default class ThemedIcon extends Vue {
   @Prop() name!: string
+  @Prop() margin!: string
+  @Prop() padding!: string
   hovered: Boolean = false
 
   get color () {
     if (!this.hovered) {
-      return {}
+      return {
+        'margin': this.margin,
+        'padding': this.padding
+      }
     }
     const col = this.$store.state.theme.primary
     // CONVERT COL TO RGB
@@ -26,7 +32,9 @@ export default class ThemedIcon extends Vue {
     const b = parseInt(col.substr(5, 2), 16)
     return {
       'color': this.$store.state.theme.primary,
-      'background': `rgba(${r},${g},${b},0.1)`
+      'background': `rgba(${r},${g},${b},0.1)`,
+      'margin': this.margin,
+      'padding': this.padding
     }
   }
 }
@@ -34,11 +42,6 @@ export default class ThemedIcon extends Vue {
 
 <style scoped lang="sass">
 i
-  margin-left: 1rem
-  padding-top: 0.5rem
-  padding-bottom: 0.5rem
-  padding-right: 0.5rem
-  padding-left: 0.75rem
   font-size: 1.5rem
   color: #777
   border-radius: 50%
