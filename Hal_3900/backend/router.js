@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const cors = require('cors');
 const bot = require('./bot');
 const hal = new bot()
 
@@ -8,10 +9,8 @@ module.exports = function(app)
     // Returns any static files in frontend `/dist`
     app.use(express.static(path.join(__dirname, '../frontend/dist')))
 
-    // index
-    app.get('/', (_, res) =>
-      res.sendFile(path.join(__dirname, 'dist', 'index.html'))
-    );
+    // Middleware
+    app.use(cors());
 
     // Web socket connection
     app.ws('/talk', function(ws, req) {
@@ -35,6 +34,6 @@ module.exports = function(app)
 
     // 404 catch all
     app.get('*', (_, res) =>
-      res.sendFile(path.join(__dirname, 'public', '404.html'))
+      res.sendFile(path.join(__dirname, '../frontend/dist', '404.html'))
     );    
 }
