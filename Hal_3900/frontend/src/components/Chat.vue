@@ -99,7 +99,7 @@ export default class Chat extends Vue {
       if (window.location.host !== 'hal-3900.com') {
         host = 'localhost:9447'
       }
-      this.socket = new WebSocket(`ws://${host}/talk`)
+      this.socket = new WebSocket(`ws://${host}/talk?transport=websocket`)
       this.socket.onmessage = this.recv
       this.socket.onerror = this.socketErr
     })
