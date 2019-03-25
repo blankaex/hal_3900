@@ -21,7 +21,11 @@ const parseData = (html) => {
         }
         $(element).find("tr").map((i, e) => {
             // get the tablerow text, strip whitespace to singles
-            const text = $(e).text().replace(/\s+/g, ' ');
+            const td = [];
+            $(e).find("td").map((i, e) => {
+                td.push($(e).text());
+            });
+            const text = td.toString().replace(",", " ").replace(/\s+/g, ' ');
             const tags = []; // these tags will extract from text
             // construct js object
             items.push({tags, text});
@@ -69,27 +73,6 @@ const parseData = (html) => {
 
 };
 
-// GET ALL LINKS FROM PAGE
-const parseLinks = (html) => {
-    const allLinks = [];
-
-    let $ = cheerio.load(html);
-
-    $("a").map((index, element) => {
-        const link = $(element).attr("href");
-        if (link.toString().startsWith("/COMP1521/18s2/")
-            && !link.toString().includes("groups/")
-            && !link.toString().includes("admin/")
-            && !link.toString().includes("classes/")) {
-            allLinks.push({
-                title: $(element).text(),
-                linkURL: $(element).attr("href").toString()
-            });
-        }
-    });
-};
-
-
 // feed me the html for the root forum page
 const getForumTopicPages = (forumRootHtml) => {
     // array of each item to be {topic name, url}
@@ -129,7 +112,7 @@ const getForumPages = (html, topicPageId) => {
     });
 
     $(".breadcrumb").find("li").map((index, element) => {
-        tags.push({"name": $(element).text().replace(/\s+/g, ' ')});
+        tags.push({"name": $(element).text().replace(/\s+/g, ' ').toLowerCase()});
     });
 
     return {tags, topicPageId, addressList};
@@ -179,4 +162,4 @@ const processFiles = (directory, destination) => {
 
 };
 
-module.exports = {parseData, parseLinks, processFiles, getForumTopicPages, getForumPages, getForumPostObject};
+module.exports = {parseData, processFiles, getForumTopicPages, getForumPages, getForumPostObject};

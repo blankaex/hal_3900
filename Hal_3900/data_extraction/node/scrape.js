@@ -6,7 +6,7 @@ const process = require('./process.js');
 
 const getPage = async (linkInfo) => {
 
-    const myCookie = ""; // login session cookie
+    const myCookie = "session=.eJwljkkOwjAQBP_icw5DvA6fscZ2BywgQXZyQvwdA7dWqUuql4pLQ7-q894OTCrWos7Kew5JW6BIYWbns2TYNEMIWeusJpV7W-K-3bCOv8CYRKwD6QIrCOxhKDtazExsLE7wjhINrz6eaH1bZccQB9havdRV7vHoaH_0Xb8QSxwCu_cHciQyCQ.D3pTlg.E5FBHC9C5Ogd5zbkzy984eVmUsw; Domain=.webcms3.cse.unsw.edu.au; HttpOnly; Path=/"; // login session cookie
 
     // This fetches the html from the page specified
     const html = await rp({
@@ -92,12 +92,17 @@ const scrapeSpecified = (fileName) => {
     // console.log(pages);
 
     // SCRAPE FROM LISTED
-    // pages.list.forEach(page => {
-    //     console.log("scraping " + page.address);
-    //     getPage(page)
-    //         .then(result => fs.writeFileSync("../html/" + page.name.replace(/\s+/g, '-') + ".html", result))
-    //         .catch(err => console.log(err.message));
-    // });
+    pages.list.forEach(async (page) => {
+        console.log("scraping " + page.address);
+        const html = await getPage(page);
+        const data = await process.parseData(html);
+        // WRITE JSON OBJECTS TO FILE
+        fs.writeFileSync("../data_page/" + page.name.replace(/\s+/g, '-') + ".json", JSON.stringify(data));
+        // ?    .then(result => fs.writeFileSync("../html/" + page.name.replace(/\s+/g, '-') + ".html", result))
+        //     .catch(err => console.log(err.message));
+    });
+    // process.processFiles("../html/", "../data_page/");
+
 
     // SCRAPE FORUM STARTING AT ROOT PAGE
     scrapeForum(pages.forum);
