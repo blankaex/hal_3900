@@ -1,18 +1,36 @@
 const MongoClient = require('mongodb').MongoClient;
 
 const find_all_from_collection = async (dbConn, collectionName) => {
-    console.log("showing data from " + collectionName);
     const collection = dbConn.collection(collectionName);
-    let results;
     try {
-        const cursor = collection.find({});
-        results = await cursor.toArray();
+        const cursor = await collection.find({});
+        const results = await cursor.toArray();
         cursor.close();
-    } catch(err) {
-        console.dir(err);
+        return results;
+    } catch (err) {
+        console.error(err);
     }
-
-    return results;
 };
 
-module.exports = {show_all_from_collection};
+const find_by_collection_and_tag = async (tag, dbConn, collectionName) => {
+    const collection = dbConn.collection(collectionName);
+    try {
+        // find all objects where tags contains an array elem with name = tag
+        const cursor = await collection.find({ tags : { $elemMatch: {"name": tag} } } );
+        const results = await cursor.toArray();
+        cursor.close();
+        return results;
+        // return results;
+    } catch (err) {
+        console.dir(err);
+    }
+};
+
+// feed me tag as a string
+const find_all_by_tag = async (tag) => {
+
+
+};
+
+
+module.exports = {find_all_from_collection, find_by_collection_and_tag};

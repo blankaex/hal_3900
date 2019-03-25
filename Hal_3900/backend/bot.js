@@ -1,4 +1,5 @@
 const DB = require('./db');
+const query = require('./db_query');
 
 module.exports = class Bot {
 	constructor() {
@@ -17,6 +18,7 @@ module.exports = class Bot {
 			// // Run INIT DATA here once established working
 			console.log("Initialising db with data");
 			this.db.initData();
+			
 		})
 	}
 	query(msg) {
