@@ -85,23 +85,21 @@ const scrapeForum = async (forumRoot) => {
     });
 };
 
-const scrapeSpecified = (fileName) => {
-
-    // GET PAGES OBJECT FROM FILE
-    const pages = require(fileName);
-    // console.log(pages);
+const scrapeSpecified = (pages) => {
 
     // SCRAPE FROM LISTED
-    // pages.list.forEach(page => {
-    //     console.log("scraping " + page.address);
-    //     getPage(page)
-    //         .then(result => fs.writeFileSync("../html/" + page.name.replace(/\s+/g, '-') + ".html", result))
-    //         .catch(err => console.log(err.message));
-    // });
+    pages.list.forEach(async (page) => {
+        console.log("scraping " + page.address);
+        const html = await getPage(page);
+        const data = await process.parseData(html);
+        // WRITE JSON OBJECTS TO FILE
+        fs.writeFileSync("../data_page/" + page.name.replace(/\s+/g, '-') + ".json", JSON.stringify(data));
+    });
+
 
     // SCRAPE FORUM STARTING AT ROOT PAGE
     scrapeForum(pages.forum);
 
 };
 
-module.exports = {getPage, scrapeSpecified};
+module.exports = {scrapeSpecified};

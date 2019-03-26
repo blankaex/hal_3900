@@ -37,7 +37,7 @@ module.exports = class DB {
         const collection = this.dbConn.collection(collectionName);
         try {
             const res = await collection.insertMany(objects);
-            console.log(`Inserted ${res.insertedCount} objects`);
+            // console.log(`Inserted ${res.insertedCount} objects`);
         } catch(err) {
             console.dir(err);
         }
@@ -62,10 +62,14 @@ module.exports = class DB {
         // GET FORUM POSTS
         await fs.readdir(forumDir, async (err, items) => {
             // put forum post array from each file into the db
-            items.forEach(i => {
+            items.forEach(async (i) => {
                 const forum = require(forumDir + i);
                 // dump into db
-                this.addToCollection(forum.posts, 'forum');
+                try {
+                    await this.addToCollection(forum.posts, 'forum');
+                } catch (err){
+                    console.error(err);
+                }
             });
         });
         // GET BLOCK AND GROUPED
@@ -77,6 +81,7 @@ module.exports = class DB {
                 await this.addToCollection(dataObject.block, 'block');
             });
         });
+
     };
 
 };
