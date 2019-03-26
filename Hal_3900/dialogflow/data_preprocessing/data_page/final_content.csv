@@ -1,0 +1,1396 @@
+z80,z80
+register names,register names
+control chars,control chars
+arm,arm
+initialisation code,initialisation code
+message,message
+reader,reader
+process management,process management
+priorityqs50,priorityqs50
+stack pointer,stack pointer
+file,file
+gui environment load programs,gui environment load programs
+results,results
+programming environment,programming environment
+generation,generation
+format,format
+mips94,mips94
+function epilogue,function epilogue
+arrays,arrays
+sizes,sizes
+piece,piece
+pdp-1,pdp-1
+regions,regions
+conditions,conditions
+cf,cf
+mips47,mips47
+multi-tasking,multi-tasking
+debugging,debugging
+argv114,argv114
+shifts,shifts
+integers27,integers27
+# registers,# registers
+languages,languages
+msg,msg
+sum,sum
+return address,return address
+bit operators,bit operators
+device management,device management
+nec,nec
+name.h,name.h
+ram,ram
+whirlwind,whirlwind
+zuse,zuse
+integers,integers
+programs,programs
+beq,beq
+transport code,transport code
+answer,answer
+c structs,c structs
+job completion,job completion
+unions52,unions52
+classes17,classes17
+pair,pair
+mips90,mips90
+callees,callees
+textbooks,textbooks
+command-line,command-line
+octal,octal
+exec,exec
+source,source
+operating systems,operating systems
+examples,examples
+instruction,instruction
+chip,chip
+each,each
+section,section
+sets7,sets7
+0x20,0x20
+mips code,mips code
+names,names
+wastes space,wastes space
+map control structures,map control structures
+statement,statement
+abstractions,abstractions
+mips93,mips93
+labs,labs
+intel,intel
+array size,array size
+assembler programming,assembler programming
+constants,constants
+mips instructions,mips instructions
+sltu,sltu
+thousands,thousands
+code region,code region
+exercise 1,exercise 1
+arrays38,arrays38
+const,const
+assignments,assignments
+users,users
+login,login
+computing systems,computing systems
+usage conventions,usage conventions
+operation,operation
+xor,xor
+loop control,loop control
+directives,directives
+vars,vars
+registers,registers
+machine architecture,machine architecture
+x,x
+me6,me6
+view registers,view registers
+register,register
+computation,computation
+c code,c code
+account,account
+printf,printf
+sequence,sequence
+nisan,nisan
+floating point numbers,floating point numbers
+hex digits,hex digits
+expressions55,expressions55
+head of school,head of school
+n elements,n elements
+human languages,human languages
+bgtz,bgtz
+leon nguyen,leon nguyen
+binary numbers,binary numbers
+execution,execution
+system call,system call
+return code,return code
+polls,polls
+byte,byte
+words,words
+componentmin valuemax value,componentmin valuemax value
+comp1521 18s1computer systems fundamentals2,comp1521 18s1computer systems fundamentals2
+kk,kk
+researchers,researchers
+magnitude,magnitude
+arithmetic instructions,arithmetic instructions
+quizzes,quizzes
+short-circuit evaluation,short-circuit evaluation
+workstations,workstations
+operations,operations
+code value,code value
+bit fields,bit fields
+data2,data2
+harrison scott,harrison scott
+primarycolors,primarycolors
+priorityq usage55,priorityq usage55
+ieee 754,ieee 754
+processor,processor
+div,div
+computing sum,computing sum
+priorityqs52,priorityqs52
+sizeof,sizeof
+bsd,bsd
+bit-wise structs48,bit-wise structs48
+webcms3,webcms3
+file descriptors,file descriptors
+nordic noir,nordic noir
+break,break
+powerpc,powerpc
+control structures,control structures
+interface,interface
+lab assistants,lab assistants
+numeric data19,numeric data19
+assembly language12,assembly language12
+constants66,constants66
+topics,topics
+variants,variants
+efficiency,efficiency
+floating point numbers30,floating point numbers30
+user-level programs,user-level programs
+computer,computer
+errors,errors
+multics,multics
+instructions,instructions
+char array,char array
+sets8,sets8
+mips programming42,mips programming42
+pointers,pointers
+symbol table management107,symbol table management107
+servicecodeargumentsresult,servicecodeargumentsresult
+return,return
+cannot,cannot
+stack regions,stack regions
+form -n,form -n
+track,track
+floating point numbers35,floating point numbers35
+codes,codes
+stack,stack
+c view,c view
+libraries14,libraries14
+b,b
+runtime stack,runtime stack
+mips programming44,mips programming44
+array,array
+type,type
+pointer dereferencing,pointer dereferencing
+technology,technology
+oliver richards,oliver richards
+memory regions,memory regions
+\n\0,\n\0
+e.g. registers,e.g. registers
+solution,solution
+collections,collections
+layer,layer
+pointer t *p,pointer t *p
+contexts,contexts
+array indexing,array indexing
+ibm,ibm
+problem scenario,problem scenario
+fopen,fopen
+data objects,data objects
+n × sizeof,n × sizeof
+device,device
+fraction,fraction
+functions60,functions60
+amount,amount
+raw machine,raw machine
+result value,result value
+patt,patt
+c99 standard,c99 standard
+parameters,parameters
+structure components,structure components
+programming process,programming process
+disk,disk
+junjie lei,junjie lei
+heap management,heap management
+c statement,c statement
+c arrays,c arrays
+exam,exam
+register3,register3
+graphics object,graphics object
+way,way
+structure,structure
+bit,bit
+language,language
+opcodes,opcodes
+hex codes,hex codes
+bryant,bryant
+c program life-cycle36,c program life-cycle36
+calloc,calloc
+applications18,applications18
+jesse colville,jesse colville
+wael alghamdi,wael alghamdi
+170xxxxxxx,170xxxxxxx
+manner,manner
+zid,zid
+expressions,expressions
+choices,choices
+elsewhere,elsewhere
+file systems,file systems
+file pointers,file pointers
+file system,file system
+item,item
+goal,goal
+computer systems architecture1,computer systems architecture1
+testing,testing
+check marks,check marks
+bitwise and67,bitwise and67
+floating point numbers33,floating point numbers33
+v1,v1
+spim16,spim16
+latin-script alphabets,latin-script alphabets
+unsw,unsw
+comment,comment
+reg notes,reg notes
+prologue74,prologue74
+content,content
+roadmap21,roadmap21
+lectures,lectures
+service,service
+transfer execution,transfer execution
+priorityq usage54,priorityq usage54
+int matrix,int matrix
+comp2121 course,comp2121 course
+mips80,mips80
+modes30,modes30
+exercises,exercises
+process hierarchy,process hierarchy
+writeable,writeable
+mips branch delay slots64,mips branch delay slots64
+o'halloren,o'halloren
+bits,bits
+execution modes,execution modes
+open source compiler,open source compiler
+enqueue,enqueue
+notations,notations
+memoryduring program execution,memoryduring program execution
+integer constants,integer constants
+ac,ac
+flag-bits69,flag-bits69
+byte 1 byte 2 byte 3 byte 4,byte 1 byte 2 byte 3 byte 4
+bitwise neg72,bitwise neg72
+systems,systems
+head,head
+calling protocol68,calling protocol68
+mips assembly language25,mips assembly language25
+tail,tail
+instruction set assembler programming,instruction set assembler programming
+constructs,constructs
+source code,source code
+instruction sequences,instruction sequences
+element,element
+action,action
+week x,week x
+echo360,echo360
+unix file system,unix file system
+unions51,unions51
+c programs,c programs
+dequeue,dequeue
+slides14,slides14
+format address computation,format address computation
+argc,argc
+reference,reference
+character data,character data
+sets5,sets5
+qtspim,qtspim
+memory9,memory9
+function call,function call
+malloc,malloc
+int value,int value
+s2 → mips,s2 → mips
+history28,history28
+queues,queues
+abuse,abuse
+all,all
+syllabus,syllabus
+examok,examok
+system calls12,system calls12
+writing machine code,writing machine code
+system,system
+comp1911,comp1911
+database systems,database systems
+float,float
+enter,enter
+data structures,data structures
+user code,user code
+questions,questions
+mips89,mips89
+mips101,mips101
+member,member
+u+00a2,u+00a2
+0x00,0x00
+whirlwhind,whirlwhind
+name,name
+devices,devices
+parallelism,parallelism
+filesystems,filesystems
+novices,novices
+utf-8,utf-8
+uses,uses
+games networking,games networking
+cache,cache
+machines,machines
+semantics,semantics
+linux,linux
+control,control
+cycle,cycle
+environment,environment
+v1 value,v1 value
+life-cycle37,life-cycle37
+ios,ios
+rwx,rwx
+data representation,data representation
+range,range
+bit-fields,bit-fields
+lifetime,lifetime
+quantity,quantity
+caller,caller
+difference engine,difference engine
+fine control47,fine control47
+nature,nature
+jason chu,jason chu
+flavours,flavours
+software,software
+python wrapper,python wrapper
+addition,addition
+int,int
+c pre-processor104,c pre-processor104
+web site,web site
+hello\n,hello\n
+synchronisation,synchronisation
+constantvalue,constantvalue
+objects,objects
+error,error
+jump instruction,jump instruction
+digit,digit
+syscall,syscall
+copy value,copy value
+web,web
+ada lovelace,ada lovelace
+os environment,os environment
+integer constants20,integer constants20
+shiftl register1,shiftl register1
+mips instruction set40,mips instruction set40
+return error statuses,return error statuses
+aim,aim
+sturec,sturec
+permission,permission
+coincidence,coincidence
+&label,&label
+expression evaluation,expression evaluation
+callee,callee
+work,work
+machine programs,machine programs
+mips assembler,mips assembler
+locations,locations
+circuitry,circuitry
+mips,mips
+permissions,permissions
+var,var
+study assembler,study assembler
+lecture slots,lecture slots
+arithmetic-logic unit,arithmetic-logic unit
+program,program
+behaviour,behaviour
+decimal,decimal
+int data type,int data type
+front-end,front-end
+detail,detail
+str,str
+collection,collection
+stack data structure60,stack data structure60
+lengthstring,lengthstring
+flags,flags
+symbol address,symbol address
+mips instruction set39,mips instruction set39
+data4,data4
+alexander hinds,alexander hinds
+unix file system interface,unix file system interface
+loops,loops
+c type,c type
+option,option
+help,help
+textbook,textbook
+duration,duration
+sections,sections
+kernel code,kernel code
+inputs,inputs
+sub,sub
+process exit,process exit
+recursion,recursion
+tools15,tools15
+principles,principles
+memory bytes,memory bytes
+finishes,finishes
+ascii char table,ascii char table
+review,review
+style,style
+function f,function f
+variables,variables
+address,address
+instruction set,instruction set
+data6,data6
+effect,effect
+infinity,infinity
+unions,unions
+priorityqs51,priorityqs51
+stacks,stacks
+data representation11,data representation11
+gsoe9010,gsoe9010
+command line tool load programs,command line tool load programs
+number,number
+floating point numbers34,floating point numbers34
+priority order,priority order
+mips97,mips97
+motorola,motorola
+end,end
+result,result
+failure,failure
+risc,risc
+use,use
+things,things
+gui tool,gui tool
+perror,perror
+label,label
+bit-string,bit-string
+one,one
+enclosing loop,enclosing loop
+computer system layers35,computer system layers35
+mips programming41,mips programming41
+data,data
+array declaration,array declaration
+programmer,programmer
+library function,library function
+alpha,alpha
+memory space,memory space
+0x10000000,0x10000000
+error conditions,error conditions
+jump table,jump table
+text editor,text editor
+exception,exception
+int arr,int arr
+pointers28,pointers28
+calling protocol71,calling protocol71
+os,os
+d,d
+frame pointer,frame pointer
+gcc,gcc
+union type,union type
+c,c
+functions63,functions63
+flag-bits70,flag-bits70
+arrays39,arrays39
+42111110xxx10xxxxxx10xxxxxx10xxxxxx,42111110xxx10xxxxxx10xxxxxx10xxxxxx
+disjunctions,disjunctions
+gdb,gdb
+note,note
+parallel,parallel
+memoryaddress,memoryaddress
+batch processing,batch processing
+anywhere,anywhere
+spim,spim
+spim17,spim17
+c parser106,c parser106
+prac,prac
+expression evaluation109,expression evaluation109
+applications20,applications20
+stack 0x7fffefff,stack 0x7fffefff
+partition bits,partition bits
+system error message,system error message
+library functions,library functions
+tests,tests
+file permissions,file permissions
+sign bit,sign bit
+view,view
+string constants,string constants
+machine/devices,machine/devices
+c revision quiz,c revision quiz
+lbu,lbu
+representations,representations
+data movement instructions,data movement instructions
+machine,machine
+iso,iso
+unix,unix
+dynamic allocation86,dynamic allocation86
+c program,c program
+reg,reg
+os services databases,os services databases
+fine function control48,fine function control48
+ascii character encoding13,ascii character encoding13
+switch,switch
+each machine,each machine
+emojis,emojis
+carry,carry
+alu,alu
+type definitions41,type definitions41
+mips assembly language26,mips assembly language26
+68xxx,68xxx
+concurrency parallelism,concurrency parallelism
+eof,eof
+another,another
+function prologue,function prologue
+digital equipment corporation,digital equipment corporation
+mechanism,mechanism
+protocol,protocol
+constant,constant
+loads,loads
+applications17,applications17
+inaccuracies,inaccuracies
+neg,neg
+bbbbbbbb,bbbbbbbb
+syntax,syntax
+ioctl,ioctl
+region address notes,region address notes
+structs42,structs42
+video,video
+statements52,statements52
+applications,applications
+register1,register1
+template,template
+syscall value,syscall value
+components,components
+stdout,stdout
+jump,jump
+base set,base set
+code,code
+numbers,numbers
+field names,field names
+sets6,sets6
+rendering c,rendering c
+core,core
+assessments18,assessments18
+ones,ones
+values,values
+asian,asian
+system bus,system bus
+cpus,cpus
+arguments,arguments
+memory management ram,memory management ram
+logic,logic
+gui,gui
+entry point,entry point
+louis cheung,louis cheung
+mips100,mips100
+floating point numbers31,floating point numbers31
+slti,slti
+input,input
+ascii character encoding14,ascii character encoding14
+sysv,sysv
+quiz,quiz
+overflow,overflow
+type enum,type enum
+c terms,c terms
+slt,slt
+course introduction,course introduction
+types56,types56
+user,user
+control characters,control characters
+networking,networking
+calling function,calling function
+dynamic allocation85,dynamic allocation85
+o-o programming,o-o programming
+most,most
+computations,computations
+indices,indices
+n-byte,n-byte
+char,char
+pairs,pairs
+binary number,binary number
+co-processors,co-processors
+integer,integer
+processors,processors
+loadc register,loadc register
+lab machines,lab machines
+structs40,structs40
+mips88,mips88
+layout,layout
+argument,argument
+dynamic allocation84,dynamic allocation84
+string buffers,string buffers
+dennis ricthie,dennis ricthie
+register usage,register usage
+programming exercises,programming exercises
+mips instruction set38,mips instruction set38
+wpadded,wpadded
+utlising services,utlising services
+stack frame,stack frame
+encoding,encoding
+lhu,lhu
+edsac,edsac
+register k address,register k address
+input/output,input/output
+lo,lo
+anything,anything
+windows,windows
+register2 register2,register2 register2
+s2,s2
+zero,zero
+write,write
+pdp-11,pdp-11
+dec point,dec point
+perspective,perspective
+k_data 0x90000000 kernel data,k_data 0x90000000 kernel data
+server,server
+jobs,jobs
+problem specification,problem specification
+idea,idea
+iteration,iteration
+mips instruction set35,mips instruction set35
+mips on qtspim,mips on qtspim
+scope,scope
+character encoding18,character encoding18
+syntaxsemantics,syntaxsemantics
+integers21,integers21
+integers25,integers25
+simon shields,simon shields
+os development,os development
+documentation,documentation
+operands,operands
+understanding,understanding
+buffer,buffer
+existence,existence
+myunion,myunion
+implementation tasks,implementation tasks
+instances,instances
+member names,member names
+michael yoo,michael yoo
+babbage,babbage
+assembler,assembler
+memories,memories
+e.g.,e.g.
+meaning,meaning
+strategy,strategy
+pop,pop
+binary,binary
+mips92,mips92
+set,set
+byte address,byte address
+params,params
+i/o,i/o
+mips architecture13,mips architecture13
+case alphabetic,case alphabetic
+shiftr,shiftr
+compiler,compiler
+flag,flag
+leads,leads
+print,print
+tute/lab,tute/lab
+calculations,calculations
+theory,theory
+misconduct22,misconduct22
+processors data representation,processors data representation
+data1,data1
+osx,osx
+expression results44,expression results44
+data region,data region
+matthew gibson,matthew gibson
+tutes,tutes
+cpu architecture2,cpu architecture2
+family,family
+manchester mark 1,manchester mark 1
+w,w
+c compilers38,c compilers38
+ms,ms
+common,common
+location,location
+condn,condn
+assembly language,assembly language
+element type type,element type type
+shift74,shift74
+types,types
+developments,developments
+calling protocol70,calling protocol70
+feedback,feedback
+tute,tute
+blt,blt
+fine control46,fine control46
+requests,requests
+tasks,tasks
+assembly language instructions,assembly language instructions
+bitwise xor71,bitwise xor71
+c compiler,c compiler
+user programs,user programs
+bell labs,bell labs
+memory,memory
+prog name,prog name
+mips assembly language24,mips assembly language24
+stdin,stdin
+coordination,coordination
+assembly language programs,assembly language programs
+spim14,spim14
+login terminal,login terminal
+stack changes,stack changes
+sys,sys
+memory size,memory size
+pc location,pc location
+quizzes20,quizzes20
+design,design
+nodes,nodes
+strings,strings
+sets,sets
+unsw3+,unsw3+
+interpretations,interpretations
+e.g. pipe,e.g. pipe
+craft beer,craft beer
+insert,insert
+dynamic allocation83,dynamic allocation83
+user-level process,user-level process
+valves,valves
+spim emulator,spim emulator
+holidays,holidays
+operand sizes32,operand sizes32
+environment pointer,environment pointer
+history,history
+mips instruction set34,mips instruction set34
+prologue75,prologue75
+data structure63,data structure63
+ascii,ascii
+families,families
+caspian baska,caspian baska
+bit-wise structs47,bit-wise structs47
+eckert,eckert
+v,v
+uhexdigits,uhexdigits
+functions61,functions61
+alphabet,alphabet
+error messages,error messages
+char mem,char mem
+marks,marks
+storage management disk storage,storage management disk storage
+pop-up,pop-up
+destination,destination
+man,man
+errnum,errnum
+reg name,reg name
+alignment,alignment
+mips instructions27,mips instructions27
+priorityq usage58,priorityq usage58
+region,region
+lab,lab
+group members,group members
+tutor,tutor
+program computers,program computers
+mul,mul
+int values,int values
+operators,operators
+unicode15,unicode15
+processor hardware,processor hardware
+task,task
+mnemonics,mnemonics
+classes,classes
+size 1gb,size 1gb
+#instructions,#instructions
+branch delay slot,branch delay slot
+need,need
+systems programmer,systems programmer
+mips programming43,mips programming43
+push,push
+epilogue78,epilogue78
+attempts,attempts
+c pre-processor substitions,c pre-processor substitions
+command-line tool,command-line tool
+actions,actions
+mips programming45,mips programming45
+supercomputers,supercomputers
+rem,rem
+processor32,processor32
+gates,gates
+store,store
+abstraction layer,abstraction layer
+games,games
+persistence,persistence
+dynamic allocation81,dynamic allocation81
+success,success
+services,services
+system service,system service
+print error message,print error message
+fclose,fclose
+shift73,shift73
+bit-wise,bit-wise
+fragmentation,fragmentation
+multiplication,multiplication
+mips assembly language22,mips assembly language22
+microprocessor,microprocessor
+machine architectures,machine architectures
+reminder,reminder
+physical view,physical view
+d\n,d\n
+home,home
+character data12,character data12
+priorityq usage53,priorityq usage53
+fields,fields
+negation,negation
+real machine,real machine
+args,args
+mips95,mips95
+assignment,assignment
+mips instruction set33,mips instruction set33
+666666s,666666s
+data pointers,data pointers
+fstat,fstat
+nintendo64,nintendo64
+p,p
+sparc,sparc
+symbols,symbols
+memory usage,memory usage
+dynamic allocation82,dynamic allocation82
+jumps,jumps
+comp,comp
+struct alternatives43,struct alternatives43
+type definition,type definition
+structures,structures
+turing,turing
+computer systems,computer systems
+students,students
+parts,parts
+tools,tools
+servers,servers
+access rights,access rights
+fifo,fifo
+structs41,structs41
+prologue77,prologue77
+computers,computers
+forums,forums
+line,line
+cast,cast
+assessments19,assessments19
+storage,storage
+left,left
+twos,twos
+k-drama,k-drama
+control registers,control registers
+nan,nan
+jumpif register,jumpif register
+character encoding16,character encoding16
+alternative,alternative
+top,top
+phones,phones
+addresses,addresses
+applications16,applications16
+modes,modes
+communication,communication
+guarantees,guarantees
+0x7fffefff,0x7fffefff
+tb,tb
+syscalls,syscalls
+heap,heap
+addr,addr
+functions59,functions59
+v0 value,v0 value
+stack client61,stack client61
+systems31,systems31
+system calls,system calls
+time management,time management
+leave,leave
+variables108,variables108
+tute exercises,tute exercises
+operating system architecture memory,operating system architecture memory
+summary26,summary26
+memory location,memory location
+aka bias,aka bias
+c knowledge,c knowledge
+unsw bookroom,unsw bookroom
+problem,problem
+argv113,argv113
+function code,function code
+android,android
+control transfers,control transfers
+file.h,file.h
+load programs,load programs
+cycle9,cycle9
+mit,mit
+deputy,deputy
+calling protocol72,calling protocol72
+bit-wise structs49,bit-wise structs49
+forms,forms
+adts,adts
+storage devices,storage devices
+information extraction,information extraction
+alex nendick,alex nendick
+pseudo,pseudo
+bit-wise structs50,bit-wise structs50
+textbook13,textbook13
+terminator,terminator
+expression,expression
+right,right
+cost,cost
+c functions,c functions
+cond2,cond2
+returns,returns
+os modules,os modules
+function code execution,function code execution
+submissions,submissions
+bitwise or68,bitwise or68
+building adder circuits,building adder circuits
+functions,functions
+entities,entities
+expression results45,expression results45
+mips91,mips91
+cpu,cpu
+rtlinux,rtlinux
+signals,signals
+ssd,ssd
+fine program control49,fine program control49
+bit-wise structs46,bit-wise structs46
+architecture,architecture
+value,value
+units,units
+substitutions,substitutions
+unions54,unions54
+mode,mode
+bytes,bytes
+*.h,*.h
+os core,os core
+function fx,function fx
+kinds,kinds
+files,files
+pointer arithmetic,pointer arithmetic
+operating system,operating system
+functions62,functions62
+push value,push value
+width,width
+emulator,emulator
+z1,z1
+blogs21,blogs21
+lists,lists
+unix programmers manual,unix programmers manual
+thomas kilkelly,thomas kilkelly
+databases,databases
+r,r
+usage,usage
+lab environment,lab environment
+c language,c language
+arithmetic,arithmetic
+c type definition,c type definition
+terminal,terminal
+text,text
+seq,seq
+priorityq usage56,priorityq usage56
+learning,learning
+sign,sign
+kevin ni,kevin ni
+getuid,getuid
+computer system,computer system
+introduction,introduction
+function,function
+spim15,spim15
+network architecture,network architecture
+characters,characters
+positions,positions
+sorting,sorting
+li,li
+f,f
+vec,vec
+strcpy,strcpy
+exercise,exercise
+themes,themes
+#registers,#registers
+reference registers,reference registers
+part,part
+arrays36,arrays36
+mips machine archtecture21,mips machine archtecture21
+data transfer,data transfer
+history30,history30
+calling protocol69,calling protocol69
+transfer control,transfer control
+email,email
+vim,vim
+response,response
+mips machine archtecture20,mips machine archtecture20
+moves,moves
+cse,cse
+tree,tree
+eeprom,eeprom
+data persistence,data persistence
+ifs,ifs
+errno,errno
+mips instructions28,mips instructions28
+mips cpu,mips cpu
+machine resources,machine resources
+unions55,unions55
+gui interfaces,gui interfaces
+map,map
+function pointers reference addresses,function pointers reference addresses
+user boundary,user boundary
+#digits,#digits
+mips assembly language23,mips assembly language23
+mapping control structures110,mapping control structures110
+epilogue79,epilogue79
+hll,hll
+program execution logic,program execution logic
+duinos,duinos
+exponent,exponent
+mips99,mips99
+branch,branch
+memory8,memory8
+instruction set architectures,instruction set architectures
+array elements,array elements
+exams25,exams25
+lab exercises,lab exercises
+architectures,architectures
+items,items
+mips98,mips98
+schocken,schocken
+offsets,offsets
+definitions,definitions
+data3,data3
+encodings,encodings
+page faults,page faults
+sp,sp
+complexity,complexity
+data bytes,data bytes
+material,material
+cpu register,cpu register
+details,details
+prologue,prologue
+space,space
+n,n
+torture exam,torture exam
+mips87,mips87
+groups,groups
+union types,union types
+gcc replacement,gcc replacement
+text files,text files
+point,point
+contents,contents
+use templates,use templates
+www.zeetings.com/jas1/0004-2402-0001,www.zeetings.com/jas1/0004-2402-0001
+cases,cases
+double-precision,double-precision
+resource,resource
+hi,hi
+mapping control structures111,mapping control structures111
+storage33,storage33
+function calls,function calls
+sw,sw
+#bits,#bits
+shanush prema thasarathan,shanush prema thasarathan
+comp1521,comp1521
+floating-point function results,floating-point function results
+comp1511,comp1511
+conventions,conventions
+statements,statements
+mips machine archtecture19,mips machine archtecture19
+char str,char str
+allocation,allocation
+user-level processes,user-level processes
+notation,notation
+directive,directive
+reference guides,reference guides
+memory allocation,memory allocation
+lecture material,lecture material
+problems,problems
+blog,blog
+lecs,lecs
+playstation,playstation
+condition,condition
+software layers,software layers
+symbol name,symbol name
+dylan brotherston,dylan brotherston
+mips architecture,mips architecture
+afl,afl
+parameswaran,parameswaran
+arithmetic expressions48,arithmetic expressions48
+double-precision function arguments,double-precision function arguments
+ellen oates,ellen oates
+skills practice,skills practice
+programmers,programmers
+structs,structs
+block,block
+e.g. pdp,e.g. pdp
+short circuit,short circuit
+data registers,data registers
+owner,owner
+exam23,exam23
+os x,os x
+a.k.a.,a.k.a.
+richard stallman,richard stallman
+data structure62,data structure62
+component view,component view
+bit patterns,bit patterns
+chunk,chunk
+bit-strings,bit-strings
+rd,rd
+symbol symbol,symbol symbol
+function returns,function returns
+human,human
+many,many
+precision,precision
+patel,patel
+priorityq usage57,priorityq usage57
+status,status
+request,request
+textbook12,textbook12
+register2,register2
+purpose registers,purpose registers
+aydin itil,aydin itil
+call function,call function
+john shepherd,john shepherd
+classes16,classes16
+arrays37,arrays37
+language processor,language processor
+bit operations,bit operations
+properties,properties
+expressions54,expressions54
+attempt,attempt
+bridging,bridging
+silicon graphics,silicon graphics
+mauchley,mauchley
+milestones,milestones
+priority queues,priority queues
+apple,apple
+mips machine archtecture18,mips machine archtecture18
+minjie shen,minjie shen
+any,any
+queue,queue
+mini-computer,mini-computer
+waste,waste
+chunks,chunks
+libraries,libraries
+vax,vax
+device handlers,device handlers
+fridge-size,fridge-size
+difference,difference
+ls,ls
+e.g. fork,e.g. fork
+word,word
+know40,know40
+boundary,boundary
+size,size
+sequences,sequences
+applications15,applications15
+c pre-processor105,c pre-processor105
+argv112,argv112
+x-windows,x-windows
+cpu registers,cpu registers
+calling protocol66,calling protocol66
+operator,operator
+cmd-line arg,cmd-line arg
+object,object
+elements,elements
+loop,loop
+form,form
+mips96,mips96
+comments,comments
+device management control registers,device management control registers
+s1,s1
+li rd,li rd
+tutors,tutors
+function return,function return
+libraries13,libraries13
+punctuation,punctuation
+batch,batch
+string,string
+converts,converts
+vs,vs
+jashank jeremy,jashank jeremy
+aside,aside
+process,process
+guo,guo
+variety,variety
+211110xxxxx10xxxxxx,211110xxxxx10xxxxxx
+type t,type t
+memory addresses,memory addresses
+exponent bits,exponent bits
+functions73,functions73
+sysetm call,sysetm call
+symbol,symbol
+mips programs,mips programs
+kernel use,kernel use
+breakpoints,breakpoints
+envp,envp
+performance tweaking,performance tweaking
+you7,you7
+inserts,inserts
+lifo,lifo
+printing message,printing message
+statements49,statements49
+course,course
+bit manipulation,bit manipulation
+division,division
+course admin,course admin
+code control structures,code control structures
+statements53,statements53
+scanf,scanf
+forum,forum
+case values,case values
+course notes,course notes
+subset,subset
+program counter,program counter
+mips machine,mips machine
+baseline,baseline
+access,access
+occurences,occurences
+fun,fun
+clang,clang
+load button,load button
+substitutedexpression,substitutedexpression
+youtube,youtube
+statements57,statements57
+process instructions,process instructions
+variable,variable
+boundary addresses,boundary addresses
+paragraph,paragraph
+call,call
+e.g. register,e.g. register
+analytical engine,analytical engine
+version,version
+name maps,name maps
+program exit,program exit
+comp1917,comp1917
+web5,web5
+c revisited,c revisited
+pointers29,pointers29
+machine code,machine code
+writing systems,writing systems
+removal,removal
+mips instruction set36,mips instruction set36
+index,index
+prologue76,prologue76
+standard,standard
+data5,data5
+program execution,program execution
+statements50,statements50
+dram,dram
+statements56,statements56
+representation,representation
+notes,notes
+bit manipulation instructions,bit manipulation instructions
+subroutine,subroutine
+character encoding17,character encoding17
+shell,shell
+region address,region address
+mips46,mips46
+memory7,memory7
+mips representations,mips representations
+evolution,evolution
+data flow,data flow
+multi-cpu,multi-cpu
+storage34,storage34
+list,list
+example,example
+web4,web4
+c programming,c programming
+cursor,cursor
+computing devices,computing devices
+applications19,applications19
+james ye,james ye
+frame,frame
+dd,dd
+integers22,integers22
+labels,labels
+andrew taylor,andrew taylor
+topics11,topics11
+floating point numbers32,floating point numbers32
+type v,type v
+priority queue,priority queue
+mips instruction set37,mips instruction set37
+modes31,modes31
+floating-point function,floating-point function
+load/store,load/store
+vlab,vlab
+color coding,color coding
+pseudo-ops,pseudo-ops
+frames,frames
+component,component
+priorityq usage59,priorityq usage59
+padding,padding
+config,config
+halfword,halfword
+function variable,function variable
+zpass,zpass
+unions53,unions53
+daniel li,daniel li
+reason,reason
+calling protocol67,calling protocol67
+person,person
+books,books
+compilation,compilation
+masks,masks
+arr,arr
+kernel mode,kernel mode
+cond1,cond1
+demo,demo
+case,case
+eniac,eniac
+mips assembler program,mips assembler program
+features,features
+store result,store result
+paradigm,paradigm
+order,order
+branch instruction,branch instruction
+display,display
+history29,history29
+graphics objects,graphics objects
+memory layout,memory layout
+everyone,everyone
+functions58,functions58
+mark,mark
+a+,a+
+research,research
+e,e
+statements51,statements51
+digits,digits
+implementation,implementation
+penalties,penalties
+failure status,failure status
+zeroes,zeroes
+themes10,themes10
+pointer,pointer
+union,union
+oss,oss
+disk storage,disk storage
+sets4,sets4
+gui environment,gui environment
+ability,ability
+expression42,expression42
+non,non
+approach,approach
+la,la
+intel x86,intel x86
+data representations,data representations
+exams,exams
+c strings,c strings
+ways,ways
+bookroom books,bookroom books
+normalising,normalising
+evaluation,evaluation
+prototypes,prototypes
+words65,words65
+nop,nop
+unicode,unicode
+load,load
+processes,processes
+single-precision,single-precision
+kernel data,kernel data
+machine operations,machine operations
+modes29,modes29
+struct,struct
+text 0x00400000,text 0x00400000
+cs1521,cs1521
+hardware,hardware
+return value,return value
+assembly language11,assembly language11
+memory cell memory,memory cell memory
+exit,exit
+pc,pc
+computer systems architecture,computer systems architecture
+data area,data area
+lab exercise,lab exercise
+library,library
+nand,nand
