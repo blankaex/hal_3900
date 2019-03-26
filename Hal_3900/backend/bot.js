@@ -3,8 +3,11 @@ const query = require('./db_query');
 
 module.exports = class Bot {
 	constructor() {
-		this.version = '0.0';
-		this.db = new DB('mongodb://root:example@localhost:27017','database');
+		this.version = '0.1'
+		let url = 'mongodb://localhost:27017'
+		if (process.env.PRODUCTION) url = 'mongodb://database:27017'
+		console.log(">>> ",url)
+		this.db = new DB(url,'database')
 		// Async connection
 		this.db.connect().then(_=>{
 			// you can submit documents like this

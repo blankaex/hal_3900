@@ -6,9 +6,6 @@ const hal = new bot()
 
 module.exports = function(app)
 {
-    // Returns any static files in frontend `/dist`
-    app.use(express.static(path.join(__dirname, '../frontend/dist')))
-
     // Middleware
     app.use(cors());
 

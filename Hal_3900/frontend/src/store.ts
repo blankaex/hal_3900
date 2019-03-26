@@ -1,15 +1,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import moment from 'moment'
+import { Theme } from '@/components/types'
 
 Vue.use(Vuex)
-
-interface Theme {
-  primary: string,
-  secondary: string,
-  primaryGradient: string[],
-  secondaryGradient: string[]
-}
 
 export default new Vuex.Store({
   state: {
@@ -38,6 +32,12 @@ export default new Vuex.Store({
         primary: '#457fca',
         secondaryGradient: ['#ff9068', '#fd746c'],
         primaryGradient: ['#5691c8', '#457fca']
+      },
+      {
+        primary: '#f15f79',
+        secondary: '#b24592',
+        primaryGradient: ['#b24592', '#f15f79'],
+        secondaryGradient: ['#136a8a', '#267871']
       }
     ]
   },
