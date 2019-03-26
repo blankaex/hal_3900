@@ -82,12 +82,6 @@ module.exports = class DB {
             });
         });
 
-
-        // USE THIS TO TEST SEARCH BY TAG
-        // console.log("searching for Lecture posts");
-        const search = await query.find_by_collection_and_tag("mips", this.dbConn, 'block');
-        // const all = await query.find_all_from_collection(this.dbConn, 'forum');
-        console.log(search);
     };
 
 };

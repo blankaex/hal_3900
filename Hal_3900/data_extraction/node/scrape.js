@@ -85,11 +85,7 @@ const scrapeForum = async (forumRoot) => {
     });
 };
 
-const scrapeSpecified = (fileName) => {
-
-    // GET PAGES OBJECT FROM FILE
-    const pages = require(fileName);
-    // console.log(pages);
+const scrapeSpecified = (pages) => {
 
     // SCRAPE FROM LISTED
     pages.list.forEach(async (page) => {

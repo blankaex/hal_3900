@@ -1,0 +1,3229 @@
+Tags List
+ Course Details 
+table
+ Assessment 
+list
+ Contents 
+Admin
+Objectives
+Errata
+c language
+introduction
+course introduction
+comp1521 18s1computer systems fundamentals2
+course
+cast
+thousands
+comp1521
+web4
+entry point
+webcms3
+http://webcms3.cse.unsw.edu.au/comp1521/18s1/
+content
+most
+cs1521
+home
+labs
+lecs
+tutes
+web
+http://cgi.cse.unsw.edu.au/~cs1521/18s1/index.php
+web5
+material
+zid
+zpass
+check marks
+line
+sturec
+email
+forum
+questions
+me6
+research
+you7
+students
+c: assembly language
+mips
+adts
+comp1511
+lists
+everyone
+instruction set architectures
+cpu architecture2
+cpu
+study assembler
+assembly language
+sets4
+families
+risc
+sets5
+instructions
+themes10
+destination
+registers
+themes
+sets6
+kinds
+real machine
+topics11
+sets7
+sets8
+textbook12
+textbook
+cycle9
+cpus
+program execution logic
+textbook13
+bookroom books
+bryant
+computer systems
+machine code
+notes
+o'halloren
+perspective
+programmer
+reference
+slides14
+topics
+unsw
+cpu register
+execution
+program counter
+track
+pc
+instruction
+textbooks
+assembly language11
+systems
+tools15
+bit-string
+e.g.
+hex digits
+machine programs
+sequence
+linux
+tools
+work
+assembler
+abuse
+program
+assembly language12
+language
+writing machine code
+mips architecture13
+architecture
+source code
+spim
+spim14
+instruction set
+machine architecture
+emulator
+assessment
+cases
+code
+gcc
+mark
+performance
+performance mark
+performance tests
+solution
+tutor
+command
+command-line
+e.g. bash
+example
+lines
+programs
+shells
+text
+token
+tokens
+command-line arguments
+executable
+ls
+ls command
+shell
+~cs1521/bin
+command lines
+commands
+effects
+file
+history
+lot
+output
+pipeline
+text file
+unix
+users
+words
+comp2041
+details
+way
+web site
+pipelines
+programming capability
+assignment
+bash
+features
+some
+assignment files
+directory
+cse
+files
+home machine
+machine
+machines
+zip file
+compilation
+modules
+system
+shell program
+skeleton
+functions
+history list data
+interface
+history list functions
+aim
+c
+c files
+command history list data structures
+exercise
+mymysh
+program skeleton
+following
+executable file
+function
+message
+name
+path
+prompt
+somewhere
+user
+argument
+environment
+execve
+lab
+library function
+parameter
+pathname
+week 08 lab
+command executable
+command name
+difference
+hyphens
+information
+return status
+search
+wexitstatus
+built-ins
+number
+command line
+shell prompt
+examples
+sequence number
+sequence numbers
+sessions
+command history
+data structure
+data structures
+history.c
+implementation
+interface functions
+binary
+executions
+format
+mymysh program
+space character
+⎵
+notation
+one
+seqno
+any
+errors
+command path
+getcwd
+hint
+working directory
+chdir
+filename expansion
+exit
+actions
+all
+characters
+glob
+glob_nocheck
+glob_tilde
+matches
+tokens list
+elsewhere
+error
+filename
+input
+pipe
+contents
+length
+above
+stages
+whole
+component
+components
+each
+marks
+practice
+ambiguities
+basis
+testing
+bug
+bugs
+design choices
+sample executable
+kudos
+worth
+cmd1
+cmd2
+cmdn
+command pipelines
+fun
+b
+data representation
+memory
+c view
+data1
+ac
+collection
+data
+variables
+properties
+size
+type
+variable
+data2
+objects
+object
+data3
+data objects
+memoryduring program execution
+regions
+data4
+data area
+data5
+call
+runtime stack
+data6
+physical view
+array
+bytes
+a.k.a.
+pointers
+chunks
+memory7
+ram
+storage
+technology
+data persistence
+memory8
+data bytes
+order
+memory9
+memories
+data representation11
+value
+bit-strings
+data representations
+meaning
+character data12
+character data
+encodings
+representations
+common
+mips on qtspim
+text editor
+vim
+gdb
+man
+classes16
+lectures
+classes17
+holidays
+lecture slots
+tute/lab
+assessments18
+lab exercises
+lab exercise
+week x
+a+
+submissions
+assessments19
+assignments
+penalties
+time management
+quizzes20
+quizzes
+c revision quiz
+quiz
+blogs21
+blog
+misconduct22
+exam23
+torture exam
+lab environment
+documentation
+exam
+exams25
+exams
+summary26
+goal
+history28
+history29
+eniac
+history30
+spim15
+mips code
+ways
+spim16
+command-line tool
+spim17
+gui tool
+mips machine archtecture18
+mips cpu
+uses
+mips machine archtecture19
+usage
+caller
+expression evaluation
+reg name
+return
+subroutine
+v0 value
+v1 value
+mips machine archtecture20
+register usage
+frame pointer
+function variable
+kernel use
+pointer
+return address
+stack pointer
+mips machine archtecture21
+double-precision function arguments
+floating-point function
+function calls
+reg
+results
+mips assembly language22
+assembly language programs
+mips assembly language23
+mips assembler program
+color coding
+comment
+directive
+label
+mips assembly language24
+mips programs
+structure
+mips assembly language25
+mips assembly language26
+memory layout
+address
+k_data 0x90000000 kernel data
+kernel code
+kernel mode
+mode
+region address
+stack 0x7fffefff
+text 0x00400000
+writeable
+mips instructions27
+classes
+mips instructions28
+mips instructions
+modes29
+memory addresses
+whirlwind
+systems31
+component view
+computer system
+processor32
+processors
+storage33
+storage34
+language processor
+memory usage
+c compiler
+computer system layers35
+software layers
+view
+c program life-cycle36
+c programs
+c program
+machine architectures
+life-cycle37
+c compilers38
+milestones
+c revisited
+know40
+problem specification
+type definitions41
+c type definition
+reminder
+type definition
+expression42
+expressions
+0x10000000
+modes30
+modes
+format address computation
+kk
+register
+register k address
+symbol
+symbol address
+symbol symbol
+modes31
+load/store
+operand sizes32
+operands
+leads
+opcodes
+operation
+mips instruction set33
+base set
+processor
+note
+use
+mips instruction set34
+&label
+addr
+c terms
+expression
+memory cell memory
+source
+syntaxsemantics
+mips instruction set35
+data movement instructions
+bit manipulation instructions
+mips instruction set36
+arithmetic instructions
+mips instruction set37
+branch instruction
+pc location
+mips instruction set38
+jump instruction
+mips instruction set39
+stdin
+stdout
+syscalls
+\n\0
+buffer
+char
+float
+integer
+lengthstring
+servicecodeargumentsresult
+mips instruction set40
+directives
+mips programming41
+mips assembler
+strategy
+mips programming42
+loops
+expression results44
+c functions
+result
+printf
+answer
+www.zeetings.com/jas1/0004-2402-0001
+expression results45
+semantics
+values
+return error statuses
+fine control46
+loop control
+fine control47
+end
+n
+fine function control48
+style
+fine program control49
+conditions
+return code
+anywhere
+program exit
+priorityqs50
+queues
+stacks
+priorityqs51
+priorityqs52
+priorityq usage53
+insert
+item
+priorityq usage54
+mips programming43
+mips programming44
+parts
+coincidence
+mips programming45
+mips46
+rendering c
+s1
+s2
+s2 → mips
+mips47
+arithmetic expressions48
+evaluation
+statements49
+statements
+statements50
+statements51
+statements52
+switch
+statements53
+jump table
+expressions54
+short circuit
+c99 standard
+return value
+priorityq usage55
+priorityq usage56
+priorityq usage57
+priorityq usage58
+priorityq usage59
+stack data structure60
+lifo
+stack: last
+stack client61
+int values
+stack
+data structure62
+fifo
+protocol
+queue
+tute exercises
+data structure63
+priority queue
+reader
+bit manipulation
+bits
+words65
+operators
+pairs
+set
+constants66
+binary numbers
+numbers
+digit
+octal
+expressions55
+disjunctions
+statements56
+iteration
+case
+statements57
+functions58
+functions59
+functions60
+frame
+section
+functions61
+stack changes
+functions62
+f
+usage conventions
+functions63
+stack frame
+mips branch delay slots64
+efficiency
+mips architecture
+branch delay slot
+problem scenario
+nop
+aside
+calling protocol66
+another
+calling protocol67
+function call
+bitwise and67
+operator
+bit
+bitwise or68
+flag-bits69
+file permissions
+unix file system
+flags
+permissions
+sets
+flag-bits70
+representation
+flag
+permission
+bitwise xor71
+building adder circuits
+bitwise neg72
+bit patterns
+shift73
+shift74
+quantity
+sign bit
+calling protocol68
+calling protocol69
+sum
+calling protocol70
+d
+function f
+calling protocol71
+calling protocol72
+functions73
+prologue
+prologue74
+prologue75
+function fx
+prologue76
+push
+prologue77
+epilogue78
+sp
+epilogue79
+mips80
+mips representations
+dynamic allocation81
+allocation
+grid
+leds
+shops
+sight
+something
+text scrolls
+text strings
+video
+assembler part
+exe.s file
+exemplar
+scroll.c
+assembler program
+behaviour
+c.
+modification
+version
+command-line argument
+feel
+scroll
+text string
+scrolling program
+comments
+purpose
+same
+scrolling
+diagram
+chars.s file
+file scroll.s)
+each function
+scroll.
+c code
+function code
+suggestions
+epilogue
+epilogues
+function prologues
+templates
+others
+rundown
+scroll.s
+status
+access
+all_chars
+file chars.s
+mips program
+qtspim
+cat step
+file exe.s
+makefile
+scroll.s file
+time
+columns
+display
+hand end
+right
+scroll repeat
+colour change
+colours
+give
+dynamic allocation82
+dynamic allocation83
+dynamic allocation84
+dynamic allocation85
+malloc
+cannot
+dynamic allocation86
+arrays
+mips87
+cursor
+elements
+index
+mips88
+d\n
+existence
+print
+mips89
+mips90
+space
+mips91
+mips92
+int matrix
+mips93
+mips94
+computing sum
+mips95
+mips96
+structs
+c structs
+mips97
+definitions
+instances
+structures
+mips98
+structure components
+mips99
+mips100
+mips101
+struct
+c pre-processor104
+substitutions
+c pre-processor105
+c pre-processor substitions
+c parser106
+syntax
+attempts
+tree
+symbol table management107
+compiler
+names
+variables108
+choices
+expression evaluation109
+short-circuit evaluation
+mapping control structures110
+use templates
+mapping control structures111
+template
+argc
+argv112
+idea
+mips machine
+initialisation code
+environment pointer
+envp
+argv113
+argv114
+cmd-line arg
+ascii character encoding13
+0x00
+groups
+nature
+ascii character encoding14
+ascii
+ascii char table
+0x20
+eof
+unicode15
+standard
+writing systems
+character encoding16
+utf-8
+encoding
+codes
+latin-script alphabets
+asian
+languages
+emojis
+symbols
+character encoding17
+strings
+byte
+c strings
+character encoding18
+constants
+contexts
+notations
+sequences
+unicode
+numeric data19
+forms
+integer constants20
+integer constants
+integers21
+int data type
+integers22
+binary number
+int
+addition
+carry
+overflow
+integers25
+magnitude
+x
+problem
+alu
+hardware
+neg
+ones
+zeroes
+integers27
+twos
+pointers28
+locations
+pointers29
+pointer arithmetic
+pointer t *p
+sizeof
+paradigm
+string
+floating point numbers30
+floating point numbers
+r
+subset
+floating point numbers31
+types
+#digits
+dec point
+p
+w
+width
+floating point numbers32
+ieee 754
+normalising
+floating point numbers33
+dd
+floating point numbers34
+floating point numbers35
+exponent
+fraction
+arrays36
+n elements
+type t
+arrays37
+array declaration
+type v
+element type type
+array indexing
+v
+element
+terminator
+arrays38
+arrays39
+structs40
+structs41
+layout
+name maps
+family
+structs42
+alignment
+padding
+fields
+waste
+wastes space
+clang
+wpadded
+exercise 1
+struct alternatives43
+nodes
+amount
+bit-wise structs46
+control
+bit fields
+bit-wise structs47
+bit-wise structs48
+graphics objects
+bit-wise structs49
+graphics object
+bit-wise structs50
+alternative
+bit operators
+bit-fields
+masks
+unions51
+interpretations
+piece
+programmers
+unions
+unions52
+cf
+union type
+myunion
+field names
+unions53
+union
+unions54
+union types
+c type
+member names
+member
+unions55
+types56
+primarycolors
+type enum
+toggle menu
+areas
+computer architecture
+computing
+concurrency concepts
+infrastructure
+network
+networks
+operating systems
+study
+terms
+understanding
+comp1911
+capabilities
+development
+courses
+teaching strategies
+half
+foundation
+level
+software
+demonstrations
+lecture
+lecture notes
+techniques
+technologies
+theory
+web pages
+advance
+attendance
+exercises
+ideas
+lecture material
+session
+tutorial
+class
+effort
+lab classes
+laboratory class
+laboratory classes
+problems
+variety
+approach
+feedback
+lab class
+lab partner
+usefulness
+tutors
+code reviews
+tutorials
+members
+pair
+lab work
+lab marks
+summary
+things
+exam environment
+practice prac exam
+programming tasks
+grade system
+challenge exercises
+bonus
+lab component
+lab mark
+improvement
+semester
+skills
+bonus mark
+chance
+part
+programming assignments
+assignment specification
+assignments submissions
+penalty
+reduction
+exam timetable
+analysis
+answers
+assembler programs
+debug
+implementation tasks
+mixture
+course score
+grade
+hurdle
+hurdle requirement
+uf
+consideration request
+final exam
+illness
+misadventure
+myunsw
+request
+supplementary exam
+community
+condition
+enrolment
+experience
+learning
+policies
+potential
+principles
+rules
+student code of conduct
+teaching
+university
+activities
+breach
+bullying
+equity
+exclusion
+facebook
+misconduct
+person
+premises
+privacy
+respect
+responsibility
+safety
+social media
+standards
+student code policy
+suspension
+concerns
+grievance officer
+lecturer
+school ethics officer
+student representatives
+plagiarism
+sources
+anyone
+code repository
+cse directory
+excuse
+ignorance
+commitment
+culture
+integrity
+principle
+staff
+detail
+pages
+procedures
+context
+page
+responsibilities
+rights
+circumstances
+consideration
+ability
+may
+none
+word
+disability services
+john shepherd
+quiz marks
+mapping
+assessments
+reason
+change
+depth
+technology base
+text book
+course outline
+links
+resources
+copies
+library
+machine language
+many
+unsw bookstore
+books
+course website
+offerings
+18s1 offering
+complaints
+pace
+unsw3+
+myexperience
+resource
+computer systems architecture
+d:
+computer systems architecture1
+evolution
+oss
+pdp-11
+computer
+devices
+system bus
+flavours
+abstractions
+execution modes
+os development
+os
+system calls
+system calls12
+libraries13
+services
+user programs
+libraries14
+applications15
+task
+user-level programs
+applications
+libraries
+applications16
+applications17
+applications18
+attempt
+applications19
+action
+response
+system call
+library functions
+applications20
+vs
+roadmap21
+os modules
+sections
+paragraph
+ Course Summary 
+ Assumed Knowledge 
+ Learning Outcomes 
+ Teaching Strategies and Rationale 
+ Lectures 
+ Tutorials 
+ Laboratory Classes 
+ Blogs 
+ Assignments 
+ Final Exam 
+ !! Important !! 
+ Special Consideration 
+ Final Mark 
+ Course Schedule 
+ Resources for Students 
+ Course Evaluation and Development 
+Background
+Setting Up
+The Program
+Exercise
+Running the program
+Challenges
+Submission
+Hints
+Challenge
+bulk
+storage devices
+hard disk drive
+characteristics
+hdds
+disk
+sector
+measures
+solid-state drive
+ssd
+data persistenly
+ssds
+storage9
+bulk storage devices
+operating system
+file systems
+mechanism
+file system12
+file system
+graph
+symlinks
+location
+notion
+processes
+file system13
+paths
+stdio.h
+file system14
+file-system
+range
+linux file
+file system objects
+inodes
+metadata
+inode
+file system16
+name proceeds
+file system operations17
+filedesc
+rm
+write
+void
+byte sequences
+deal
+file-descriptor
+pointer values
+records
+ing records
+off_t lseek
+whence
+int stat
+statbuf
+file system links
+file stat structure
+int mkdir
+mode_t mode
+fsync
+filesystype
+int mount
+target
+ext3-type
+file system summary35
+cache memory
+computation
+memory management40
+memory management41
+process
+memory management42
+memory management43
+memory management44
+scenario
+address mapping
+memory management45
+slots
+slot
+memory management46
+process memory
+memory management47
+implications
+splitting process memory
+memory management48
+mapping calculation
+scheme
+memory management49
+memory management50
+mapping table
+memory management review51
+addresses
+process address
+pageno
+pagesize
+entries
+pageinfo
+mapping53
+page table entries
+side-effect
+memory55
+frames
+4gb memory
+process address space
+re-use
+memory56
+mapping process address
+page table
+memory57
+timestamps
+memory58
+working sets59
+working sets60
+observations
+running programs
+load
+memory62
+address space
+memory63
+memory64
+mapping process
+page tables
+page fault
+free list
+faults66
+page frames
+getfreeframe
+factors
+heuristic
+lru replacement
+replacement69
+lru
+thrashing
+working set model
+replacement70
+replacement strategy
+virtual memory 71
+pts
+virtual memory 72
+bottom
+heap
+top
+virtual address space
+virtual memory 73
+library code
+sharing
+cache memory75
+memory management hardware76
+address translation
+memory management hardware77
+tlb
+translation lookaside buffer
+instance
+independence
+reality
+impression
+process management83
+info
+process control block
+linux processes85
+linux processes86
+pcb
+linux processes87
+process info
+process table entry
+user structure
+process table
+system calls88
+system calls89
+fork
+system calls90
+process id
+system calls91
+system calls92
+getpgid
+system calls93
+getpid
+system calls94
+int options
+system calls95
+options
+pid
+waitpid
+system calls96
+wait
+system calls97
+int kill
+pid_t procid
+sigid
+system calls98
+kill
+system calls99
+int status
+system calls100
+void exit
+system calls101
+system calls102
+parent
+sigchld
+signal
+zombie process
+system calls103
+system calls104
+process control flow105
+control flow
+process control flow106
+events
+process control flow107
+effect
+exceptions
+process control flow108
+traps
+system space
+signals
+process activity
+process events
+default
+handling
+handler
+handlers113
+sighnd
+sighnd handler
+handlers114
+signal handler function
+sigaction
+sigaction *oldact
+struct sigaction *newact
+handlers116
+handlers117
+process pre-emption
+input/output
+system ones
+exception handling
+process state changes
+scheduling
+process scheduler
+os scheduler
+i/o
+i/o devices131
+hard disk
+cost
+latency
+ms transfer
+i/o devices132
+solid state disk
+i/o devices133
+network transfer
+ping command
+transmission
+i/o devices134
+access protocol
+device
+i/o devices
+i
+o137
+disk device
+memory address
+block
+transfers data
+disclaimer
+linux138
+byte-streams
+dev
+linux139
+device files
+character
+character devices
+linux140
+arg
+linux141
+cpu speed
+read
+os buffers
+i/o library
+network architecture
+networks2
+computers
+networks3
+requirements
+network communication4
+overview
+internet5
+copper
+end system
+fibre
+hop
+internet
+laptop
+millions
+network apps communication links
+network switches
+packets
+radio
+routers
+satellite bandwidth
+server
+smartphone host
+transmission rate packet switches
+internet6
+internet communications
+abstraction
+layers
+internet7
+network layers
+protocols8
+communication activity
+network protocols
+communication rules
+protocols
+network application layer9
+application layer
+apps
+client-server
+structuring network communication
+data provider
+addressing11
+server processes
+addresses12
+host
+identifier
+ip address
+protocols13
+application-layer protocol
+http protocol14
+hypertext transfer protocol
+http protocol15
+apache
+client
+e.g. chrome
+http
+http requests
+http responses
+responses
+web browser
+web client-server model
+web page server
+web server
+client-server model
+http protocol16
+http application layer
+transport layer view
+http protocol17
+request message
+url
+http protocol18
+method
+http protocol19
+response message
+http protocol20
+http response
+response status codes
+dns
+server addresses
+network requests
+domain name system
+ip address mapping
+host command
+network connection
+life
+name resolution
+styles
+dns servers
+network architecture27
+model
+headers
+transport layer28
+transport layer
+transport layer29
+transport layer protocols30
+transport layer protocols
+transport layer protocols31
+tcp
+udp
+user datagram protocol
+transport layer protocols32
+ip protocol
+transport layer protocols33
+udp sound
+advantages
+checksum
+error detection
+network layer34
+app processes
+communication
+hosts
+network layer
+network layer protocol35
+internet protocol
+network layer protocol
+network layer protocol36
+ip forwarding
+routing algorithm
+link
+link layer
+ethernet38
+ethernet
+link layer implementation
+mac
+media access control
+nic
+ethernet39
+broadcast medium
+access protocols
+ethernet40
+access transmission protocol
+csma
+wireless sensor network security41
+wsn
+motion
+pollutants
+pressure
+sensors
+sound
+temperature
+vibration
+security42
+wireless sensor network
+security
+wireless sensor networks
+resource constraints
+wsns
+aspects
+obstacles
+sensor network security
+security requirements
+wsn attacks46
+attacks
+wsn attacks47
+attack
+dos
+service
+constraints
+wsn attacks48
+sybil attack
+wsn attacks49
+node replication attacks
+wsn attacks50
+wsn attacks51
+wsn attacks52
+defense strategies
+concurrency
+g
+parallelism
+computations
+synchronisation
+parallelism3
+e.g. gpu
+processing
+simd
+completion
+parallelism4
+programming model
+word frequencies
+concurrency6
+tasks
+child
+concurrency7
+threads
+unix threads8
+posix
+pthreads
+unix threads9
+attr
+thread
+unix threads10
+unix threads11
+concurrency12
+concurrency13
+concurrency14
+bank withdrawal
+account
+balance
+concurrency15
+restatement
+outcome
+concurrency control16
+concurrency control
+concurrency control17
+memory approach
+producer-consumer problem18
+concurrency control issues
+producer-consumer problem19
+producer-consumer problem20
+producer process
+producer-consumer problem21
+consumer process
+producer-consumer problem22
+semaphores23
+operations
+semaphore
+semaphores24
+producer-consumer problem
+semaphores
+semaphores25
+semaphores26
+semaphores27
+passing28
+passing29
+message passing systems
+passing30
+message passing architecture
+passing31
+message passing framework
+mpi
+bindings
+c++
+java
+python
+passing32
+google's go
+language support
+go
+withdrawal example
+https://tour.golang.org/
+process interaction
+processes35
+processes36
+file locking
+locking37
+locking38
+lock
+pipes39
+consumer
+producer
+pipes40
+int fd
+int pipe
+pipes41
+pipes42
+pipes43
+pattern
+pipe usage
+pipes44
+popen
+queues45
+pipes
+message queue architecture
+queues47
+mq
+queues48
+mq_send
+mqd_t
+msg
+uint prio
+queues49
+uint *prio
+queues50
+server program
+client program
+sockets52
+ipc
+mechanisms
+sockets53
+channel
+socket
+sockets54
+int domain
+int socket
+int type
+sockets55
+int bind
+sockaddr *addr
+sockfd
+socklen_t addrlen
+sockets56
+sockets57
+addrlen
+sockets58
+http://www.linuxhowtos.org/c_c++/socket.htm
+sockets59
+Forums
+Tutors' Weekly
+Week 01 Notes
+Weekly Notes
+Week 04 Notes
+Week 02 Notes
+COMP1521 Tutor Group
+Week 06 Notes
+Week 07 Notes
+Week 03 Notes
+Tute Exercises with Solutions
+Week 08: Files, Processes, Signals
+Week 01: Introduction, C Revision
+Week 07: Files, Memory Management
+Week 04: MIPS Assembler
+Lecture Exercises
+Lectures
+Week 5
+Q and A
+Tutorials
+Week 01: Introduction, C Review
+Lab Classes
+Week 10: DNS Lookup
+Week 08: A Minimal Shell
+Lecture Slides
+Week 3
+Sample Exams
+Week 03: Bit-fields, Unions and Floats
+Week 01: Input/Output Functions
+Week 05: More MIPS Programming
+Assignment 1
+Assignment 1 Submission
+Assignments
+Tue 3-4 Lecture Video: fork(), _exit(), atexit(), wait()
+Week 7
+Week 07: Virtual Memory
+Assignment 2
+Assignment 2 Submission
+Week 03: Memory, Data Representation
+Assignment 1 Specification
+Week 04: Introduction to MIPS programming
+Assignment 2 Specification 
+Assignment 2 Testing Suggestions
+Wed 4-5 Lecture: Data representation: integer, pointer, float
+Week 2
+Week 02: Big Numbers
+Assignment 2 Marking Notes
+Assignment Marking
+Week 09: A Minimal Web Server
+Echo360 Lecture Videos (via Moodle)
+Miscellaneous
+Wed 5-6 Lecture Video: syscall, Addressing modes
+Week 12: Course Review
+COMP1521 Front Page
+comp1521 tutor group
+forums
+lab pair
+regards
+sms
+spreadsheets
+submission
+wael
+cheers
+colombo lg01
+ellen
+sitar
+tute-lab
+practice prac exam questions
+&amp
+backspace
+insert mode
+line numbers
+outside
+settings
+student
+exam provisions
+practice exam
+provisions
+blockhouse
+cover
+g15
+someone
+tutelab
+function signature
+inet_ntoa
+struct in_addr
+struct in_addr ip
+classrun -rsms
+marking
+permission error
+thanks
+lab assistant
+assignment spec
+negative
+redirection statements
+typo
+wed17-brass
+carey
+tut-lab
+flute
+assign1 lab01 lab02 lab03 lab04 lab05 lab06 lab07 lab08 lab09 lab10
+running tcl8.5
+segfaults
+segmentation fault
+xmark
+advantage
+gedit
+gui editors
+mips syntax
+branches
+jumps
+lots
+midterm
+entirety
+takers
+wed
+thu
+place
+lab substitution
+tutor forum
+admin
+assignment submission
+assistance
+assistant
+best
+due
+form
+good luck
+mei cheng.
+option
+people
+replacement case
+wael alghamdi
+c basics revision
+cat
+cat4
+couple
+disk quotas
+heads
+issues
+null
+null pointer
+program files
+rotation encoder
+struct example
+tute groups
+tutors' weekly
+week 01 notes
+weekly notes
+webcms
+benefits
+both
+business
+clarification
+comp2121
+comp6447
+consensus
+jas
+latter
+lecture attendance
+lecture content
+lecture pace
+lecture recordings
+lecture streams web streams
+mess
+prereq
+promptness
+quality
+quiz results
+rate
+raymond
+speed
+talks
+uni
+week 04 notes
+25%
+@jas
+few
+portion
+programming
+revision
+stage
+subject
+tut content
+challenge
+extension activity
+extension work
+group
+browser
+guys
+https://join.slack.com/t/soln-creators/shared_invi
+hugh chan
+jakehenryfitz@gmail.com
+khan-academy-esque
+more
+outsiders
+playback
+side-project
+tool
+videos
+vids
+whiteboard videos
+factorial
+imo
+mistake
+need
+recursive function
+versions
+finals
+solutions
+complement
+ieee754
+lab questions
+tutorial discussion
+week 02 notes
+assignment - one
+question
+refactoring
+s
+t
+t registers
+week 06 notes
+c file
+flickering
+mips file
+points
+terminal
+complaint
+debugging
+machine-transcribing
+suggestion
+thinking
+week 07 notes
+children
+fork lab
+fork-bomb
+forking
+help
+majority
+memory exceptions
+movement
+print pids
+thing students
+18s1 labs
+file operations
+practice exam questions
+arithmetic
+bit operations
+carlos liang z5059355
+dante petrin z5214298
+elisa han z5115423
+laura chambers z5059509
+marie abed z5059063 h15b
+powers
+sam ross z5215490
+shifts
+shivang jatwani z5182263
+simardeep singh z5208460 h15b
+t11a
+week 03 notes
+yingxin guo
+0x.sh
+input spacing
+test
+test cases
+tests
+clipboard
+iframe
+lab machines
+terminals
+bignum
+concepts
+floating point
+tute
+correction
+pre-fix
+tute exercises with solutions
+week 01: introduction, c revision
+x++
+page0
+step
+title
+week 07: files, memory management
+box
+hi john
+week 04: mips assembler
+exam prep
+hugh
+marlene
+videos hi
+week 08: files, processes, signals
+q11
+sigquit
+&lt
+errno
+file descriptor
+file descriptors
+lecture exercises
+nread
+o_rdonly
+open %s
+week 5
+c programming questions
+helper
+sample exams
+assumptions
+bigarray
+i++
+window
+working set
+check q1
+prac exam
+running check
+trick
+asciiz array
+bracket
+code fragment
+fragment
+programming logic
+semi-colon
+syntax errors
+advice
+data section
+nterm: .byte '\0
+2017s2
+17s2
+curious
+middle
+``%d %d %d
+decimal
+sample
+scanf
+stdio.h&gt
+2
+complement binary
+practice paper
+technicality
+wolframalpha
+control-z
+e. -100_16
+e. sigtstp
+man page
+sample exam
+stop
+theorem questions
+coord
+coord-&gt
+error messages
+point
+point *temptl
+temptl
+temptl-&gt
+type argument
+exe
+scripts
+cse machine
+declaration
+function mergesort
+make
+mergesort
+qsort
+sorting function
+_&lt
+prac exams
+q1
+liz
+q4bi 17s2
+directories
+sample final exam
+o_creat
+o_wronly
+q5 comp1521
+page table entires
+download page
+exam files
+files.tar
+shepherd
+vlab
+calculation
+flip digits
+question7 b
+bin path
+dr
+exam1
+quirk
+re-start
+re-start q1
+rmm0d function
+spec
+ssh
+tl
+calculator apps
+exam spec front sheet
+gnome-calculator
+17s2 exam
+check
+chmod 755
+script
+getstudents
+sth
+float values
+week 03: bit-fields, unions and floats
+c syntax
+lecture slides
+week 3
+differences
+fault
+memframes
+paddr
+pte
+week 07: virtual memory
+combinations
+counter
+nsaves
+nwrites
+spot
+exception handling code
+executables
+got
+home computing
+im
+install&lt
+installation
+macos
+nobr&gt
+sense
+sourceforge
+soure
+spim command-line interface
+spim.
+subdirectory
+tigervnc
+trouble
+week 04: introduction to mips programming
+windows
+zip
+constant
+hand
+q5
+region
+week 01: introduction, c review
+explanation
+aliases
+hostnames
+ip addresses
+week 10: dns lookup
+dcc
+seg fault
+skeleton code loops
+week 08: a minimal shell
+\n
+``%d element
+bin-pc.
+glass
+i&lt
+import
+increments
+loop
+loop condition
+outputs
+prints
+c99
+declartion
+strdup
+/bin
+cd
+q18
+week 03: memory, data representation
+0x1
+0x8048621 sintptr
+0x804864b str2ptr
+0x8048657 str2ptr
+0xfff37a7c chptr
+0xfff37a7e chptr
+@%p\n
+address %p\n
+address 0x1
+char charray
+char etext
+charray
+charray address
+charray address %p\n
+charray content
+chptr
+chptr address %p\n
+chptr content
+content 0x1
+content 0x9
+content 0xf7513de0
+dbptr
+dbptr address %p\n
+edata
+etext
+etext@0x8048678 edata@0x804a020 end@0x804a024
+float z
+int num
+int y
+int z
+intarray
+intarray address
+intarray address %p\n
+intarray content
+intptr
+intptr address %p\n
+sinptr
+sintptr
+sintptr address %p\n
+sintptr content
+sintptr++
+str1ptr
+str1ptr address %p\n
+str1ptr++
+str2ptr address %p\n
+1st byte
+byte characters
+calculations
+character encoding standard
+combination
+mask
+mask2 #
+mask2 0xc0
+second
+top4 0xf0
+unicode character
+assignment 2
+assignment 2 submission
+c history.h history.c
+specification
+ld
+c exercise
+mention
+prototype
+prototypes
+sumof
+wed 4-5 lecture: data representation: integer, pointer, float
+week 2
+assignment 2 marking notes
+assignment marking
+dash line
+printing
+printing error
+return 0
+returns 0
+spelling errors
+q and a
+assignment marks
+exam mark
+course work
+le
+grades
+n/a
+web page
+field
+grades section
+be
+difficulty
+final
+reasons
+lab results
+q3
+exammark
+finalmark
+float question
+fractions
+xcalc
+sir
+theory questions
+writing section
+check command
+nothing
+q2 q2
+binary system
+hexdecimal
+_exit
+ascii value
+mark result
+advanceeeeee
+autotest
+practice exams
+wsn security
+autotests
+bunch
+callum avery
+demand
+exe.s
+file&gt
+function skeleton
+home computer
+main.
+practice exercise
+practice exercises
+run
+sample solutions
+spim -file
+file &gt
+issue
+load file
+matter
+non-instruction
+0xfffb
+sample exam questions
+char type
+c99 -o
+gnu99 -o
+wall -werror
+practice test
+hi jas
+hex
+test file
+possibility
+assignment feedback
+practice lab test
+ps
+quiz 6
+goto function
+colour
+copy
+set syntax
+tab spacing
+vimrc file
+q
+recommendations
+essay questions
+auto-testing
+home directory
+child process stop
+execve function
+reply
+thankyou
+command number
+cs1521/bin/mymysh
+initcommandhistory
+wk
+quiz mark
+quiz5 question
+debugging lecture
+chdir function
+const str
+addtocommandhistory
+init
+screenshot
+strut
+time table
+buf
+extension
+glibc
+length size
+maxline
+posix.
+pwd functionality
+history substitution
+changes
+cleancommandhisotry
+cmdline
+commandhistory
+lecture note
+bank example
+echo
+producer consumer problem
+recording
+quizes
+duplicate
+bit confusion
+frame size
+memory management
+page size
+xyz
+lab06
+atm
+biglength
+bigstring
+blank spaces
+curser
+failure
+nscols
+offset
+re-writes
+runs
+success
+jal 0x00000000
+qtspim instruction
+board
+tt
+hello world
+spim -file exe.
+exe.
+letters
+run parameters
+spaces
+bigletter
+chrsize
+column
+description
+equation
+height
+matrix
+nrows
+nrows * nscols
+spacing
+comment delay function
+delay function
+display speed
+align
+arguments
+hello
+io address
+ass1 code
+ch
+look
+show_display function
+fee
+hello&amp
+console window
+3d array
+colindex
+colsize
+colsize+ rowindex
+lecture videos
+youtube
+h files
+function fac
+code part
+grade space
+lecture example
+assignment1
+example code solution
+anything
+subjects
+trust
+website
+cisco anyconnect
+vnc lab
+double
+error message
+disk quota
+help session
+law
+course admins
+touch
+add
+warnings
+symbel
+challenge question
+harold
+lab instructions
+bignum.
+cs1521/bin/check add
+mistakes
+integer array
+book
+book contents
+chapters
+lab/tute
+participation
+participation marks
+partner
+procedure
+slides
+consultations
+help labs
+timetable
+lab solution
+lab01
+fine
+record
+blogs
+file (.o files
+makefiles
+c programming
+much
+proportion
+quiz questions
+notepad doc
+thoughts
+web stream lecture
+lecture spots
+web lecture
+web lectures
+solusion
+week 01: input/output functions
+inconvienience.
+sydney
+bonus marks
+ie
+cs1521/bin/check cat4
+lab spec
+bin
+cat tests
+cat2
+diff tests
+export
+open source file
+test scripts
+tests folder
+week01
+fgets
+file content
+fputs
+assignmap
+classrun
+give command
+login
+ravel
+spec files
+spec files login
+system error
+thu18-tabla
+z5115499 stuid
+``blog'' button
+``grades'' button
+assignment lab01
+check submission
+collect submission
+lab submission
+sentence
+tab
+cmd
+txt
+warandpeace.
+package manager
+endrowloop &lt
+endrowloop-0x004001cc
+instruction references
+rowloop
+update
+week 05: more mips programming
+data file
+isi.s
+matrix.h
+subdirectories
+test command
+atoi
+place value
+week 02: big numbers
+binary files tests
+exp
+code doesnt
+raymond setiawan soedargo
+segmentation error
+addbignums
+bignum *res
+bignum m
+bignum n
+shows
+chars
+strncpy
+anybody
+assertion
+intlistok
+myotherlist
+useintlist.
+printing results
+size error
+apprecated
+dl_pagesize
+glro
+realloc
+segmentatiom fault
+challenge exercise
+mutiplybignums
+subtractbignums
+digits
+argv
+code extracts
+nbytes
+scanning
+bignum.c
+hexadecimal
+warm-up question
+direction
+picture
+sign
+diff
+other
+test files
+test5
+math library
+pow
+warm up exercise
+week 09: a minimal web server
+curl -d
+echo360 lecture videos (via moodle)
+miscellaneous
+show answer) button
+week 12: course review
+/assign1... drwxr-x
+assignment 1
+assignment 1 submission
+assignment draft
+draft
+joe
+permission deniedsubmission
+scroll.s'
+scroll.s`
+state
+atexit
+atexit function
+function printing
+main
+tue 3-4 lecture video: fork(), _exit(), atexit(), wait()
+week 7
+assignment 1 specification
+deadline
+clear
+i'v
+islower
+string characters
+times
+char limit
+easiest
+mips statement
+args
+criiteria
+multiplited
+row
+rows
+total
+console
+memory error
+tips
+hash symbols
+bad
+given code
+base address
+col_size
+ndcols
+delay
+delay'' function
+'a'
+isupper
+means
+photo
+two
+formula
+multiplier
+position
+rightmost
+out_col++
+setupdisplay
+auto test
+delay parameter
+in_col
+out_col
+bounds
+exception
+pictures
+putty
+roling
+abc
+main_post
+c code part
+equivalent
+https://pastebin.com/ckrwnher 1
+number&gt
+s5
+syscall-ing
+command prompt
+left
+clue
+below
+bottom line
+showdisplay
+cause
+letter
+exe.s '
+3d array all_chars
+command line argument
+parameter hello
+stuff
+blank
+bne
+code snippet
+kind
+thestring
+command line arguments
+auto-test
+guy
+clobber
+clobbers
+purposes
+screen
+scroll window height
+window height
+0xfffffffc
+syntax error
+all_chars array.
+0x10010232 exception 4
+fact
+cond
+endi
+endj
+labels
+main_ptrs_cond main_ptrs_step
+main_ptrs_init
+styling mark
+everything
+exe.s abc
+&gt
+inlower
+least
+parameters
+return value v0
+string mush
+delay'' function numbers
+posts
+array indexes
+green
+image
+rectangles
+speeds
+places
+0x00617364 exception 7
+0x00647361 exception 4
+address error
+exceptions.
+exe.s dsa
+lib
+spim -file exe.s asd
+string argument
+thestring li
+# finish loop
+nrows li
+value store
+fallthrough
+application
+assembly code
+assembly files
+cse vlab
+kernel text segment
+reinitalize
+setnativelocks
+user text segment
+vpn
+chunk
+auto tests
+scroll.c file
+string mus h
+hand side screen
+argument box
+command line version
+execution line
+usage error
+everytime
+sort
+ascii numbers
+subtraction
+type char
+main_ch_islower
+main_ptrs_cond
+starter code
+charsize
+product
+delay numbers
+print string
+putchar
+syscall
+io
+step by step
+store byte command
+cat chars.s scroll.s &gt
+run parameter
+lab video
+c file solution
+delay values
+hand corner
+mine
+t5
+text blinker
+ubuntu
+working solution
+all_chars array
+scroll.s code
+the.s file
+.s file
+scroll speed
+scroll.s &gt
+comparison
+main_ptrs_f
+main_thelength_ge_maxchars
+load word
+occurrences
+escape sequence
+string printing syscall
+assignment 2 testing suggestions
+fopen
+histfile
+mymysh_history
+submission mark
+user input
+cat assign1
+testing suggestions
+executionable
+isexecutionable' function
+nonexec
+ls ls
+atestfolder
+c ls
+c ls ls
+c ls q
+wildcard stuff
+assignment 2 specification 
+buffer char
+buffer length
+history file
+memory leak
+mymysh.c
+child processes
+memory leaks
+parent program
+w/e
+example program
+file input
+history scaffold
+showcommandhistory
+folder
+permission issue
+array pointer
+wildcard
+argument list
+ref imp
+snail pace
+cat &lt
+file/ directory error
+perror
+xyx.txt
+child process
+nonexec execve
+guarantees
+isexecutable
+``./nonexec
+``./nonexec &gt
+choice
+functionality
+output stream
+printing errors
+reference program
+sample solution
+/.mymysh_history
+``%s\n
+file anything
+file redirection
+fopen error
+ls *.txt &gt
+running /bin
+text.txt
+file card expansion
+p.s.
+assumption
+ls root
+asdf
+cs1521/bin/mymysh mymysh
+i/o redirection
+cd command
+history command
+setup
+cs1521/bin/mymysh &lt
+fileofcommands
+footer&gt
+header&gt
+obs
+shell commands
+yinan feng
+error names
+outpu
+input.txt &gt
+redirects
+follow errors
+heap allocation
+jump
+memcheck
+move
+stack allocation
+uninitialised
+valgrind
+command.txt&gt
+*.txt
+ctrl
+ctrl + c
+echo abcd &gt
+myshsh
+redirection
+running xxxx
+sleep
+tokenise
+command.txt &gt
+code start
+file expansion
+base code
+debug region
+cat command printing output
+sample shell
+file name expansion function
+wild card
+wildcards
+break
+operation execution
+runtime
+runtime error
+workaround
+array elements
+strcpy
+tilde
+tilde\n
+condition statement
+filenameexpand
+found
+garbage
+glob_command
+glob_command array
+glob_command_size
+globbing
+hd xxx à'w÷à'w÷è'w÷è'w÷ð'w÷ð'w÷ø'w÷ø'w÷ glob_command
+j
+j++
+light
+ls -l
+memory allocation
+print statements
+strcpy function
+switch %
+switch argument
+switch arguments
+troubleshooting
+cat command
+output file
+outputfilename
+coommand
+linux bash command
+sfihkdff
+cd home
+feature
+reference soln
+soln
+will
+cleancommandhistory
+history functions
+max - 20
+initcommandhistory function
+input redirection
+myout file
+history.h
+pls help
+linux system
+pwd
+redirect input/output
+out.obs
+redirect part
+trim
+increment
+home/histfile
+~/histfile
+forum post
+test &gt
+commands section
+dicrectory
+ls *.c
+history.h file
+acceptance
+bin/mymysh
+reference solution
+array index
+c libraries
+error checking
+trim function
+directory bin
+mysh
+xxx
+situations
+wonder
+255
+exec format error
+execve failures
+print statement
+sample prints
+).commandline
+commandhistory.
+findexecutable
+forks
+history implementation
+lack
+pid = fork
+cat process
+extroneous
+cd ~/filename
+getenv
+lead
+username
+cam eup
+glibc_2.27
+gnu
+ive
+libc.so.6
+mymysh: /lib/i386
+weill %
+bin/mymysh: /lib/i386
+getcommandfromhistory
+seqnum
+commandline
+net
+sscanf
+clearcommandhistory
+hisarg
+mymysh process
+history entries
+assign2
+hi
+assignment specs
+confusion
+fd
+function names
+interaction
+savecommandhistory
+skeleton program files
+unintuitively
+\b
+entry
+escape sequences
+newline
+cmdno
+bin folder
+curiosity
+mkdir
+function prototype
+histfile ``.mymysh_history
+question marks
+sample mymysh
+dot
+file name
+function prototypes
+error handling
+print message
+freaks
+hello\n
+leak-check
+memory access
+cwd
+model solution
+code displays
+count
+dir
+model shell
+model solution shell
+program return
+command output
+input case
+code execution
+command history file
+heck
+history implementation working
+home environment
+homedir
+zxxxxxxx
+zxxxxxxx/.mymysh_history/
+infile &gt
+thing
+extent
+knowledge
+testing filename expansion
+mymysh_history file
+showhistory
+bash shell
+filename expansions
+shell redirection
+repost
+exit code
+invocation
+linker command
+inithistory
+beginning
+nentries
+catering
+digit numbers
+cd variants
+handles
+oliver
+delete
+factor
+file pointer
+h command
+hang
+history log
+post
+rui tong
+show function
+thanks jas
+writing
+first
+redirect command
+txt command
+txt file
+hints
+return 0/1
+running
+situation
+challenge component
+command history list
+command sequence
+h
+requirement
+pattern match/glob case
+pattern match
+hello &gt
+sample program
+test1.txt test2.txt
+aonther text file
+gedit mymysh.c
+gedit mymysh.c &amp
+press control
+reactions
+z
+outf
+outs
+ordering
+reverse order
+cat xxxxx
+history recording
+redirection part
+execve command
+director
+definition
+redirection command
+try_2 &gt
+farmat
+input command
+redirect
+exec
+status codes
+cage
+tmp_amd
+wc
+sample output
+maxstr
+string size
+cat xyz
+file xyz
+sub-processes
+wstatus
+command numbers
+history.txt
+char lines
+0x1000
+0x1008
+data value
+discussion
+lecture examples
+load word instruction
+memory location
+parentheses
+slide
+sorts
+var
+var b
+variations
+wed 5-6 lecture video: syscall, addressing modes
+comp1521 front page
