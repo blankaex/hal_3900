@@ -2,7 +2,7 @@
 <div :class="{'sidebar':true,'open': open}">
   <div class="menu">
     <ThemedIcon
-    @click="open=!open"
+    @click="open = !open"
     padding="0.45rem 0.5rem 0.35rem 0.5rem"
     name="menu"></ThemedIcon>
     <div class="themes">
