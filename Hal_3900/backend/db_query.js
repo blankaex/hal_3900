@@ -12,6 +12,18 @@ const find_all_from_collection = async (dbConn, collectionName) => {
     }
 };
 
+const find_forum_questions_by_topic = async (tag, dbConn) => {
+    const collection = dbConn.collection('forum');
+    try {
+        const cursor = await collection.find({ tags : { $elemMatch: {"name" : tag} } }, {tags: 0, _id:0} );
+        const results = await cursor.toArray();
+        cursor.close();
+        return results;
+    } catch (err) {
+        console.error(err);
+    }
+};
+
 const find_by_collection_and_tag = async (tag, dbConn, collectionName) => {
     const collection = dbConn.collection(collectionName);
     try {
@@ -51,7 +63,7 @@ const get_all_unique_tags = async (dbConn) => {
     // reduce to single array of unique
     let tagSet = new Set(grouped);
     for (const b of block){
-        tagSet.add(b)
+        tagSet.add(b);
     }
     for (const f of forum){
         tagSet.add(f);
@@ -61,4 +73,4 @@ const get_all_unique_tags = async (dbConn) => {
 };
 
 
-module.exports = {find_all_from_collection, find_by_collection_and_tag, get_all_unique_tags};
+module.exports = {find_forum_questions_by_topic, find_all_from_collection, find_by_collection_and_tag, get_all_unique_tags};

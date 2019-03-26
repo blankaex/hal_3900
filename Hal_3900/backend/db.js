@@ -82,6 +82,8 @@ module.exports = class DB {
             });
         });
 
+        const res = await query.find_forum_questions_by_topic('assignment', this.dbConn);
+        console.log(res);
     };
 
 };
