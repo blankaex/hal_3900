@@ -156,6 +156,11 @@ export default class Chat extends Vue {
   border-radius: 10px
   color: white
   max-width: 60%
+  white-space: pre-wrap
+  white-space: -moz-pre-wrap
+  white-space: -pre-wrap
+  white-space: -o-pre-wrap
+  word-wrap: break-word
 .bot
   justify-content: flex-start
 .user
