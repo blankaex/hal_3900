@@ -35,7 +35,7 @@ export default new Vuex.Store({
       },
       {
         primary: '#f15f79',
-        secondary: '#b24592',
+        secondary: '#267871',
         primaryGradient: ['#b24592', '#f15f79'],
         secondaryGradient: ['#136a8a', '#267871']
       }

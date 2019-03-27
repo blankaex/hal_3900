@@ -9,6 +9,13 @@
         <div class="text" :style="{'background': getGradient(message.from)}">{{message.text}}</div>
         <img v-if="message.from === 'user'" src="../assets/user.png">
     </div>
+      <div class="msg bot" v-if="waiting">
+        <img src="../assets/hal.png">
+        <div class="spinner">
+          <div class="double-bounce1" :style="{'background-color': this.$store.state.theme.secondary}"></div>
+          <div class="double-bounce2" :style="{'background-color': this.$store.state.theme.secondary}"></div>
+        </div>
+    </div>
   </div>
   <div class="input" v-on:keydown.enter="send" >
     <input type="text"
@@ -20,6 +27,7 @@
     <ThemedIcon
       name="send"
       padding="0.5rem 0.5rem 0.5rem 0.75rem"
+      margin="0rem 0rem 0rem 1rem"
       @click="send"></ThemedIcon>
   </div>
 </div>
@@ -39,6 +47,7 @@ export default class Chat extends Vue {
   draft: string = ''
   socket: WebSocket|null = null
   inputFocused: Boolean = false
+  waiting: Boolean = false 
 
   get inputColor () {
     if (!this.inputFocused) {
@@ -60,6 +69,7 @@ export default class Chat extends Vue {
     if (this.draft.trim() === '') return
     if (!this.socket) throw Error("Socket hasn't been connected yet!")
     this.$store.commit('sendMessage', this.draft)
+    this.waiting = true
     this.socket.send(JSON.stringify({
       type: 'message',
       error: false,
@@ -72,12 +82,14 @@ export default class Chat extends Vue {
   recv (res: MessageEvent) {
     const resObj:BotResponse = JSON.parse(res.data)
     this.$store.commit('recvMessage', resObj.text)
+    this.waiting = false;
     this.$nextTick(function () {
       this.scrollEnd()
     })
   }
 
   socketErr () {
+    this.waiting = false;
     // TODO: i dunno crash lol
   }
 
@@ -99,7 +111,7 @@ export default class Chat extends Vue {
       if (window.location.host !== 'hal-3900.com') {
         host = 'localhost:9447'
       }
-      this.socket = new WebSocket(`ws://${host}/talk?transport=websocket`)
+      this.socket = new WebSocket(`ws://${host}/talk`)
       this.socket.onmessage = this.recv
       this.socket.onerror = this.socketErr
     })
@@ -161,8 +173,49 @@ export default class Chat extends Vue {
   white-space: -pre-wrap
   white-space: -o-pre-wrap
   word-wrap: break-word
+.msg.bot .text::before
+    content: "Hal"
+    margin-top: -1.4rem
+    position: absolute
+    font-size: 0.8rem
+    color: #BBB
 .bot
   justify-content: flex-start
 .user
   justify-content: flex-end
+
+.spinner
+  width: 40px
+  height: 40px
+  position: relative
+
+.double-bounce1, .double-bounce2 
+  width: 100%
+  height: 100%
+  border-radius: 50%
+  opacity: 0.6
+  position: absolute
+  top: 0
+  left: 0  
+  -webkit-animation: sk-bounce 2.0s infinite ease-in-out
+  animation: sk-bounce 2.0s infinite ease-in-out
+
+.double-bounce2
+  -webkit-animation-delay: -1.0s
+  animation-delay: -1.0s
+
+@-webkit-keyframes sk-bounce
+  0%, 100%
+    -webkit-transform: scale(0.0)
+  50%
+    -webkit-transform: scale(1.0)
+
+@keyframes sk-bounce
+  0%, 100%
+    transform: scale(0.0)
+    -webkit-transform: scale(0.0)
+  50%
+    transform: scale(1.0)
+    -webkit-transform: scale(1.0)
+
 </style>
