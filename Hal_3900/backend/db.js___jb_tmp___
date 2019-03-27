@@ -82,7 +82,7 @@ module.exports = class DB {
             });
         });
 
-        const res = await query.find_by_collection_and_all_tags(['paragraph', 'aim'], this.dbConn, 'block');
+        const res = await query.find_by_collection_and_all_tags(['list', 'aim'], this.dbConn, 'block');
         console.log(res);
     };
 

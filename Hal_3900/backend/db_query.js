@@ -38,6 +38,21 @@ const find_by_collection_and_tag = async (tag, dbConn, collectionName) => {
     }
 };
 
+
+const find_by_collection_and_all_tags = async (tagsArray, dbConn, collectionName) => {
+    const collection = dbConn.collection(collectionName);
+    try {
+        // find all objects where tags contains an array elem with name = tag
+        const cursor = await collection.find({ "tags.name" : { $all: tagsArray } } );
+        const results = await cursor.toArray();
+        cursor.close();
+        return results;
+        // return results;
+    } catch (err) {
+        console.dir(err);
+    }
+};
+
 const find_all_by_tag = async (tag, dbConn) => {
     const grouped = await find_by_collection_and_tag(tag, dbConn, 'grouped');
     const block = await find_by_collection_and_tag(tag, dbConn, 'block');
@@ -73,4 +88,4 @@ const get_all_unique_tags = async (dbConn) => {
 };
 
 
-module.exports = {find_forum_questions_by_topic, find_all_from_collection, find_by_collection_and_tag, get_all_unique_tags};
+module.exports = {find_forum_questions_by_topic, find_by_collection_and_all_tags, find_all_from_collection, find_by_collection_and_tag, get_all_unique_tags};
