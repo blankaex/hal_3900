@@ -1,5 +1,9 @@
 import json
 import csv
+'''processing tags files produced by assignment.py
+	content.py, course_outline.py 
+	make sure there is no same tag in 2 different
+	set'''
 
 paths = ['assignments.csv','course_outline.csv','content.csv']
 asst = []
@@ -33,7 +37,7 @@ f.append (list(scontent))
 
 
 fpaths = ['assignments_info.csv','course_outline_info.csv','content_info.csv']
-
+'''write processed tags into 3 csv files'''
 for i in range(0,3):
     with open(fpaths[i],'w',encoding = 'utf-8',newline = '') as c:
         writer = csv.writer(c)
