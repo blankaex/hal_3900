@@ -10,15 +10,18 @@ module.exports = function(app)
     app.use(cors());
 
     // Web socket connection
+    // TODO: make not ugly
     app.ws('/talk', function(ws, req) {
       ws.on('message', function(msg) {
         msg = JSON.parse(msg)
         if (msg.type === 'message') {
-          ws.send(JSON.stringify({
-            type: 'message',
-            error: false,
-            text: hal.query(msg.text)
-          }))
+          hal.query(msg.text).then(r=>{
+            ws.send(JSON.stringify({
+              type: 'message',
+              error: false,
+              data: r
+            }))
+          })
         } else {
           ws.send(JSON.stringify({
             type: 'error',
