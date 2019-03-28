@@ -57,13 +57,13 @@ module.exports = class DB {
     }
 
     async initData () {
-        const dataDir = "../data_extraction/data_page/";
-        const forumDir = "../data_extraction/data_forum/";
+        const dataDir = "data/data_page";
+        const forumDir = "data/data_forum";
         // GET FORUM POSTS
         await fs.readdir(forumDir, async (err, items) => {
             // put forum post array from each file into the db
             items.forEach(async (i) => {
-                const forum = require(forumDir + i);
+                const forum = require(`./${forumDir}/${i}`);
                 // dump into db
                 try {
                     await this.addToCollection(forum.posts, 'forum');
@@ -75,7 +75,7 @@ module.exports = class DB {
         // GET BLOCK AND GROUPED
         await fs.readdir(dataDir, async (err, items) => {
             items.forEach(async (i) => {
-                const dataObject = require(dataDir + i);
+                const dataObject = require(`./${dataDir}/${i}`);
                 // dump into db
                 await this.addToCollection(dataObject.grouped, 'grouped');
                 await this.addToCollection(dataObject.block, 'block');
