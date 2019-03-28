@@ -19,8 +19,13 @@
   },
   "dependencies": {
     "cors": "^2.8.5",
+    "dialogflow": "^0.8.2",
     "express": "^4.16.4",
     "express-ws": "^4.0.0",
-    "fs": "0.0.1-security"
+    "fs": "0.0.1-security",
+    "pump": "^3.0.0",
+    "through2": "^3.0.1",
+    "uuid": "^3.3.2",
+    "yargs": "^13.2.2"
   }
 }
