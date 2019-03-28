@@ -11,6 +11,9 @@
   "license": "ISC",
   "devDependencies": {
     "dialogflow": "^0.8.2",
+    "chai": "^4.2.0",
+    "execa": "^1.0.0",
+    "mocha": "^6.0.2",
     "mongodb": "^3.1.13",
     "nodemon": "^1.18.10"
   },
