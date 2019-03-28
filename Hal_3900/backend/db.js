@@ -56,6 +56,23 @@ module.exports = class DB {
         return results;
     }
 
+    // takes a dialogflow object and searches for matches in the DB
+    async findResponses(df_object) {
+
+        // extract tags to search from the object
+        const tags_array = [];
+
+        // array of results
+        const res = await query.find_by_collection_and_all_tags(tags_array, this.dbConn, 'block');
+        console.log(res);
+
+        // process results to find the best match?? ask Yi about this
+
+        // return the first result
+        return res[0];
+
+    }
+
     async initData () {
         const dataDir = "../data_extraction/data_page/";
         const forumDir = "../data_extraction/data_forum/";
@@ -81,9 +98,6 @@ module.exports = class DB {
                 await this.addToCollection(dataObject.block, 'block');
             });
         });
-
-        const res = await query.find_by_collection_and_all_tags(['paragraph', 'aim'], this.dbConn, 'block');
-        console.log(res);
     };
 
 };

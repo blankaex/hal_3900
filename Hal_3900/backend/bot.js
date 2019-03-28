@@ -41,6 +41,8 @@ module.exports = class Bot {
 			  }
 			}
 		};
+
+		// process the user's request and return an instance of DecectIntentResponse
 		const responses = await this.DF.sessionClient.detectIntent(request);
 		const result = responses[0].queryResult;
 		return {
