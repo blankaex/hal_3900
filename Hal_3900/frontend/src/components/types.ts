@@ -6,7 +6,11 @@ export interface Theme {
 }
 
 export interface BotResponse {
-    text?: string,
+    data?: {
+        response: string,
+        intent: string
+    },
     error: false,
+    msg?: string,
     type: 'message'|'error'
 }
