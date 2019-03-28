@@ -7,7 +7,7 @@ const wsApp = require('express-ws')(app);
 app.use(cors());
 
 // Get routes
-// require('./router')(app);
+require('./router')(app);
 
 //API test stuff
 const posts = require('./routes/api/posts');
