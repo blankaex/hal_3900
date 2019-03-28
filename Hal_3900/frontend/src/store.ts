@@ -14,6 +14,12 @@ export default new Vuex.Store({
         text: 'Hello, welcome back!'
       }
     ],
+    log: [
+      {
+        timestamp: moment(),
+        message: 'Logging started'
+      }
+    ],
     theme: {
       primary: '#fd746c',
       secondary: '#457fca',
@@ -59,6 +65,12 @@ export default new Vuex.Store({
     changeTheme (state, payload) {
       const theme = state.themes.filter((x:Theme) => x.primary === payload)[0]
       state.theme = theme
+    },
+    log (state, payload) {
+      state.log.push({
+        timestamp: moment(),
+        message: payload
+      })
     }
   },
   actions: {

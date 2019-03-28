@@ -60,6 +60,7 @@ export default class Chat extends Vue {
     if (this.draft.trim() === '') return
     if (!this.socket) throw Error("Socket hasn't been connected yet!")
     this.$store.commit('sendMessage', this.draft)
+    this.$store.commit('log', `sent: ${this.draft}`)
     this.socket.send(JSON.stringify({
       type: 'message',
       error: false,
@@ -71,7 +72,16 @@ export default class Chat extends Vue {
 
   recv (res: MessageEvent) {
     const resObj:BotResponse = JSON.parse(res.data)
-    this.$store.commit('recvMessage', resObj.text)
+    if (!resObj) {
+      this.$store.commit('log', `[ERROR] Recieved Empty Response`)
+      return
+    } else if (!resObj.data) {
+      this.$store.commit('log', `[ERROR] Recieved Empty Data field in response`)
+      return
+    }
+    this.$store.commit('log', `identified intent: ${resObj.data.intent}`)
+    this.$store.commit('log', `got response: ${resObj.data.response}`)
+    this.$store.commit('recvMessage', resObj.data.response)
     this.$nextTick(function () {
       this.scrollEnd()
     })
