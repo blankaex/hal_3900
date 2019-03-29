@@ -7,5 +7,5 @@ RUN npm install
 
 EXPOSE 9447
 ENV PRODUCTION='1'
-
+ENV GOOGLE_APPLICATION_CREDENTIALS="/app/web/DFServiceAccount.json"
 ENTRYPOINT npm run start

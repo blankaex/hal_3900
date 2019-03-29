@@ -11,13 +11,21 @@
   "license": "ISC",
   "devDependencies": {
     "dialogflow": "^0.8.2",
+    "chai": "^4.2.0",
+    "execa": "^1.0.0",
+    "mocha": "^6.0.2",
     "mongodb": "^3.1.13",
     "nodemon": "^1.18.10"
   },
   "dependencies": {
     "cors": "^2.8.5",
+    "dialogflow": "^0.8.2",
     "express": "^4.16.4",
     "express-ws": "^4.0.0",
-    "fs": "0.0.1-security"
+    "fs": "0.0.1-security",
+    "pump": "^3.0.0",
+    "through2": "^3.0.1",
+    "uuid": "^3.3.2",
+    "yargs": "^13.2.2"
   }
 }

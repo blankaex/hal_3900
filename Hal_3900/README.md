@@ -22,5 +22,6 @@ _in one terminal launch backend_
 ```
 cd backend
 npm run install // if you haven't already
+EXPORT GOOGLE_APPLICATION_CREDENTIALS="backend/DFServiceAccount.json"
 npm run dev
 ```
