@@ -1,22 +1,13 @@
 const express = require('express');
 const path = require('path');
-const cors = require('cors');
-const sess = require('express-session');
 const bot = require('./bot');
 const hal = new bot()
 
 module.exports = function(app)
 {
     // Returns any static files in frontend `/dist`
+    // ### is this necessary?
     app.use(express.static(path.join(__dirname, '../frontend/dist')))
-
-    // Middleware
-    app.use(cors());
-    // store this in db for persistence
-	// docs https://www.npmjs.com/package/express-session
-    app.use(sess({secret:"flag{this_is_a_flag}",resave:false,saveUninitialized:true})); 
-    app.use(express.json());       // to support JSON-encoded bodies
-    app.use(express.urlencoded()); // to support URL-encoded bodies
 
     // Login stuff test
     app.post('/register', function(req, res) {
@@ -35,7 +26,9 @@ module.exports = function(app)
         var fs = require('fs');
 		var obj = JSON.parse(fs.readFileSync('test.json', 'utf8'));
 		if(obj.user === req.body.user && obj.pass === req.body.pass) {
+            console.log(req.session.user);
 			req.session.user = req.body.user;
+            console.log(req.session.user);
 			return res.status(200).send('logged in');
 		} else {
 			return res.status(401).send('nop');
@@ -44,6 +37,7 @@ module.exports = function(app)
     })
 
     app.get('/dashboard', function(req, res) {
+        console.log(req.session.user);
         if(!req.session.user) // this isn't global for some reason
             return res.status(401).send('401');
         return res.status(200).send('sekrit club');
