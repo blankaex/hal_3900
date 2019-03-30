@@ -4,48 +4,73 @@
     <div :class="{'msg':true,
       'bot':message.from === 'bot',
       'user':message.from === 'user'
-      }" v-for="message in $store.state.messages" :key="message.id">
+      }" v-for="message in $store.state.messages" :key="message.id+'-'+message.from">
         <img v-if="message.from === 'bot'" src="../assets/hal.png">
         <div class="text" :style="{'background': getGradient(message.from)}">{{message.text}}</div>
         <img v-if="message.from === 'user'" src="../assets/user.png">
     </div>
+      <div class="msg bot" v-if="waiting">
+        <img src="../assets/hal.png">
+        <div class="spinner">
+          <div class="double-bounce1" :style="{'background-color': this.$store.state.theme.secondary}"></div>
+          <div class="double-bounce2" :style="{'background-color': this.$store.state.theme.secondary}"></div>
+        </div>
+    </div>
   </div>
   <div class="input" v-on:keydown.enter="send" >
-    <input type="text" v-model="draft"/>
-    <i class="mdi mdi-send" @click="send"></i>
+    <input type="text"
+      v-model="draft"
+      :style="inputColor"
+      @focus="inputFocused = true"
+      @blur="inputFocused = false"
+    />
+    <ThemedIcon
+      name="send"
+      padding="0.5rem 0.5rem 0.5rem 0.75rem"
+      margin="0rem 0rem 0rem 1rem"
+      @click="send"></ThemedIcon>
   </div>
 </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
+import { BotResponse, Theme } from './types'
+import ThemedIcon from './ThemedIcon.vue'
 
-interface BotResponse {
-  text?: string,
-  error: false,
-  type: 'message'|'error'
-}
-interface Theme {
-  primary: string,
-  secondary: string,
-  primaryGradient: string[],
-  secondaryGradient: string[]
-}
-
-@Component
+@Component({
+  components: {
+    ThemedIcon
+  }
+})
 export default class Chat extends Vue {
-  draft: string = '';
-  socket: WebSocket|null = null;
+  draft: string = ''
+  socket: WebSocket|null = null
+  inputFocused: Boolean = false
+  waiting: Boolean = false 
+
+  get inputColor () {
+    if (!this.inputFocused) {
+      return {}
+    }
+    return {
+      'borderColor': this.$store.state.theme.primary,
+      'color': this.$store.state.theme.primary
+    }
+  }
 
   scrollEnd () {
     const container = this.$el.querySelector('#messages')
     if (container === null) return
     container.scrollTop = container.scrollHeight
   }
+
   send () {
     if (this.draft.trim() === '') return
-    if (!this.socket) return // TODO: actually throw a error here
+    if (!this.socket) throw Error("Socket hasn't been connected yet!")
     this.$store.commit('sendMessage', this.draft)
+    this.$store.commit('log', `sent: ${this.draft}`)
+    this.waiting = true
     this.socket.send(JSON.stringify({
       type: 'message',
       error: false,
@@ -54,16 +79,32 @@ export default class Chat extends Vue {
     this.draft = ''
     this.scrollEnd()
   }
+
   recv (res: MessageEvent) {
     const resObj:BotResponse = JSON.parse(res.data)
-    // TODO: Error handling
-    this.$store.commit('recvMessage', resObj.text)
+    if (!resObj) {
+      this.$store.commit('log', `[ERROR] Recieved Empty Response`)
+      return
+    } else if (!resObj.data) {
+      this.$store.commit('log', `[ERROR] Recieved Empty Data field in response`)
+      return
+    }
+    this.$store.commit('log', `identified intent: ${resObj.data.intent}`)
+    this.$store.commit('log', `got response: ${resObj.data.response}`)
+    this.$store.commit('recvMessage', resObj.data.response)
+    this.waiting = false;
     this.$nextTick(function () {
       this.scrollEnd()
     })
   }
+
+  socketErr () {
+    this.waiting = false;
+    // TODO: i dunno crash lol
+  }
+
   getGradient (who:string) {
-    const theme = this.$store.state.theme
+    const theme:Theme = this.$store.state.theme
     const pg = theme.primaryGradient
     const sg = theme.secondaryGradient
     if (who === 'user') {
@@ -72,11 +113,17 @@ export default class Chat extends Vue {
       return `linear-gradient(to right, ${sg[0]}, ${sg[1]})`
     }
   }
+
   mounted () {
     this.$nextTick(function () {
-      const host = window.location.host
+      // Are we running in dev mode?
+      let host = 'backend.hal-3900.com'
+      if (window.location.host !== 'hal-3900.com') {
+        host = 'localhost:9447'
+      }
       this.socket = new WebSocket(`ws://${host}/talk`)
       this.socket.onmessage = this.recv
+      this.socket.onerror = this.socketErr
     })
   }
 }
@@ -99,19 +146,6 @@ export default class Chat extends Vue {
   @extend %flex-center
   width: 100%
   height: 5rem
-.input i
-  margin-left: 1rem
-  padding-top: 0.5rem
-  padding-bottom: 0.5rem
-  padding-right: 0.5rem
-  padding-left: 0.75rem
-  font-size: 1.5rem
-  color: #777
-  border-radius: 50%
-  cursor: pointer
-.input i:hover
-  color: #ff9068
-  background: rgba(255, 144, 104,0.1)
 .input input
   height: 2rem
   border: 2px solid #EBEBEB
@@ -144,8 +178,54 @@ export default class Chat extends Vue {
   border-radius: 10px
   color: white
   max-width: 60%
+  white-space: pre-wrap
+  white-space: -moz-pre-wrap
+  white-space: -pre-wrap
+  white-space: -o-pre-wrap
+  word-wrap: break-word
+.msg.bot .text::before
+    content: "Hal"
+    margin-top: -1.4rem
+    position: absolute
+    font-size: 0.8rem
+    color: #BBB
 .bot
   justify-content: flex-start
 .user
   justify-content: flex-end
+
+.spinner
+  width: 40px
+  height: 40px
+  position: relative
+
+.double-bounce1, .double-bounce2 
+  width: 100%
+  height: 100%
+  border-radius: 50%
+  opacity: 0.6
+  position: absolute
+  top: 0
+  left: 0  
+  -webkit-animation: sk-bounce 2.0s infinite ease-in-out
+  animation: sk-bounce 2.0s infinite ease-in-out
+
+.double-bounce2
+  -webkit-animation-delay: -1.0s
+  animation-delay: -1.0s
+
+@-webkit-keyframes sk-bounce
+  0%, 100%
+    -webkit-transform: scale(0.0)
+  50%
+    -webkit-transform: scale(1.0)
+
+@keyframes sk-bounce
+  0%, 100%
+    transform: scale(0.0)
+    -webkit-transform: scale(0.0)
+  50%
+    transform: scale(1.0)
+    -webkit-transform: scale(1.0)
+
 </style>
