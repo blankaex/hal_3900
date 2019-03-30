@@ -55,3 +55,5 @@ router.get('/:name', (req, res) => {
 		res.status(200).json({ msg: `Created user ${req.params.name}` });
 	}
 });
+
+module.exports = router;
