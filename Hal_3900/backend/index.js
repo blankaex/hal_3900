@@ -1,7 +1,7 @@
 const express = require('express');
 const session = require('express-session');
-const cors = require('cors');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const app = express();
 const wsApp = require('express-ws')(app);
 
@@ -16,7 +16,10 @@ app.use(session({
     secret: 'flag{this_is_a_flag}',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: true }
+    cookie: { secure: true, maxAge: 60000 },
+	// store: new MongoStore({
+	// 	mongooseConnection: db
+	//   })
 }));
 
 // User API endpoint

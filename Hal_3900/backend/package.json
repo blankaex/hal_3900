@@ -10,8 +10,8 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "dialogflow": "^0.8.2",
     "chai": "^4.2.0",
+    "dialogflow": "^0.8.2",
     "execa": "^1.0.0",
     "mocha": "^6.0.2",
     "mongodb": "^3.1.13",
@@ -25,6 +25,7 @@
     "express-session": "^1.15.6",
     "express-ws": "^4.0.0",
     "fs": "0.0.1-security",
+    "mongoose": "^5.4.20",
     "pump": "^3.0.0",
     "through2": "^3.0.1",
     "uuid": "^3.3.2",
