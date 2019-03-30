@@ -21,6 +21,7 @@ const UserSchema = new mongoose.Schema({
           trim: true
         }
 });
+const User = mongoose.model('User', UserSchema);
 
 // test "db"
 const db = [
@@ -30,37 +31,23 @@ const db = [
 	{ id: 3, name: 'Zain' }
 ];
 
-// test
-router.get('/', async (req, res) => {
-	if (req.session.count) {
-		req.session.count++
-		res.setHeader('Content-Type', 'text/html')
-		res.write('<p>count: ' + req.session.count + '</p>')
-		res.write('<p>expires in: ' + (req.session.cookie.maxAge / 1000) + 's</p>')
-		res.end()
-	} else {
-		req.session.count = 1
-		res.end('refresh')
-	}
-});
-
 // get all users
-// router.get('/', async (req, res) => {
-// 	res.status(200).json(db);
-// });
+router.get('/', async (req, res) => {
+	res.status(200).json(db);
+});
 
 // get current user
 router.get('/me', async (req, res) => {
-    console.log(req.session.user);
 	if(req.session.user)
 		res.status(200).json(req.session.user);
 	else
 		res.status(200).send('u r no one');
 });
 
-// get any user, create if doesn't exist
+// sets the user of the current session
 router.get('/:name', (req, res) => {
-    req.session.user = req.params.name;
+    req.session.user = req.params.name; // should technically be done at the end
+										// but what could go wrong
 	if (db.some(db => db.name === req.params.name)) {
 		res.status(200).json(db.filter(db => db.name === req.params.name));
 	} else {
@@ -68,5 +55,3 @@ router.get('/:name', (req, res) => {
 		res.status(200).json({ msg: `Created user ${req.params.name}` });
 	}
 });
-
-module.exports = router;

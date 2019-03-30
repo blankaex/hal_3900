@@ -16,7 +16,8 @@ app.use(session({
     secret: 'flag{this_is_a_flag}',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: true, maxAge: 60000 },
+    // cookie: { secure: true, maxAge: 3600000 },
+    cookie: { maxAge: 3600000 },
 	// store: new MongoStore({
 	// 	mongooseConnection: db
 	//   })
@@ -27,7 +28,7 @@ const users = require('./routes/api/users');
 app.use('/api/users', users)
 
 // Get routes
-require('./router')(app);
+require('./routes/router')(app);
 
 const PORT = process.env.PORT || 9447;
 
