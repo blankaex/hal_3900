@@ -10,7 +10,7 @@
   "author": "ellen",
   "license": "ISC",
   "dependencies": {
-    "@google-cloud/language": "^2.0.2",
+    "@google-cloud/language": "^2.1.0",
     "cheerio": "^1.0.0-rc.2",
     "objects-to-csv": "^1.2.1",
     "request": "^2.88.0",

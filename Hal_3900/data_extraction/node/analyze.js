@@ -6,6 +6,11 @@ const language = require('@google-cloud/language');
 
 const client = new language.LanguageServiceClient();
 
+const getTag = (name, salience) => {
+    const theta = 1;
+    return {name, salience, theta};
+};
+
 // Entity Analysis on a single text with Google Cloud NLP,
 // returns analysis as object
 const analyze = async (text) => {
@@ -27,7 +32,7 @@ const getNewTags = async (text) => {
     const newTags = res[0].entities.map(entity => {
         const name = entity.name.toLowerCase();
         const salience = entity.salience;
-        return {name, salience};
+        return getTag(name, salience);
     });
 
     return await Promise.all(newTags);

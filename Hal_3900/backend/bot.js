@@ -4,10 +4,10 @@ const uuid = require('uuid');
 
 module.exports = class Bot {
 	constructor() {
-		this.version = '0.1'
-		let url = 'mongodb://localhost:27017'
-		if (process.env.PRODUCTION) url = 'mongodb://database:27017'
-		this.db = new DB(url,'database')
+		this.version = '0.1';
+		let url = 'mongodb://localhost:27017';
+		if (process.env.PRODUCTION) url = 'mongodb://database:27017';
+		this.db = new DB(url,'database');
 		// Async connection
 		this.db.connect().then(_=>{
 			// you can submit documents like this
@@ -21,11 +21,11 @@ module.exports = class Bot {
 			// // Run INIT DATA here once established working
 			console.log("Initialising db with data");
 			this.db.initData();
-		})
+		});
 		// Create DF session
 		const sessionId = uuid.v4();
 		// Create a new session
-		this.DF = {}
+		this.DF = {};
 		this.DF.sessionClient = new dialogflow.SessionsClient();
 		// TODO: move these into env vars 
 		const projectId = "test-53d52";
@@ -41,9 +41,10 @@ module.exports = class Bot {
 			  }
 			}
 		};
-
-		// process the user's request and return an instance of DecectIntentResponse
+		console.log(request);
+		// process the user's request and return an instance of DetectIntentResponse
 		const responses = await this.DF.sessionClient.detectIntent(request);
+		console.log(responses);
 		const result = responses[0].queryResult;
 		return {
 			response: result.fulfillmentText,
