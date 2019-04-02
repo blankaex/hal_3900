@@ -101,7 +101,6 @@ const parseData = (html) => {
 const getForumTopicPages = (forumRootHtml) => {
     // array of each item to be {topic name, url}
 
-    //TODO refactor to use Promise.all() to create array
     const topicPages = [];
     const baseURL = "https://webcms3.cse.unsw.edu.au";
 
@@ -109,7 +108,7 @@ const getForumTopicPages = (forumRootHtml) => {
 
     $("tr").map((index, element) => {
         const address = baseURL + $(element).find("td").eq(0).find("a").attr("href");
-        const name = $(element).find("td").eq(0).text().replace(/\s+/g, ' ').replace(":", "/");  // TODO why is this replacing : with / ???
+        const name = $(element).find("td").eq(0).text().replace(/\s+/g, ' ').replace(":", "/");
         const numPosts = stripText($(element).find("td").eq(1).text());
             if (parseInt(numPosts) !== 0 && name !== ""
                 && !name.includes("Tutor's Weekly") && !name.includes("Tutor Group") ){
@@ -133,7 +132,6 @@ const getForumPages = (html, topicPageId) => {
         // get its first <td>
         // get the a.href within that, this is the link
         const address = baseURL + $(element).find("td").eq(0).find("a").attr("href");
-        // console.log(address);  // TODO some of these addresses are finding undefined
         addressList.push(address);
     });
 
@@ -156,9 +154,7 @@ const extractMessage = (messageItem) => {
 };
 
 const getForumPostObject = (apiResponseObject, tags) => {
-
-    // console.log("getting forum post object");
-    // TODO catch error thrown here on some objects: TypeError: cannot read property '0' of undefined
+    
     const question = stripText(apiResponseObject.result.messages[0].body);
     const answers = [];
     apiResponseObject.result.messages[0].children.forEach(child => {
