@@ -93,7 +93,7 @@ export default class Chat extends Vue {
     this.$store.commit('log', `identified intent: ${resObj.data.intent}`)
     this.$store.commit('log', `got response: ${resObj.data.response}`)
     this.$store.commit('recvMessage', resObj.data.response)
-    this.waiting = false;
+    this.waiting = false
     this.$nextTick(function () {
       this.scrollEnd()
     })
@@ -171,10 +171,7 @@ export default class Chat extends Vue {
   border-radius: 50%
   margin: 0.5rem
 .msg .text
-  padding-left: 1rem
-  padding-right: 1rem
-  padding-top: 0.5rem
-  padding-bottom: 0.5rem
+  padding: 0.5rem 1rem
   position: relative
   font-family: 'Raleway', sans-serif
   border-radius: 10px
