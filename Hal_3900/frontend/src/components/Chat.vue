@@ -47,7 +47,7 @@ export default class Chat extends Vue {
   draft: string = ''
   socket: WebSocket|null = null
   inputFocused: Boolean = false
-  waiting: Boolean = false 
+  waiting: Boolean = false
 
   get inputColor () {
     if (!this.inputFocused) {
@@ -82,6 +82,7 @@ export default class Chat extends Vue {
 
   recv (res: MessageEvent) {
     const resObj:BotResponse = JSON.parse(res.data)
+
     if (!resObj) {
       this.$store.commit('log', `[ERROR] Recieved Empty Response`)
       return
@@ -92,14 +93,14 @@ export default class Chat extends Vue {
     this.$store.commit('log', `identified intent: ${resObj.data.intent}`)
     this.$store.commit('log', `got response: ${resObj.data.response}`)
     this.$store.commit('recvMessage', resObj.data.response)
-    this.waiting = false;
+    this.waiting = false
     this.$nextTick(function () {
       this.scrollEnd()
     })
   }
 
   socketErr () {
-    this.waiting = false;
+    this.waiting = false
     // TODO: i dunno crash lol
   }
 
@@ -170,10 +171,8 @@ export default class Chat extends Vue {
   border-radius: 50%
   margin: 0.5rem
 .msg .text
-  padding-left: 1rem
-  padding-right: 1rem
-  padding-top: 0.5rem
-  padding-bottom: 0.5rem
+  padding: 0.5rem 1rem
+  position: relative
   font-family: 'Raleway', sans-serif
   border-radius: 10px
   color: white
@@ -184,11 +183,11 @@ export default class Chat extends Vue {
   white-space: -o-pre-wrap
   word-wrap: break-word
 .msg.bot .text::before
-    content: "Hal"
-    margin-top: -1.4rem
-    position: absolute
-    font-size: 0.8rem
-    color: #BBB
+  content: "Hal"
+  margin-top: -1.4rem
+  position: absolute
+  font-size: 0.8rem
+  color: #BBB
 .bot
   justify-content: flex-start
 .user
@@ -199,14 +198,14 @@ export default class Chat extends Vue {
   height: 40px
   position: relative
 
-.double-bounce1, .double-bounce2 
+.double-bounce1, .double-bounce2
   width: 100%
   height: 100%
   border-radius: 50%
   opacity: 0.6
   position: absolute
   top: 0
-  left: 0  
+  left: 0
   -webkit-animation: sk-bounce 2.0s infinite ease-in-out
   animation: sk-bounce 2.0s infinite ease-in-out
 
