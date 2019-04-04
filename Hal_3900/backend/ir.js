@@ -1,7 +1,10 @@
 // Given a candiate and a list of tags
 // calculates it's score
 function calcScore(tags, candidate) {
-    return candidate.tags.reduce((acc, tag) => acc + (tags.includes(tag["name"]) ? tag.salience : 0), 0);
+    return candidate.tags.reduce(
+        (acc, tag) => acc + (tags.includes(tag["name"]) ? tag.salience : 0),
+        0
+    );
 }
 // input: tags extracted by dialogflow
 //        candidates which have the tags, got by db_query.js
