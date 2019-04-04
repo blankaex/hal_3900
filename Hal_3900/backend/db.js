@@ -99,5 +99,4 @@ module.exports = class DB {
             });
         });
     };
-
 };
