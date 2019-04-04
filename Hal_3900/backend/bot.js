@@ -37,7 +37,7 @@ module.exports = class Bot {
 			queryInput: {
 			  text: {
 				text: msg,
-				languageCode: 'en-AU'
+				languageCode: 'en'
 			  }
 			}
 		};
