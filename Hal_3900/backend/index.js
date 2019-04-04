@@ -27,6 +27,10 @@ app.use(session({
 const users = require('./routes/api/users');
 app.use('/api/users', users)
 
+// Quiz API endpoint
+const quiz = require('./routes/api/quiz');
+app.use('/api/quiz', quiz)
+
 // Get routes
 require('./routes/router')(app);
 
