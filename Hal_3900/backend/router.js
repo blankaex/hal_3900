@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const cors = require('cors');
 const bot = require('./bot');
-const hal = new bot()
+const hal = new bot();
 
 module.exports = function(app)
 {
@@ -13,8 +13,10 @@ module.exports = function(app)
     // TODO: make not ugly
     app.ws('/talk', function(ws, req) {
       ws.on('message', function(msg) {
-        msg = JSON.parse(msg)
-        if (msg.type === 'message') {
+
+          msg = JSON.parse(msg);
+
+          if (msg.type === 'message') {
           hal.query(msg.text).then(r=>{
             ws.send(JSON.stringify({
               type: 'message',

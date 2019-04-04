@@ -3,6 +3,27 @@ const fs = require('fs');
 const rp = require('request-promise');
 const cheerio = require('cheerio');
 
+
+const stripText = (text) => {
+    // strip html tags
+    let newText = text.replace(/<(?:.|\n)*?>/gm, '');
+    // strip non-alphanumeric, replace with space
+    newText = newText.replace(/[\W_]+/g," ");
+    // remove excess whitespace
+    newText = newText.replace(/\s+/g, ' ');
+    // tolower() and trim start/end whitespace
+    newText = newText.toLowerCase().trim();
+
+    return newText;
+
+};
+
+const getTag = (name) => {
+    const salience = 0.5;
+    const theta = 1;
+    return {name, salience, theta};
+};
+
 const parseData = (html) => {
 
     let $ = cheerio.load(html);
@@ -12,12 +33,12 @@ const parseData = (html) => {
     $("table").each((index, element) => {
         const items = [];
         const tags = [];
-        tags.push({"name":"table"});
+        tags.push(getTag("table"));
         const prev = $(element).prev();
         if (prev.is("h1") ||  prev.is("h2") || prev.is("h3")
             || prev.is("h4") || prev.is("h5") || prev.is("h6")){
-            const name = prev.text().replace(/\s+/g, ' ');
-            tags.push({name});
+            const name = stripText(prev.text());
+            tags.push(getTag(name));
         }
         $(element).find("tr").map((i, e) => {
             // get the tablerow text, strip whitespace to singles
@@ -25,7 +46,7 @@ const parseData = (html) => {
             $(e).find("td").map((i, e) => {
                 td.push($(e).text());
             });
-            const text = td.toString().replace(",", " ").replace(/\s+/g, ' ');
+            const text = stripText(td.toString());
             const tags = []; // these tags will extract from text
             // construct js object
             items.push({tags, text});
@@ -37,16 +58,16 @@ const parseData = (html) => {
     $("ul").map((index, element) => {
         let items = [];
         const tags = [];
-        tags.push({"name" : "list"});
+        tags.push(getTag("list"));
         const prev = $(element).prev();
         if (prev.is("h1") ||  prev.is("h2") || prev.is("h3")
             || prev.is("h4") || prev.is("h5") || prev.is("h6")){
-            const name = prev.text().replace(/\s+/g, ' ');
-            tags.push({name});
+            const name = stripText(prev.text());
+            tags.push(getTag(name));
         }
         $(element).find("li").each((i, e) => {
             // paragraph with stripped whitespace. could break them up further if needed
-            const text = $(e).text().replace(/\s+/g, ' ');
+            const text = stripText($(e).text());
             const tags = []; // these tags will extract from data
             items.push({tags, text});
         });
@@ -57,16 +78,19 @@ const parseData = (html) => {
     const block = [];
     $("p").map((index, element) => {
         const tags = [];
-        tags.push({"name" : "paragraph"});
+        tags.push(getTag("paragraph"));
         const prev = $(element).prev();
         if (prev.is("h1") ||  prev.is("h2") || prev.is("h3")
             || prev.is("h4") || prev.is("h5") || prev.is("h6")){
-            const name = prev.text().replace(/\s+/g, ' ');
-            tags.push({name});
+            const name = stripText(prev.text());
+            tags.push(getTag(name));
         }
         // paragraph with stripped whitespace. could break them up further if needed
-        const text = $(element).text().replace(/\s+/g, ' ');
-        block.push({tags, text});
+        const text = stripText($(element).text());
+
+        if (text){ // text is not falsy value or "",
+            block.push({tags, text});
+        }
     });
 
     return {grouped, block};
@@ -77,7 +101,6 @@ const parseData = (html) => {
 const getForumTopicPages = (forumRootHtml) => {
     // array of each item to be {topic name, url}
 
-    //TODO refactor to use Promise.all() to create array
     const topicPages = [];
     const baseURL = "https://webcms3.cse.unsw.edu.au";
 
@@ -86,8 +109,9 @@ const getForumTopicPages = (forumRootHtml) => {
     $("tr").map((index, element) => {
         const address = baseURL + $(element).find("td").eq(0).find("a").attr("href");
         const name = $(element).find("td").eq(0).text().replace(/\s+/g, ' ').replace(":", "/");
-        const numPosts = $(element).find("td").eq(1).text().replace(/\s+/g, ' ');
-            if (parseInt(numPosts) !== 0 && name !== ""){
+        const numPosts = stripText($(element).find("td").eq(1).text());
+            if (parseInt(numPosts) !== 0 && name !== ""
+                && !name.includes("Tutor's Weekly") && !name.includes("Tutor Group") ){
                 topicPages.push({name, address, numPosts});
             }
     });
@@ -97,6 +121,7 @@ const getForumTopicPages = (forumRootHtml) => {
 // feed me html object for a topic listing page
 // returns list of links from this topic page
 const getForumPages = (html, topicPageId) => {
+
     const baseURL = "https://webcms3.cse.unsw.edu.au";
 
     let $ = cheerio.load(html);
@@ -107,19 +132,19 @@ const getForumPages = (html, topicPageId) => {
         // get its first <td>
         // get the a.href within that, this is the link
         const address = baseURL + $(element).find("td").eq(0).find("a").attr("href");
-        // console.log(address);  // TODO some of these addresses are finding undefined
         addressList.push(address);
     });
 
     $(".breadcrumb").find("li").map((index, element) => {
-        tags.push({"name": $(element).text().replace(/\s+/g, ' ').toLowerCase()});
+        const name = stripText($(element).text());
+        tags.push(getTag(name));
     });
 
     return {tags, topicPageId, addressList};
 };
 
 const extractMessage = (messageItem) => {
-    const text = messageItem.body.replace(/<(?:.|\n)*?>/gm, '').replace(/\s+/g, ' ');
+    const text = stripText(messageItem.body);
     const childResults = [];
     childResults.push(text);
     messageItem.children.forEach(child => {
@@ -129,9 +154,8 @@ const extractMessage = (messageItem) => {
 };
 
 const getForumPostObject = (apiResponseObject, tags) => {
-
-    // console.log("getting forum post object");
-    const question = apiResponseObject.result.messages[0].body.replace(/<(?:.|\n)*?>/gm, '').replace(/\s+/g, ' ');
+    
+    const question = stripText(apiResponseObject.result.messages[0].body);
     const answers = [];
     apiResponseObject.result.messages[0].children.forEach(child => {
         const results = extractMessage(child);
