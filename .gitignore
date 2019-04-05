@@ -85,6 +85,9 @@ typings/
 # DynamoDB Local files
 .dynamodb/
 
-#intellij/webstorms
+# intellij/webstorms
 **/.idea
 
+# latex logs
+Proposal/Project Proposal.aux
+Proposal/Project Proposal.toc
