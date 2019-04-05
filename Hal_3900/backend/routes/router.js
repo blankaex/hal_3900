@@ -5,10 +5,6 @@ const hal = new bot()
 
 module.exports = function(app)
 {
-    // Returns any static files in frontend `/dist`
-    // ### is this necessary?
-    app.use(express.static(path.join(__dirname, '../../frontend/dist')))
-
     // Web socket connection
     // TODO: make not ugly
     app.ws('/talk', function(ws, req) {
@@ -32,8 +28,11 @@ module.exports = function(app)
       });
     });
 
-    // 404 catch all
-    app.get('*', (_, res) =>
-        res.sendFile(path.join(__dirname, '../../frontend/dist', '404.html'))
-    );    
+    // User API endpoint
+    const users = require('./api/users');
+    app.use('/api/users', users)
+
+    // Quiz API endpoint
+    const quiz = require('./api/quiz');
+    app.use('/api/quiz', quiz)
 }
