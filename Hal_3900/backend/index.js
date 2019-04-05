@@ -24,14 +24,6 @@ app.use(session({
 
 app.ws('/talk', ws => talkSocket(ws));
 
-// User API endpoint
-const users = require('./routes/api/users');
-app.use('/api/users', users)
-
-// Quiz API endpoint
-const quiz = require('./routes/api/quiz');
-app.use('/api/quiz', quiz)
-
 // Get routes
 require('./routes/router')(app);
 
