@@ -3,10 +3,13 @@ const fs = require('fs');
 const query = require('./db_query');
 
 module.exports = class DB {
-    constructor (dbUrl, dbName) {
+    constructor () {
+        let url = 'mongodb://localhost:27017';
+		if (process.env.PRODUCTION) url = 'mongodb://database:27017';
         this.dbConn = null;
-        this.dbUrl = dbUrl;
-        this.dbName = dbName;
+        this.dbUrl = url;
+        this.dbName = 'database';
+        this.connected = false;
     }
 
     async connect() {
@@ -17,6 +20,9 @@ module.exports = class DB {
             const client = await MongoClient.connect(this.dbUrl,mongoConfig);
             console.log("Connected to database successfully");
             this.dbConn = client.db(this.dbName);
+            this.connected = true;
+            console.log("Initialising db with data");
+			//this.initData();
         } catch(err) {
             console.dir(err);
         }
@@ -43,8 +49,8 @@ module.exports = class DB {
         }
     }
 
-    async search(obj) {
-        const collection = this.dbConn.collection('documents');
+    async search(obj, collectionName) {
+        const collection = this.dbConn.collection(collectionName);
         let results = [];
         try {
             const cursor = collection.find(obj);
@@ -89,6 +95,7 @@ module.exports = class DB {
                 }
             });
         });
+
         // GET BLOCK AND GROUPED
         await fs.readdir(dataDir, async (err, items) => {
             items.forEach(async (i) => {
@@ -98,5 +105,26 @@ module.exports = class DB {
                 await this.addToCollection(dataObject.block, 'block');
             });
         });
+
+        // TEST QUIZ DATA 
+        const db = [
+            { 
+                id: 0, 
+                question: 'What should you fill a lecture hall with?',
+                answer: 'Toast.'
+            },
+            { 
+                id: 1, 
+                question: 'What colour is the sky?',
+                answer: 'Green.'
+            },
+            { 
+                id: 2, 
+                question: 'What are the MIPS $a registers conventionally used for?',
+                answer: 'Storing arguments for function calls.'
+            }
+        ];
+
+        await this.addToCollection(db, 'quizQuestions');
     };
 };

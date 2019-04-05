@@ -1,4 +1,4 @@
-const bot = require('../bot');
+const bot = require('./bot');
 const hal = new bot()
 
 function sendHalResponse(msg) {
@@ -23,6 +23,6 @@ async function respond(ws, msg) {
     }
 }
 
-export function talkSocket(ws) {
+module.exports = function talkSocket(ws) {
     ws.on('message', msg => respond(ws, msg))
 }
