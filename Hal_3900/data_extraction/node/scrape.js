@@ -6,7 +6,7 @@ const process = require('./process.js');
 
 const getPage = async (linkInfo) => {
 
-    const myCookie = ""; // login session cookie
+    const myCookie = "session=.eJwljssOwiAUBf_lrru4bXn2ZwjQgxIVDLQr47-LujuZnEnmRS419CttRzsxkcs7baQXLaPXIYZdpVmCJWatYkyCbWKpaKLYW3JHvaGMv4cQge1qeN0hPYzVEBwVJ7GwFcOGVhx4ePnxROu1-ANDHKC2fMnF393Z0f7ou34hkq0xVr0_K3MxbQ.D38fKg.BaWk9qKOiurZck2yzvAhJzTg7G4; Domain=.webcms3.cse.unsw.edu.au; HttpOnly; Path=/"; // login session cookie
 
     // This fetches the html from the page specified
     const html = await rp({
@@ -28,9 +28,12 @@ const scrapeForum = async (forumRoot) => {
         console.error(err);
     }
 
+    console.log("1");
+
     // GET TOPIC PAGE LINKS FROM FORUM ROOT HTML
     // topicPages is format [{name, address, numPosts},{etc....}, {etc.....}]
     const topicPages = process.getForumTopicPages(forumRootHtml);
+    console.log("2");
 
     // GET TOPIC PAGES HTMLS, GET LINKS FROM THESE TO ACTUAL QUESTION PAGES
     const topicPageLinks = topicPages.map(async (linkInfo, index) => {
@@ -45,6 +48,7 @@ const scrapeForum = async (forumRoot) => {
             console.error(err);
         }
     });
+    console.log("3");
 
     // format of array: [{tags, addresslist},{ etc....  },{ etc...  }]
     // each array item corresponds to one of the topic listing pages.
@@ -98,7 +102,7 @@ const scrapeSpecified = (pages) => {
 
 
     // SCRAPE FORUM STARTING AT ROOT PAGE
-    scrapeForum(pages.forum);
+    // scrapeForum(pages.forum);
 
 };
 

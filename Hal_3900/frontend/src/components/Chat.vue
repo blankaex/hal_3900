@@ -82,6 +82,7 @@ export default class Chat extends Vue {
 
   recv (res: MessageEvent) {
     const resObj:BotResponse = JSON.parse(res.data)
+
     if (!resObj) {
       this.$store.commit('log', `[ERROR] Recieved Empty Response`)
       return
@@ -170,10 +171,8 @@ export default class Chat extends Vue {
   border-radius: 50%
   margin: 0.5rem
 .msg .text
-  padding-left: 1rem
-  padding-right: 1rem
-  padding-top: 0.5rem
-  padding-bottom: 0.5rem
+  padding: 0.5rem 1rem
+  position: relative
   font-family: 'Raleway', sans-serif
   border-radius: 10px
   color: white
@@ -184,11 +183,11 @@ export default class Chat extends Vue {
   white-space: -o-pre-wrap
   word-wrap: break-word
 .msg.bot .text::before
-    content: "Hal"
-    margin-top: -1.4rem
-    position: absolute
-    font-size: 0.8rem
-    color: #BBB
+  content: "Hal"
+  margin-top: -1.4rem
+  position: absolute
+  font-size: 0.8rem
+  color: #BBB
 .bot
   justify-content: flex-start
 .user
