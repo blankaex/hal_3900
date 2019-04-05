@@ -3,12 +3,15 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const app = express();
-const wsApp = require('express-ws')(app);
+const talkSocket = require('./talk');
+
+require('express-ws')(app);
 
 // Middleware
 app.use(cors());
-app.use(bodyParser.json({ extended: true })); // to support JSON-encoded bodies
-app.use(bodyParser.urlencoded({ extended: true })); // to support URL-encoded bodies
+app.use(bodyParser.json({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true }));
+
 // store this in db for persistence
 // docs https://www.npmjs.com/package/express-session
 app.set('trust proxy', 1);
@@ -16,12 +19,10 @@ app.use(session({
     secret: 'flag{this_is_a_flag}',
     resave: false,
     saveUninitialized: true,
-    // cookie: { secure: true, maxAge: 3600000 },
-    cookie: { maxAge: 3600000 },
-	// store: new MongoStore({
-	// 	mongooseConnection: db
-	//   })
+    cookie: { maxAge: 3600000 }
 }));
+
+app.ws('/talk', ws => talkSocket(ws));
 
 // User API endpoint
 const users = require('./routes/api/users');
