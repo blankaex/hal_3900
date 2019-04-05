@@ -47,7 +47,7 @@ export default class Chat extends Vue {
   draft: string = ''
   socket: WebSocket|null = null
   inputFocused: Boolean = false
-  waiting: Boolean = false 
+  waiting: Boolean = false
 
   get inputColor () {
     if (!this.inputFocused) {
@@ -92,14 +92,14 @@ export default class Chat extends Vue {
     this.$store.commit('log', `identified intent: ${resObj.data.intent}`)
     this.$store.commit('log', `got response: ${resObj.data.response}`)
     this.$store.commit('recvMessage', resObj.data.response)
-    this.waiting = false;
+    this.waiting = false
     this.$nextTick(function () {
       this.scrollEnd()
     })
   }
 
   socketErr () {
-    this.waiting = false;
+    this.waiting = false
     // TODO: i dunno crash lol
   }
 
@@ -199,14 +199,14 @@ export default class Chat extends Vue {
   height: 40px
   position: relative
 
-.double-bounce1, .double-bounce2 
+.double-bounce1, .double-bounce2
   width: 100%
   height: 100%
   border-radius: 50%
   opacity: 0.6
   position: absolute
   top: 0
-  left: 0  
+  left: 0
   -webkit-animation: sk-bounce 2.0s infinite ease-in-out
   animation: sk-bounce 2.0s infinite ease-in-out
 
