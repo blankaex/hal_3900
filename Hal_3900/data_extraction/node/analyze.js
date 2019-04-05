@@ -36,7 +36,6 @@ const getNewTags = async (text) => {
     });
 
     return await Promise.all(newTags);
-
 };
 
 // feed me an object from the data_page directory
@@ -114,22 +113,6 @@ const analyzePageDirectory = (directory) => {
     });
 };
 
-// Runs analysis on all forum objects found in the forum type directory
-const analyzeForumPostsDirectory = (directory) => {
-    // read file entries from directory one at a time
-    fs.readdir(directory, function (err, items) {
 
-        items.forEach(async (i) => {
-            const forumObject = require(directory + i);
-            try {
-                const result = await analyzeForumObject(forumObject);
-                // NOTE: overwrites old file with updated object. Adds tag info only, no deletion of data
-                fs.writeFileSync(directory + i, JSON.stringify(result));
-            } catch (err) {
-                console.error(err);
-            }
-        });
-    });
-};
 
-module.exports = {analyzePageObject, analyzePageDirectory, analyzeForumPostsDirectory};
+module.exports = {analyzePageObject, analyzePageDirectory, analyzeForumPostsDirectory, getNewTags};
