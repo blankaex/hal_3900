@@ -1,5 +1,8 @@
 const fs = require('fs');
 const analyze = require('./analyze.js');
+
+// TODO... CAN I IMPORT DB FUNCTIONS HERE?
+
 // Initialize the queues (3 types)
 
 const init_forum_stack = (directory) => {
@@ -11,11 +14,22 @@ const init_forum_stack = (directory) => {
     return forumList;
 };
 
+// code suggestion from https://codingwithspike.wordpress.com/2018/03/10/making-settimeout-an-async-await-function/
+const wait = async (ms) => {
+    return new Promise(resolve => {
+        setTimeout(resolve, ms);
+    });
+};
+
+
 // Runs analysis on all forum objects found in the forum type directory
 const run_queue = async () => {
     const capPerMinute = 500; // the capped rate of queries per minute for our QUOTA is 600, keep well under this and adjust later
-    const maxPerSecond = capPerMinute/60;
+
     // calc millisecond wait time between requests
+    let millisecWaitTime = 60000 / capPerMinute;
+
+    let numQuotaErrs = 0;
 
     const stack = init_forum_stack("../data_forum");
 
@@ -29,16 +43,24 @@ const run_queue = async () => {
         let newTags;
         try {
             newTags = await analyze.getNewTags(item.question); // question is the forum text we've been analyzing
+
             // if success, add tags to the item and send to the DB
             const tags = item.tags.concat(newTags);
-            return {tags, "question": item.question, "answers": item.answers};
+            const res = {tags, "question": item.question, "answers": item.answers};
+
+            await wait(millisecWaitTime);  // short wait to space out API calls
 
         } catch (err) {
-            // if fails, wait for a minute and retry
+            stack.push(item);             // put back on stack
+            millisecWaitTime += 10;       // increase wait time per item
+            numQuotaErrs ++;              // count up quota exceeds
+            await(60000)                  // wait for 1 minute before restarting
         }
 
     }
 
 };
+
+
 
 

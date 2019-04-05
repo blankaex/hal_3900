@@ -22,3 +22,9 @@ console.log("Data extractions functions currently commented out: choose what you
 // analyze.analyzeDataDirectory("../data_page/");
 
 // analyze.analyzeForumPostsDirectory("../data_forum/");
+
+
+
+// TODO testing sleeping function
+
+while ()
