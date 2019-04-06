@@ -17,7 +17,7 @@ const getPage = async (linkInfo) => {
     return html;
 };
 
-const scrapeForum = async (forumRoot) => {
+const scrapeForum = async (forumRoot, courseCode, intent) => {
 
     // GET FORUM HTML
     const linkInfo = {"address": forumRoot};
@@ -28,12 +28,9 @@ const scrapeForum = async (forumRoot) => {
         console.error(err);
     }
 
-    console.log("1");
-
     // GET TOPIC PAGE LINKS FROM FORUM ROOT HTML
     // topicPages is format [{name, address, numPosts},{etc....}, {etc.....}]
     const topicPages = process.getForumTopicPages(forumRootHtml);
-    console.log("2");
 
     // GET TOPIC PAGES HTMLS, GET LINKS FROM THESE TO ACTUAL QUESTION PAGES
     const topicPageLinks = topicPages.map(async (linkInfo, index) => {
@@ -48,16 +45,14 @@ const scrapeForum = async (forumRoot) => {
             console.error(err);
         }
     });
-    console.log("3");
 
     // format of array: [{tags, addresslist},{ etc....  },{ etc...  }]
     // each array item corresponds to one of the topic listing pages.
 
     const finalPageLists = await Promise.all(topicPageLinks);
 
-    // GET A POSTS OBJECT FOR EACH FORUM TOPIC
-    // Posts item format = {tags: [], question: " ", answers: []}
-    const forumPosts = finalPageLists.forEach(async (pageList) => {
+    // GET A POSTS OBJECT FOR EACH FORUM TOPIC, STORE TO FILESYSTEM AS JSON
+    finalPageLists.forEach(async (pageList) => {
 
         const postObjects = pageList.addressList.map(async (address, index) => {
 
@@ -71,7 +66,7 @@ const scrapeForum = async (forumRoot) => {
                 // const questionPage = await getPage({address});
                 const apiResponse = await getPage({"address": url});
                 const responseObject = JSON.parse(apiResponse);
-                return process.getForumPostObject(responseObject, pageList.tags);
+                return process.getForumPostObject(responseObject, pageList.tags, intent, courseCode);
             } catch (err) {
                 console.error(err);
             }
@@ -89,20 +84,26 @@ const scrapeForum = async (forumRoot) => {
     });
 };
 
-const scrapeSpecified = (pages) => {
-
-    // SCRAPE FROM LISTED
-    pages.list.forEach(async (page) => {
+const scrapeList = (list, intent, courseCode) => {
+    list.forEach(async (page) => {
         console.log("scraping " + page.address);
         const html = await getPage(page);
-        const data = await process.parseData(html);
+        const data = await process.parseData(html, intent, courseCode);
         // WRITE JSON OBJECTS TO FILE
         fs.writeFileSync("../data_page/" + page.name.replace(/\s+/g, '-') + ".json", JSON.stringify(data));
     });
+};
 
+
+const scrapeSpecified = (pages) => {
+
+    // SCRAPE FROM LISTED INTENTS
+    scrapeList(pages.outline, "outline", pages.courseCode);
+    scrapeList(pages.assignment, "assignment", pages.courseCode);
+    scrapeList(pages.content, "content", pages.courseCode);
 
     // SCRAPE FORUM STARTING AT ROOT PAGE
-    // scrapeForum(pages.forum);
+    scrapeForum(pages.forum, pages.courseCode, "forum");
 
 };
 

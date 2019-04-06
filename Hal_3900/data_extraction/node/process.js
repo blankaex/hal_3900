@@ -1,4 +1,3 @@
-// SCRAPER MODULES
 const fs = require('fs');
 const rp = require('request-promise');
 const cheerio = require('cheerio');
@@ -24,7 +23,7 @@ const getTag = (name) => {
     return {name, salience, theta};
 };
 
-const parseData = (html) => {
+const parseData = (html, intent, courseCode) => {
 
     let $ = cheerio.load(html);
 
@@ -49,9 +48,9 @@ const parseData = (html) => {
             const text = stripText(td.toString());
             const tags = []; // these tags will extract from text
             // construct js object
-            items.push({tags, text});
+            items.push({intent, courseCode, tags, text});
         });
-        grouped.push({tags, items});
+        grouped.push({intent, courseCode, tags, items});
     });
 
     // GET ALL LIST DATA
@@ -69,9 +68,9 @@ const parseData = (html) => {
             // paragraph with stripped whitespace. could break them up further if needed
             const text = stripText($(e).text());
             const tags = []; // these tags will extract from data
-            items.push({tags, text});
+            items.push({intent, courseCode, tags, text});
         });
-        grouped.push({tags, items});
+        grouped.push({intent, courseCode, tags, items});
     });
 
     // GET ALL PARAGRAPHS DATA
@@ -89,7 +88,7 @@ const parseData = (html) => {
         const text = stripText($(element).text());
 
         if (text){ // text is not falsy value or "",
-            block.push({tags, text});
+            block.push({intent, courseCode, tags, text});
         }
     });
 
@@ -145,16 +144,23 @@ const getForumPages = (html, topicPageId) => {
 
 const extractMessage = (messageItem) => {
     const text = stripText(messageItem.body);
+    const theta = 1;
+    const count = 0;
     const childResults = [];
-    childResults.push(text);
+
+    // get the text from THIS message
+    childResults.push({text, theta, count});
+
+    // also add the results from all children of this message (recurse)
     messageItem.children.forEach(child => {
         childResults.push(extractMessage(child));
     });
+
     return childResults;
 };
 
-const getForumPostObject = (apiResponseObject, tags) => {
-    
+const getForumPostObject = (apiResponseObject, tags, intent, courseCode) => {
+
     const question = stripText(apiResponseObject.result.messages[0].body);
     const answers = [];
     apiResponseObject.result.messages[0].children.forEach(child => {
@@ -166,9 +172,11 @@ const getForumPostObject = (apiResponseObject, tags) => {
         });
     });
 
-    return {tags, question, answers};
+    return {intent, courseCode, tags, question, answers};
 };
 
+
+//TODO remove this isn't being used
 // PROCESS HTML FILES
 const processFiles = (directory, destination) => {
 

@@ -13,6 +13,7 @@ console.log("Data extractions functions currently commented out: choose what you
 // ------ SCRAPING FROM WEB INTO PROCESSED FILES ------
 
 // TO SCRAPE PAGES LISTED IN pagesToScrape.json.
+
 // scraper.scrapeSpecified(require("../pagesToScrape.json"));
 
 // ------ ANALYZE TEXT WITH GOOGLE CLOUD NLP ------
@@ -21,10 +22,4 @@ console.log("Data extractions functions currently commented out: choose what you
 // YOU MAY RUN INTO QUOTA PROBLEMS -> THIS NEEDS SOME EXPLORATION
 // analyze.analyzeDataDirectory("../data_page/");
 
-// analyze.analyzeForumPostsDirectory("../data_forum/");
-
-
-
-// TODO testing sleeping function
-
-while ()
+// analyze.analyzeForumPostsDirectory("../data_forum/")
