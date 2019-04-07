@@ -19,13 +19,11 @@ router.get('/', async (req, res) => {
 
 // get a specific question
 router.get('/:id', async (req, res) => {
-    const id = req.params.id;
-
     if (!db.connected)
         await db.connect();
 
     // TODO: optional heuristic stuff based on user stats
-    const query = { id: { $eq: id } };
+    const query = { id: { $eq: req.params.id } };
     const result = await db.search(query, 'quiz');
 
 	if (result.length > 0)
