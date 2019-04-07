@@ -33,8 +33,6 @@ const run_queue = async () => {
 
     const stack = init_forum_stack("../data_forum");
 
-    // TODO track num fails to adjust waiting rate
-
     while (stack.length > 0){
         // pop item
         const item = stack.pop();
@@ -47,6 +45,8 @@ const run_queue = async () => {
             // if success, add tags to the item and send to the DB
             const tags = item.tags.concat(newTags);
             const res = {tags, "question": item.question, "answers": item.answers};
+
+            // TODO database insert    https://stackoverflow.com/questions/14481521/get-the-id-of-inserted-document-in-mongo-database-in-nodejs
 
             await wait(millisecWaitTime);  // short wait to space out API calls
 
