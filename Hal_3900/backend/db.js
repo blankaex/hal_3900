@@ -1,6 +1,7 @@
 const MongoClient = require('mongodb').MongoClient;
 const fs = require('fs');
-const logger = require('js-logger').get('Database');
+const logger = require('log4js').getLogger('Database');
+logger.level = 'info';
 
 // Helper function to make fs.readdir
 // actually async
@@ -45,7 +46,7 @@ module.exports = class DB {
 	// feed me an array of db objects and the name of collection they belong to
 	async addToCollection(objects, collection='documents') {
 		const collectionRef = this.dbConn.collection(collection);
-		await collectionRef.insertMany(objects);
+		const res = await collectionRef.insertMany(objects);
 		logger.info(`Inserted ${res.insertedCount} objects into collection ${collection}`);
 	}
 	
@@ -58,25 +59,32 @@ module.exports = class DB {
 	}
 	
 	async initData () {
+		let knownCollections = await this.dbConn.listCollections().toArray();
+		knownCollections = knownCollections.map(x=>x.name);
+		if (knownCollections.indexOf("forum") !== -1) {
+			logger.info(`Detected collections, skipping init step`);
+			return;
+		}
+		
 		const forumDir = "data/data_forum";
 		const dataDir = "data/data_page";
 	
 		logger.info(`Reading forum posts from ${forumDir}`);
-		const items = await asyncReadDir(forumDir);
-		for (item of items) {
-			await this.addToCollection(require(`./${forumDir}/${i}`).posts, 'forum')
+		let items = await asyncReadDir(forumDir);
+		for (const item of items) {
+			await this.addToCollection(require(`./${forumDir}/${item}`).posts, 'forum');
 		}
 
 		logger.info(`Reading blocked and grouped posts from ${dataDir}`);
-		const items = await asyncReadDir(dataDir);
-		for (item of items) {
-			const dataObject = require(`./${dataDir}/${i}`);
+		items = await asyncReadDir(dataDir);
+		for (const item of items) {
+			const dataObject = require(`./${dataDir}/${item}`);
 			await this.addToCollection(dataObject.grouped, 'grouped');
 			await this.addToCollection(dataObject.block, 'block');
 		}
 	};
 	
-	async find_all_from_collection(collectionName) {
+	async findAllFromCollection(collectionName) {
 		const collection = this.dbConn.collection(collectionName);
 		let results = [];
 		const cursor = await collection.find({});
@@ -85,7 +93,7 @@ module.exports = class DB {
 		return results;
 	};
 	
-	async find_forum_questions_by_topic(tag) {
+	async findForumQuestionsByTopic(tag) {
 		const collection = this.dbConn.collection('forum');
 		const cursor = await collection.find({
 			tags : {
@@ -99,7 +107,7 @@ module.exports = class DB {
 		return results;
 	}
 	
-	async find_by_collection_and_tag(tag, collectionName) {
+	async findByCollectionAndTag(tag, collectionName) {
 		const collection = this.dbConn.collection(collectionName);
 		// find all objects where tags contains an array elem with name = tag
 		const cursor = await collection.find({ tags: { $elemMatch: { "name": tag } } } );
@@ -108,7 +116,7 @@ module.exports = class DB {
 		return results;
 	};
 	
-	async find_by_collection_and_all_tags(tagsArray, collectionName) {
+	async findByCollectionAndAllTags(tagsArray, collectionName) {
 		const collection = this.dbConn.collection(collectionName);
 		// find all objects where tags contains an array elem with name = tag
 		const cursor = await collection.find({ "tags.name" : { $all: tagsArray } } );
@@ -117,23 +125,23 @@ module.exports = class DB {
 		return results;
 	};
 	
-	async find_all_by_tag(tag) {
-		const grouped = await find_by_collection_and_tag(tag, this.dbConn, 'grouped');
-		const block = await find_by_collection_and_tag(tag, this.dbConn, 'block');
-		const forum = await find_by_collection_and_tag(tag, this.dbConn, 'forum');
+	async findAllByTag(tag) {
+		const grouped = await this.findByCollectionAndTag(tag, this.dbConn, 'grouped');
+		const block = await this.findByCollectionAndTag(tag, this.dbConn, 'block');
+		const forum = await this.findByCollectionAndTag(tag, this.dbConn, 'forum');
 		
 		return {grouped, forum, block};
 	};
 	
-	async get_unique_tags_from_collection(collectionName) {
+	async getUniqueTagsFromCollection(collectionName) {
 		const collection = this.dbConn.collection(collectionName);
 		return await collection.distinct("tags.name");
 	};
 	
-	async get_all_unique_tags() {
-		const grouped = await get_unique_tags_from_collection(this.dbConn, 'grouped');
-		const block = await get_unique_tags_from_collection(this.dbConn, 'block');
-		const forum = await get_unique_tags_from_collection(this.dbConn, 'forum');
+	async getAllUniqueTags() {
+		const grouped = await this.getUniqueTagsFromCollection(this.dbConn, 'grouped');
+		const block = await this.getUniqueTagsFromCollection(this.dbConn, 'block');
+		const forum = await this.getUniqueTagsFromCollection(this.dbConn, 'forum');
 		
 		// reduce to single array of unique
 		let tagSet = new Set(grouped);
@@ -143,10 +151,10 @@ module.exports = class DB {
 	};
 	
 	async getDataPoints(tags) {
-		const candidates = find_all_from_collection('grouped');
-		candidates += find_all_from_collection('block');
-		candidates += find_all_from_collection('forum');
-		
+		let candidates = await this.findAllFromCollection('grouped');
+		candidates = candidates.concat(await this.findAllFromCollection('block'));
+		candidates = candidates.concat(await this.findAllFromCollection('forum'));
+
 		//calculate scores for each candidate
 		candidates = candidates.map((candidate)=>{
 				return {
@@ -154,13 +162,12 @@ module.exports = class DB {
 						_score: calcScore(tags, candidate)
 				}
 		});
-
+		
 		// sort by score
 		candidates = candidates.sort((a,b)=> b._score - a._score);
 		
 		// filter out duplicates
 		const response = candidates.filter((value, index, self)=>self.indexOf(value) === index);
-		
 		return response.slice(0,4); // output top 3 results
 	};
 

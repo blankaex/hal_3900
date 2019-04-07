@@ -14,9 +14,8 @@ module.exports = function(app)
     app.ws('/talk', function(ws, req) {
       ws.on('message', function(msg) {
 
-          msg = JSON.parse(msg);
-
-          if (msg.type === 'message') {
+        msg = JSON.parse(msg);
+        if (msg.type === 'message') {
           hal.query(msg.text).then(r=>{
             ws.send(JSON.stringify({
               type: 'message',
@@ -24,6 +23,8 @@ module.exports = function(app)
               data: r
             }))
           })
+        } else if (msg.type === 'training') {
+          hal.train(msg.choice);
         } else {
           ws.send(JSON.stringify({
             type: 'error',
