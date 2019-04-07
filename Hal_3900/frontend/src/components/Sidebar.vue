@@ -16,7 +16,12 @@
     </div>
   </div>
   <div class="content">
-    <Log></Log>
+    <div class="log">
+      <div class="logline" v-for="logItem in $store.state.log" :key="logItem.id">
+        <span>{{logItem.timestamp.calendar()}}</span><br>
+        {{logItem.message}}
+      </div>
+    </div>
   </div>
 </div>
 </template>

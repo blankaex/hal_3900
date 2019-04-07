@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import moment from 'moment'
 import { Theme } from '@/components/types'
+import uuid from 'uuid/v4'
 
 Vue.use(Vuex)
 
@@ -9,13 +10,16 @@ export default new Vuex.Store({
   state: {
     messages: [
       {
-        id: 0,
+        id: '0',
         from: 'bot',
-        text: 'Hello, welcome back!'
+        type: 'simple',
+        body: 'Hello, welcome back!'
       }
     ],
+    activeMessage: '0',
     log: [
       {
+        id: '0',
         timestamp: moment(),
         message: 'Logging started'
       }
@@ -49,18 +53,34 @@ export default new Vuex.Store({
   },
   mutations: {
     sendMessage (state, payload) {
+      const generatedUuid = uuid()
       state.messages.push({
-        id: moment().unix(),
+        id: generatedUuid,
+        type: 'simple',
         from: 'user',
-        text: payload
+        body: payload
       })
+      state.activeMessage = generatedUuid
     },
     recvMessage (state, payload) {
+      const generatedUuid = uuid()
       state.messages.push({
-        id: moment().unix(),
+        id: generatedUuid,
         from: 'bot',
-        text: payload
+        type: 'simple',
+        body: payload
       })
+      state.activeMessage = generatedUuid
+    },
+    recvOptions (state, payload) {
+      const generatedUuid = uuid()
+      state.messages.push({
+        id: generatedUuid,
+        from: 'bot',
+        type: 'options',
+        body: payload
+      })
+      state.activeMessage = generatedUuid
     },
     changeTheme (state, payload) {
       const theme = state.themes.filter((x:Theme) => x.primary === payload)[0]
@@ -68,6 +88,7 @@ export default new Vuex.Store({
     },
     log (state, payload) {
       state.log.push({
+        id: uuid(),
         timestamp: moment(),
         message: payload
       })
