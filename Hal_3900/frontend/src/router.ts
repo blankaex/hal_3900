@@ -13,7 +13,7 @@ const router = new Router({
       name: 'home',
       component: Home,
       meta: {
-        middleware: checkAuth
+        middleware: checkAuth// TODO can put array if add more than 1 middleware
       }
     },
     {
@@ -29,7 +29,7 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   if (to.meta.middleware) {
     const middleware = to.meta.middleware
-    return middleware({ from, to, router, next }) // TODO Error: middleware[0] is not a function
+    return middleware({ from, to, router, next })// TODO put array if add more than 1 middleware
   }
   return next()
 })

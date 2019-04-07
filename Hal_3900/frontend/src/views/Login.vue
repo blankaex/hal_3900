@@ -1,14 +1,16 @@
 <template>
-  <h1> hewwo iz login XDc </h1>
+  <div class="login">
+    <h3>Login:</h3>
+    <input type="text" name="username" placeholder="Username"/>
+    <input type="password" name="password" placeholder="Password"/>
+    <button type="button">Login</button>
+  </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Vue } from 'vue-property-decorator'
 
-@Component
-export default class Login extends Vue {
-
-}
+export default class Login extends Vue {}
 </script>
 
 <style scoped lang="sass">
