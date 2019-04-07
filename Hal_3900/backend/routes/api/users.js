@@ -24,6 +24,20 @@ router.get('/me', async (req, res) => {
 		res.status(200).send('please log in');
 });
 
+// get specific user
+router.get('/:zid', async (req, res) => {
+    if (!db.connected)
+        await db.connect();
+
+    const query = { zid: { $eq: req.params.zid } };
+    const result = await db.search(query, 'users');
+
+	if (result.length > 0)
+		res.status(200).send(result[0]);
+    else
+        res.status(400).send("invalid zid");
+});
+
 // sets the user of the current session
 router.post('/set', async (req, res) => {
     if(req.session.user != req.body.zid) {
