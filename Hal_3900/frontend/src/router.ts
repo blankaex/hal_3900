@@ -29,7 +29,7 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   if (to.meta.middleware) {
     const middleware = to.meta.middleware
-    return middleware[0]({from,to,router,next})
+    return middleware({ from, to, router, next }) // TODO Error: middleware[0] is not a function
   }
   return next()
 })
