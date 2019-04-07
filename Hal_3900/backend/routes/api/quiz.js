@@ -1,8 +1,38 @@
+const uuid = require('uuid');
 const express = require('express');
 const router = express.Router();
 const DB = require('../../db');
 const db = new DB();
-const uuid = require('uuid');
+
+// get all questions
+router.get('/', async (req, res) => {
+    if (!db.connected)
+        await db.connect()
+
+    const result = await db.search({}, 'quiz');
+
+	if (result.length > 0)
+		res.status(200).send(result);
+    else
+        res.status(400).send("no questions");
+});
+
+// get a specific question
+router.get('/:id', async (req, res) => {
+    const id = req.params.id;
+
+    if (!db.connected)
+        await db.connect();
+
+    // TODO: optional heuristic stuff based on user stats
+    const query = { id: { $eq: id } };
+    const result = await db.search(query, 'quiz');
+
+	if (result.length > 0)
+		res.status(200).send(result[0]);
+    else
+        res.status(400).send("invalid question id");
+});
 
 // add a new question
 router.post('/add', async (req, res) => {
@@ -15,9 +45,9 @@ router.post('/add', async (req, res) => {
         res.status(400).send("required params: answer");
 
     // add to db
-    if (!db.connected) {
+    if (!db.connected)
         await db.connect()
-    }
+
     const uniqueId = uuid.v4();
     db.addToCollection([
         {
@@ -25,30 +55,9 @@ router.post('/add', async (req, res) => {
             question: req.body.question,
             answer: req.body.answer
         }
-    ], 'quizQuestions');
+    ], 'quiz');
+
     res.status(200).send(`Added question with id ${uniqueId}`);
-});
-
-// fetch a question
-router.get('/:id', async (req, res) => {
-    const id = req.params.id;
-
-    if (!db.connected) {
-        await db.connect()
-    }
-    // TODO: optional heuristic stuff based on user stats
-    const query = {
-        id: {
-            $eq: id
-        }
-    };
-    const result = await db.search(query,'quizQuestions');
-    console.log(await db.search({},'quizQuestions'));
-	if (result.length > 0)
-		res.status(200).send(result[0]);
-    else
-        res.status(400).send("invalid question id");
-    
 });
 
 module.exports = router;
