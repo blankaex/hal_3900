@@ -11,17 +11,17 @@ router.get('/', async (req, res) => {
     const result = await db.search({}, 'users');
 
 	if (result.length > 0)
-		res.status(200).send(result);
+		res.status(200).json(result);
     else
-        res.status(400).send("no users");
+        res.status(400).json({'response': 'No users found.'});
 });
 
 // get current user
 router.get('/me', async (req, res) => {
 	if(req.session.user)
-		res.status(200).json(req.session.user);
+		res.status(200).json({'user': req.session.user});
 	else
-		res.status(200).send('please log in');
+		res.status(200).json({'response': 'Not logged in.'});
 });
 
 // get specific user
@@ -33,9 +33,9 @@ router.get('/:zid', async (req, res) => {
     const result = await db.search(query, 'users');
 
 	if (result.length > 0)
-		res.status(200).send(result[0]);
+		res.status(200).json(result[0]);
     else
-        res.status(400).send("invalid zid");
+        res.status(400).json({'response': `zid ${req.params.zid} not found.`});
 });
 
 // sets the user of the current session
@@ -53,7 +53,7 @@ router.post('/set', async (req, res) => {
         req.session.user = req.body.zid;
     }
 
-    res.status(200).send(req.session.user);
+    res.status(200).json({'user': req.session.user});
 });
 
 module.exports = router;
