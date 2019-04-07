@@ -3,17 +3,13 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const app = express();
-const talkSocket = require('./talk');
-
-require('express-ws')(app);
 
 // Middleware
 app.use(cors());
 app.use(bodyParser.json({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// store this in db for persistence
-// docs https://www.npmjs.com/package/express-session
+// Session
 app.set('trust proxy', 1);
 app.use(session({
     secret: 'flag{this_is_a_flag}',
@@ -21,8 +17,6 @@ app.use(session({
     saveUninitialized: true,
     cookie: { maxAge: 3600000 }
 }));
-
-app.ws('/talk', ws => talkSocket(ws));
 
 // Get routes
 require('./routes/router')(app);
