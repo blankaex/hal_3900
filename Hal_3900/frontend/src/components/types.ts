@@ -15,3 +15,8 @@ export interface BotResponse {
     msg?: string,
     type: 'message'|'error'
 }
+
+export enum AppState {
+    READY,
+    PENDING
+}

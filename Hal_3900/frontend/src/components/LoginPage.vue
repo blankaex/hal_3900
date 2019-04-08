@@ -6,7 +6,7 @@
     <button type="button">Login</button>
   </div>
 </template>
-<!--TODO make it actually log in :'( -->
+<!--TODO: make it actually log in :'( -->
 <script>
     export default {
         name: "LoginPage"
