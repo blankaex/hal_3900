@@ -22,10 +22,12 @@ function calcScore(tags, candidate) {
 }
 
 module.exports = class DB {
-	constructor (dbUrl, dbName) {
+	constructor () {
+		let url = 'mongodb://localhost:27017';
+		if (process.env.PRODUCTION) url = 'mongodb://database:27017';
 		this.dbConn = null;
-		this.dbUrl = dbUrl;
-		this.dbName = dbName;
+		this.dbUrl = url;
+		this.dbName = 'database';
 	}
 	
 	async connect() {

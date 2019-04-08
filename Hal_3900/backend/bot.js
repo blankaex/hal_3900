@@ -1,43 +1,27 @@
-const MongoClient = require('mongodb').MongoClient;
-const dbUrl = 'mongodb://localhost:27017';
-const dbName = 'database';
 const DB = require('./db');
 const dialogflow = require('dialogflow');
 const uuid = require('uuid');
-<<<<<<< HEAD
 const DFconfig = require('./DFServiceAccount.json');
-=======
 const logger = require('log4js').getLogger('Bot');
 logger.level = 'info';
->>>>>>> master
 
 module.exports = class Bot {
 	constructor() {
 		this.version = '0.1';
+				
 		this.db = new DB();
 		// Async connection
-<<<<<<< HEAD
-		this.db.connect()
-		
-=======
 		this.db.connect().then(_=>{
 			logger.info("Initialising db with data");
 			this.db.initData();
 		});
->>>>>>> master
 		// Create DF session
 		const sessionId = uuid.v4();
 		
 		// Create a new session
 		this.DF = {};
 		this.DF.sessionClient = new dialogflow.SessionsClient();
-<<<<<<< HEAD
 		this.DF.sessionPath = this.DF.sessionClient.sessionPath(DFconfig.project_id, sessionId);
-=======
-		// TODO: move these into env vars
-		const projectId = "test-53d52";
-		this.DF.sessionPath = this.DF.sessionClient.sessionPath(projectId, sessionId);
->>>>>>> master
 	}
 	async train(choice) {
 		logger.info(`TRAINING FROM CHOICE ${choice.text}`);
