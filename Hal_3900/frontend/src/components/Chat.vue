@@ -6,7 +6,15 @@
       'user':message.from === 'user'
       }" v-for="message in $store.state.messages" :key="message.id+'-'+message.from">
         <img v-if="message.from === 'bot'" src="../assets/hal.png">
-        <div class="text" :style="{'background': getGradient(message.from)}">{{message.text}}</div>
+        <div v-if="message.type == 'simple'"
+          class="text"
+          :style="{'background': getGradient(message.from)}">{{message.body}}</div>
+        <div v-if="message.type == 'options'"
+          class="options"
+          :style="{'background': getGradient(message.from)}">
+            <div class="item" v-for="(option,i) in message.body" :key="option._id">
+              <div class="selectBest" @click="selectBest(option,i, message.id)"></div>{{option.text.trim()}}</div>
+          </div>
         <img v-if="message.from === 'user'" src="../assets/user.png">
     </div>
       <div class="msg bot" v-if="waiting">
@@ -48,7 +56,6 @@ export default class Chat extends Vue {
   socket: WebSocket|null = null
   inputFocused: Boolean = false
   waiting: Boolean = false
-
   get inputColor () {
     if (!this.inputFocused) {
       return {}
@@ -57,6 +64,18 @@ export default class Chat extends Vue {
       'borderColor': this.$store.state.theme.primary,
       'color': this.$store.state.theme.primary
     }
+  }
+
+  selectBest (choice:any, choiceIndex:number, messageId: string) {
+    if (this.$store.state.activeMessage !== messageId) return
+    if (!this.socket) throw Error("Socket hasn't been connected yet!")
+    this.$store.commit('sendMessage', choiceIndex)
+    this.socket.send(JSON.stringify({
+      type: 'training',
+      error: false,
+      choice
+    }))
+    this.$store.commit('recvMessage', 'Thanks!')
   }
 
   scrollEnd () {
@@ -93,6 +112,15 @@ export default class Chat extends Vue {
     this.$store.commit('log', `identified intent: ${resObj.data.intent}`)
     this.$store.commit('log', `got response: ${resObj.data.response}`)
     this.$store.commit('recvMessage', resObj.data.response)
+    if (resObj.data.options && resObj.data.options.length > 0) {
+      this.$store.commit('log', `got options: `)
+      let i = 1
+      for (let option of resObj.data.options) {
+        this.$store.commit('log', `${i}. ${option.text} (${option._score})`)
+        i++
+      }
+      this.$store.commit('recvOptions', resObj.data.options)
+    }
     this.waiting = false
     this.$nextTick(function () {
       this.scrollEnd()
@@ -182,6 +210,18 @@ export default class Chat extends Vue {
   white-space: -pre-wrap
   white-space: -o-pre-wrap
   word-wrap: break-word
+.msg .options
+  padding: 0.5rem 1rem
+  position: relative
+  font-family: 'Raleway', sans-serif
+  border-radius: 10px
+  color: white
+  max-width: 60%
+  white-space: pre-wrap
+  white-space: -moz-pre-wrap
+  white-space: -pre-wrap
+  white-space: -o-pre-wrap
+  word-wrap: break-word
 .msg.bot .text::before
   content: "Hal"
   margin-top: -1.4rem
@@ -212,6 +252,23 @@ export default class Chat extends Vue {
 .double-bounce2
   -webkit-animation-delay: -1.0s
   animation-delay: -1.0s
+
+.options .item
+  display: flex
+  align-items: center
+  justify-content: flex-start
+  flex-direction: row
+  height: 2rem
+
+.selectBest
+  width: 15px
+  height: 15px
+  border: 2px solid #EBEBEB
+  border-radius: 50%
+  margin-right: 1rem
+  cursor: pointer
+.selectBest:hover
+  background: #EBEBEB
 
 @-webkit-keyframes sk-bounce
   0%, 100%

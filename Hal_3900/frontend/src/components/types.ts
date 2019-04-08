@@ -8,7 +8,8 @@ export interface Theme {
 export interface BotResponse {
     data?: {
         response: string,
-        intent: string
+        intent: string,
+        options: any[]
     },
     error: false,
     msg?: string,
