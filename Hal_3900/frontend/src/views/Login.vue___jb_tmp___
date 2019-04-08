@@ -23,9 +23,9 @@ export default {
   },
   methods: {
     login(){
-      console.log(this.username)
       if (this.username && this.password){
         // needs to send credentials to backend, and receive cookie back
+        
 
       }
     }
