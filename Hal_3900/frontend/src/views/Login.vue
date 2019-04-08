@@ -1,16 +1,33 @@
 <template>
   <div class="login">
     <h3>Login:</h3>
-    <input type="text" name="username" placeholder="Username"/>
-    <input type="password" name="password" placeholder="Password"/>
-    <button type="button">Login</button>
+    <input type="text" name="username" v-model="username" placeholder="Username"/>
+    <input type="password" name="password" v-model="password" placeholder="Password"/>
+    <button type="button" v-on:click="login()">Login</button>
   </div>
 </template>
+
+<!--TODO make it actually log in :'( -->
 
 <script lang="ts">
 import { Vue } from 'vue-property-decorator'
 
-export default class Login extends Vue {}
+// export default class Login extends Vue
+export default {
+  data () {
+    return {
+      username: '',
+      password: ''
+    }
+  },
+  methods: {
+    login(){
+      if (this.username && this.password){
+        // needs to send credentials to backend, and receive cookie back
+      }
+    }
+  }
+}
 </script>
 
 <style scoped lang="sass">
