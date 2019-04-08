@@ -3,6 +3,9 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const app = express();
+const logger = require('log4js').getLogger('Index');
+logger.level = 'info';
+require('express-ws')(app);
 
 // Middleware
 app.use(cors());
@@ -23,4 +26,6 @@ require('./routes/router')(app);
 
 const PORT = process.env.PORT || 9447;
 
-app.listen(PORT, () => console.log(`Server started on localhost:${PORT}`));
+app.listen(PORT, () => {
+    logger.info(`Server started on localhost:${PORT}`);
+});
