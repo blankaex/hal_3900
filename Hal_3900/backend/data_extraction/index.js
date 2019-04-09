@@ -1,5 +1,6 @@
 const scraper = require('./scrape.js');
 const analyze = require('./analyze.js');
+const run_queue = require('./start_queue.js');
 const fs = require('fs');
 
 console.log("Data extractions functions currently commented out: choose what you want to do in index.js");
@@ -23,3 +24,7 @@ console.log("Data extractions functions currently commented out: choose what you
 // analyze.analyzeDataDirectory("../data_page/");
 
 // analyze.analyzeForumPostsDirectory("../data_forum/")
+
+// ------ RUN TASK QUEUE ------
+run_queue.run_queue();
+

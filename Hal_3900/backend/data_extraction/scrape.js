@@ -4,8 +4,8 @@ const rp = require('request-promise');
 
 const process = require('./process.js');
 
-const data_forum_folder = "../../data/data_forum/";
-const data_page_folder = "../../data/data_page/";
+const data_forum_folder = "../data/data_forum/";
+const data_page_folder = "../data/data_page/";
 
 
 const getPage = async (linkInfo) => {
@@ -84,7 +84,7 @@ const scrapeForum = async (forumRoot, courseCode, intent) => {
         const posts = postsArray.filter(item => item != null);
 
         // SAVE JSON TO FILE
-        fs.writeFileSync("../data_forum/" + pageList.topicPageId + ".json", JSON.stringify({posts}));
+        fs.writeFileSync(data_forum_folder + pageList.topicPageId + ".json", JSON.stringify({posts}));
 
     });
 };
@@ -95,7 +95,7 @@ const scrapeList = (list, intent, courseCode) => {
         const html = await getPage(page);
         const data = await process.parseData(html, intent, courseCode);
         // WRITE JSON OBJECTS TO FILE
-        fs.writeFileSync("../data_page/" + page.name.replace(/\s+/g, '-') + ".json", JSON.stringify(data));
+        fs.writeFileSync(data_page_folder + page.name.replace(/\s+/g, '-') + ".json", JSON.stringify(data));
     });
 };
 

@@ -1,6 +1,10 @@
 const fs = require('fs');
 const analyze = require('./analyze.js');
-const db = require('../../db.js');
+const db = require('../db.js');
+const dataType = require('./getDataType.js');
+
+const data_forum_folder = "../data/data_forum/";
+const data_page_folder = "../data/data_page/";
 
 // Initialize the queues (3 types)
 
@@ -30,7 +34,7 @@ const run_queue = async () => {
 
     let numQuotaErrs = 0;
 
-    const stack = init_forum_stack("../data_forum");
+    const stack = init_forum_stack(data_forum_folder);
 
     while (stack.length > 0){
         // pop item
@@ -41,10 +45,10 @@ const run_queue = async () => {
             newTags = await analyze.getNewTags(item.question); // question is the forum text we've been analyzing
 
             // if success, add tags to the item and send to the DB
-            const tags = item.tags.concat(newTags);
-            const res = {tags, "question": item.question, "answers": item.answers};
+            const res = dataType.getForumObject(item.intent, item.courseCode, item.tags.concat(newTags), item.question, item.answers);
 
             // TODO for now, print the object, just a test
+
             console.log(res);
             // TODO database insert    https://stackoverflow.com/questions/14481521/get-the-id-of-inserted-document-in-mongo-database-in-nodejs
 
@@ -60,6 +64,8 @@ const run_queue = async () => {
     }
 
 };
+
+module.exports = {run_queue};
 
 
 
