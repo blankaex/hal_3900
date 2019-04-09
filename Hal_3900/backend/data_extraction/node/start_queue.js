@@ -1,7 +1,6 @@
 const fs = require('fs');
 const analyze = require('./analyze.js');
-
-// TODO... CAN I IMPORT DB FUNCTIONS HERE?
+const db = require('../../db.js');
 
 // Initialize the queues (3 types)
 
@@ -37,7 +36,6 @@ const run_queue = async () => {
         // pop item
         const item = stack.pop();
         // run analysis
-        // TODO maybe make this a function to pass in whole forum object
         let newTags;
         try {
             newTags = await analyze.getNewTags(item.question); // question is the forum text we've been analyzing
@@ -46,6 +44,8 @@ const run_queue = async () => {
             const tags = item.tags.concat(newTags);
             const res = {tags, "question": item.question, "answers": item.answers};
 
+            // TODO for now, print the object, just a test
+            console.log(res);
             // TODO database insert    https://stackoverflow.com/questions/14481521/get-the-id-of-inserted-document-in-mongo-database-in-nodejs
 
             await wait(millisecWaitTime);  // short wait to space out API calls

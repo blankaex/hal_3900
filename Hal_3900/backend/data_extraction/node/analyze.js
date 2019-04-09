@@ -1,15 +1,8 @@
-// SCRAPER MODULES
 const fs = require('fs');
-
-// GOOGLE CLOUD NLP MODULES
 const language = require('@google-cloud/language');
+const dataType = require('./getDataType.js');
 
 const client = new language.LanguageServiceClient();
-
-const getTag = (name, salience) => {
-    const theta = 1;
-    return {name, salience, theta};
-};
 
 // Entity Analysis on a single text with Google Cloud NLP,
 // returns analysis as object
@@ -32,7 +25,7 @@ const getNewTags = async (text) => {
     const newTags = res[0].entities.map(entity => {
         const name = entity.name.toLowerCase();
         const salience = entity.salience;
-        return getTag(name, salience);
+        return dataType.getTag(name, salience);
     });
 
     return await Promise.all(newTags);
@@ -49,23 +42,21 @@ const analyzePageObject = async (dataObject) => {
             // get tags for each group item
             const itemMap = group.items.map(async (item) => {
                 const newTags = await getNewTags(item.text);
-                const tags = item.tags.concat(newTags);
-                return {tags, "text" : item.text};
+                return dataType.getBlock(item.intent, item.courseCode, item.tags.concat(newTags), item.text);
             });
 
             let items = await Promise.all(itemMap);     // await ensures all items finished in itemMap before proceeding
-            const tags = group.tags;                    // original group tags array
-            return {tags, items};
+            return dataType.getGrouped(group.intent, group.courseCode, group.tags, items);
         });
         return Promise.all(groupMap);
     };
 
     // returns promise of array of "block" type data items
     const blockList = async () => {
-        const blockMap = dataObject.block.map(async (item, index) => {
+        const blockMap = dataObject.block.map(async (item) => {
             const newTags = await getNewTags(item.text);
             const tags = item.tags.concat(newTags);
-            return {tags, "text": item.text};
+            return dataType.getBlock(item.intent, item.courseCode, tags, item.text);
         });
         return Promise.all(blockMap);
     };
@@ -85,9 +76,7 @@ const analyzeForumObject = async (forumObject) => {
     const postList = async () => {
         const postMap = forumObject.posts.map(async (item) => {
             const newTags = await getNewTags(item.question);
-            // console.log(newTags);
-            const tags = item.tags.concat(newTags);
-            return {tags, "question": item.question, "answers": item.answers};
+            return dataType.getForumObject(item.intent, item.courseCode, item.tags.concat(newTags), item.question, item.answers);
         });
         return Promise.all(postMap);
     };

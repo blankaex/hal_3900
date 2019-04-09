@@ -4,6 +4,10 @@ const rp = require('request-promise');
 
 const process = require('./process.js');
 
+const data_forum_folder = "../../data/data_forum/";
+const data_page_folder = "../../data/data_page/";
+
+
 const getPage = async (linkInfo) => {
 
     const myCookie = "session=.eJwljssOwiAUBf_lrru4bXn2ZwjQgxIVDLQr47-LujuZnEnmRS419CttRzsxkcs7baQXLaPXIYZdpVmCJWatYkyCbWKpaKLYW3JHvaGMv4cQge1qeN0hPYzVEBwVJ7GwFcOGVhx4ePnxROu1-ANDHKC2fMnF393Z0f7ou34hkq0xVr0_K3MxbQ.D38fKg.BaWk9qKOiurZck2yzvAhJzTg7G4; Domain=.webcms3.cse.unsw.edu.au; HttpOnly; Path=/"; // login session cookie
@@ -16,6 +20,7 @@ const getPage = async (linkInfo) => {
 
     return html;
 };
+
 
 const scrapeForum = async (forumRoot, courseCode, intent) => {
 

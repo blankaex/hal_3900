@@ -1,30 +1,17 @@
 const fs = require('fs');
-const rp = require('request-promise');
 const cheerio = require('cheerio');
+const dataType = require('./getDataType.js');
 
 
 const stripText = (text) => {
-    // strip html tags
-    let newText = text.replace(/<(?:.|\n)*?>/gm, '');
-    // strip non-alphanumeric, replace with space
-    newText = newText.replace(/[\W_]+/g," ");
-    // remove excess whitespace
-    newText = newText.replace(/\s+/g, ' ');
-    // tolower() and trim start/end whitespace
-    newText = newText.toLowerCase().trim();
-
+    let newText = text.replace(/<(?:.|\n)*?>/gm, '');   // strip html tags
+    newText = newText.replace(/[\W_]+/g," ");           // strip non-alphanumeric, replace with space
+    newText = newText.replace(/\s+/g, ' ');             // remove excess whitespace
+    newText = newText.toLowerCase().trim();             // tolower() and trim start/end whitespace
     return newText;
-
-};
-
-const getTag = (name) => {
-    const salience = 0.5;
-    const theta = 1;
-    return {name, salience, theta};
 };
 
 const parseData = (html, intent, courseCode) => {
-
     let $ = cheerio.load(html);
 
     // GET ALL TABLES DATA
@@ -32,12 +19,12 @@ const parseData = (html, intent, courseCode) => {
     $("table").each((index, element) => {
         const items = [];
         const tags = [];
-        tags.push(getTag("table"));
+        tags.push(dataType.getTag("table"));
         const prev = $(element).prev();
         if (prev.is("h1") ||  prev.is("h2") || prev.is("h3")
             || prev.is("h4") || prev.is("h5") || prev.is("h6")){
             const name = stripText(prev.text());
-            tags.push(getTag(name));
+            tags.push(dataType.getTag(name));
         }
         $(element).find("tr").map((i, e) => {
             // get the tablerow text, strip whitespace to singles
@@ -46,49 +33,47 @@ const parseData = (html, intent, courseCode) => {
                 td.push($(e).text());
             });
             const text = stripText(td.toString());
-            const tags = []; // these tags will extract from text
             // construct js object
-            items.push({intent, courseCode, tags, text});
+            items.push(dataType.getBlock(intent, courseCode, [], text));
         });
-        grouped.push({intent, courseCode, tags, items});
+        grouped.push(dataType.getGrouped(intent, courseCode, tags, items));
     });
 
     // GET ALL LIST DATA
     $("ul").map((index, element) => {
         let items = [];
         const tags = [];
-        tags.push(getTag("list"));
+        tags.push(dataType.getTag("list"));
         const prev = $(element).prev();
         if (prev.is("h1") ||  prev.is("h2") || prev.is("h3")
             || prev.is("h4") || prev.is("h5") || prev.is("h6")){
             const name = stripText(prev.text());
-            tags.push(getTag(name));
+            tags.push(dataType.getTag(name));
         }
         $(element).find("li").each((i, e) => {
             // paragraph with stripped whitespace. could break them up further if needed
             const text = stripText($(e).text());
-            const tags = []; // these tags will extract from data
-            items.push({intent, courseCode, tags, text});
+            items.push(dataType.getBlock(intent, courseCode, [], text));
         });
-        grouped.push({intent, courseCode, tags, items});
+        grouped.push(dataType.getGrouped(intent, courseCode, tags, items));
     });
 
     // GET ALL PARAGRAPHS DATA
     const block = [];
     $("p").map((index, element) => {
         const tags = [];
-        tags.push(getTag("paragraph"));
+        tags.push(dataType.getTag("paragraph"));
         const prev = $(element).prev();
         if (prev.is("h1") ||  prev.is("h2") || prev.is("h3")
             || prev.is("h4") || prev.is("h5") || prev.is("h6")){
             const name = stripText(prev.text());
-            tags.push(getTag(name));
+            tags.push(dataType.getTag(name));
         }
         // paragraph with stripped whitespace. could break them up further if needed
         const text = stripText($(element).text());
 
         if (text){ // text is not falsy value or "",
-            block.push({intent, courseCode, tags, text});
+            block.push(dataType.getBlock(intent, courseCode, tags, text));
         }
     });
 
@@ -97,8 +82,8 @@ const parseData = (html, intent, courseCode) => {
 };
 
 // feed me the html for the root forum page
+// returns array where each item to be {topic name, url}
 const getForumTopicPages = (forumRootHtml) => {
-    // array of each item to be {topic name, url}
 
     const topicPages = [];
     const baseURL = "https://webcms3.cse.unsw.edu.au";
@@ -111,14 +96,14 @@ const getForumTopicPages = (forumRootHtml) => {
         const numPosts = stripText($(element).find("td").eq(1).text());
             if (parseInt(numPosts) !== 0 && name !== ""
                 && !name.includes("Tutor's Weekly") && !name.includes("Tutor Group") ){
-                topicPages.push({name, address, numPosts});
+                topicPages.push({name, address});
             }
     });
     return topicPages;
 };
 
 // feed me html object for a topic listing page
-// returns list of links from this topic page
+// returns list of links from this topic page to
 const getForumPages = (html, topicPageId) => {
 
     const baseURL = "https://webcms3.cse.unsw.edu.au";
@@ -136,7 +121,7 @@ const getForumPages = (html, topicPageId) => {
 
     $(".breadcrumb").find("li").map((index, element) => {
         const name = stripText($(element).text());
-        tags.push(getTag(name));
+        tags.push(dataType.getTag(name));
     });
 
     return {tags, topicPageId, addressList};
@@ -144,12 +129,10 @@ const getForumPages = (html, topicPageId) => {
 
 const extractMessage = (messageItem) => {
     const text = stripText(messageItem.body);
-    const theta = 1;
-    const count = 0;
     const childResults = [];
 
     // get the text from THIS message
-    childResults.push({text, theta, count});
+    childResults.push(dataType.getAnswer(text));
 
     // also add the results from all children of this message (recurse)
     messageItem.children.forEach(child => {
@@ -172,26 +155,8 @@ const getForumPostObject = (apiResponseObject, tags, intent, courseCode) => {
         });
     });
 
-    return {intent, courseCode, tags, question, answers};
+    return dataType.getForumObject(intent, courseCode, tags, question, answers);
 };
 
 
-//TODO remove this isn't being used
-// PROCESS HTML FILES
-const processFiles = (directory, destination) => {
-
-    // OPEN FILES FROM HTML FOLDER ONE AT A TIME
-    fs.readdir(directory, function (err, items) {
-        console.log(items);
-        items.forEach(i => {
-            const html = fs.readFileSync(directory + i);
-            // PARSE TO GET DATA IN JSON FORMAT
-            const data = parseData(html);
-            // WRITE JSON OBJECTS TO FILE
-            fs.writeFileSync(destination + i.replace(".html", ".json"), JSON.stringify(data));
-        });
-    });
-
-};
-
-module.exports = {parseData, processFiles, getForumTopicPages, getForumPages, getForumPostObject};
+module.exports = {parseData, getForumTopicPages, getForumPages, getForumPostObject};
