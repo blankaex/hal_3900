@@ -9,10 +9,9 @@ const data_page_folder = "../data/data_page/";
 // Initialize the queues (3 types)
 
 const init_forum_stack = (directory) => {
-    const forumList = [];
-    fs.readdir(directory, (err, items) => {
-        // add array from each file to the forumList
-        items.forEach(i => forumList.concat((require(directory + i)).posts));
+    let forumList = [];        // add array from each file to the forumList
+    fs.readdirSync(directory).forEach(i => {
+        forumList = forumList.concat((require(directory + i)).posts);
     });
     return forumList;
 };
@@ -26,16 +25,18 @@ const wait = async (ms) => {
 
 
 // Runs analysis on all forum objects found in the forum type directory
-const run_queue = async () => {
+const run_queue = () => {
     const capPerMinute = 500; // the capped rate of queries per minute for our QUOTA is 600, keep well under this and adjust later
-
-    // calc millisecond wait time between requests
-    let millisecWaitTime = 60000 / capPerMinute;
-
-    let numQuotaErrs = 0;
+    let millisecWaitTime = 60000 / capPerMinute; // calc millisecond wait time between requests
 
     const stack = init_forum_stack(data_forum_folder);
+    console.log("list size = " + stack.length);
 
+    run_forum(stack, millisecWaitTime);
+};
+
+const run_forum = async (stack, millisecWaitTime) => {
+    let numQuotaErrs = 0;
     while (stack.length > 0){
         // pop item
         const item = stack.pop();
@@ -55,6 +56,7 @@ const run_queue = async () => {
             await wait(millisecWaitTime);  // short wait to space out API calls
 
         } catch (err) {
+            console.log(err);
             stack.push(item);             // put back on stack
             millisecWaitTime += 10;       // increase wait time per item
             numQuotaErrs ++;              // count up quota exceeds
@@ -62,7 +64,7 @@ const run_queue = async () => {
         }
 
     }
-
+    return numQuotaErrs;
 };
 
 module.exports = {run_queue};

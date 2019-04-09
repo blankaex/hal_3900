@@ -1,9 +1,9 @@
 const scraper = require('./scrape.js');
 const analyze = require('./analyze.js');
-const run_queue = require('./start_queue.js');
+const task_queue = require('./start_queue.js');
 const fs = require('fs');
 
-console.log("Data extractions functions currently commented out: choose what you want to do in index.js");
+// console.log("Data extractions functions currently commented out: choose what you want to do in index.js");
 
 /**
  * Steps from start to finish:
@@ -14,9 +14,9 @@ console.log("Data extractions functions currently commented out: choose what you
 // ------ SCRAPING FROM WEB INTO PROCESSED FILES ------
 
 // TO SCRAPE PAGES LISTED IN pagesToScrape.json.
-
-// scraper.scrapeSpecified(require("../pagesToScrape.json"));
-
+// console.log("scraping first");
+// scraper.scrapeSpecified(require("./pagesToScrape.json"));
+// console.log("done");
 // ------ ANALYZE TEXT WITH GOOGLE CLOUD NLP ------
 // ------ (ANALYSIS OF ALL FILES IN DIRECTORY) ------
 
@@ -26,5 +26,6 @@ console.log("Data extractions functions currently commented out: choose what you
 // analyze.analyzeForumPostsDirectory("../data_forum/")
 
 // ------ RUN TASK QUEUE ------
-run_queue.run_queue();
+console.log("starting queue");
+task_queue.run_queue();
 

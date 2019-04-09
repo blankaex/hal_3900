@@ -104,4 +104,4 @@ const analyzePageDirectory = (directory) => {
 
 
 
-module.exports = {analyzePageObject, analyzePageDirectory, analyzeForumPostsDirectory, getNewTags};
+module.exports = {analyzePageObject, analyzePageDirectory, getNewTags};
