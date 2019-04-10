@@ -8,12 +8,22 @@ const data_page_folder = "../data/data_page/";
 
 // Initialize the queues (3 types)
 
-const init_forum_stack = (directory) => {
+const init_page_stacks = () => {
     let forumList = [];        // add array from each file to the forumList
-    fs.readdirSync(directory).forEach(i => {
-        forumList = forumList.concat((require(directory + i)).posts);
+    let groupList = [];        // add array from each file to the forumList
+    let blockList = [];        // add array from each file to the forumList
+
+    fs.readdirSync(data_forum_folder).forEach(i => {
+        forumList = forumList.concat((require(data_forum_folder + i)).posts);
     });
-    return forumList;
+    fs.readdirSync(data_page_folder).forEach(i => {
+        const file = require(data_page_folder + i);
+        groupList = groupList.concat(file.grouped);
+        blockList = blockList.concat(file.block);
+    });
+
+
+    return {forumList, groupList, blockList};
 };
 
 // code suggestion from https://codingwithspike.wordpress.com/2018/03/10/making-settimeout-an-async-await-function/
@@ -25,34 +35,34 @@ const wait = async (ms) => {
 
 
 // Runs analysis on all forum objects found in the forum type directory
-const run_queue = () => {
+const run_queue = async () => {
     const capPerMinute = 500; // the capped rate of queries per minute for our QUOTA is 600, keep well under this and adjust later
     let millisecWaitTime = 60000 / capPerMinute; // calc millisecond wait time between requests
 
-    const stack = init_forum_stack(data_forum_folder);
-    console.log("list size = " + stack.length);
+    const stacks = init_page_stacks();
+    console.log("forum list size = " + stacks.forumList.length);
+    console.log("group list size = " + stacks.groupList.length);
+    console.log("block list size = " + stacks.blockList.length);
 
-    run_forum(stack, millisecWaitTime);
+    const numerrs = await run_forum(stack, millisecWaitTime);
+
+    // TODO run_block and run_queue, test against whole course data load, adjust params to speed up
+    
+    // console.log("finished with " + numerrs + " errs");
 };
 
 const run_forum = async (stack, millisecWaitTime) => {
     let numQuotaErrs = 0;
     while (stack.length > 0){
-        // pop item
         const item = stack.pop();
-        // run analysis
         let newTags;
         try {
             newTags = await analyze.getNewTags(item.question); // question is the forum text we've been analyzing
-
             // if success, add tags to the item and send to the DB
             const res = dataType.getForumObject(item.intent, item.courseCode, item.tags.concat(newTags), item.question, item.answers);
-
             // TODO for now, print the object, just a test
-
             console.log(res);
             // TODO database insert    https://stackoverflow.com/questions/14481521/get-the-id-of-inserted-document-in-mongo-database-in-nodejs
-
             await wait(millisecWaitTime);  // short wait to space out API calls
 
         } catch (err) {
@@ -62,7 +72,6 @@ const run_forum = async (stack, millisecWaitTime) => {
             numQuotaErrs ++;              // count up quota exceeds
             await(60000)                  // wait for 1 minute before restarting
         }
-
     }
     return numQuotaErrs;
 };
