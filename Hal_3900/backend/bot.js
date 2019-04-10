@@ -14,6 +14,7 @@ module.exports = class Bot {
 		this.db.connect().then(_=>{
 			logger.info("Initialising db with data");
 			// this.db.testTaskQueue();
+			this.db.findAllFromCollection('block').then(res => console.log(res));
 			// this.db.initData();
 		});
 		// Create DF session

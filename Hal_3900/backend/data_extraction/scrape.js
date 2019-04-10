@@ -57,7 +57,7 @@ const scrapeForum = async (forumRoot, courseCode, intent) => {
     const finalPageLists = await Promise.all(topicPageLinks);
 
     // GET A POSTS OBJECT FOR EACH FORUM TOPIC, STORE TO FILESYSTEM AS JSON
-    finalPageLists.forEach(async (pageList) => {
+    const res = finalPageLists.map(async (pageList) => {
 
         const postObjects = pageList.addressList.map(async (address, index) => {
 
@@ -87,29 +87,32 @@ const scrapeForum = async (forumRoot, courseCode, intent) => {
         fs.writeFileSync(data_forum_folder + pageList.topicPageId + ".json", JSON.stringify({posts}));
 
     });
+    await Promise.all(res);
 };
 
-const scrapeList = (list, intent, courseCode) => {
-    list.forEach(async (page) => {
+const scrapeList = async (list, intent, courseCode) => {
+    const res = list.map(async (page) => {
         console.log("scraping " + page.address);
         const html = await getPage(page);
         const data = await process.parseData(html, intent, courseCode);
         // WRITE JSON OBJECTS TO FILE
         fs.writeFileSync(data_page_folder + page.name.replace(/\s+/g, '-') + ".json", JSON.stringify(data));
     });
+
+    await Promise.all(res);
 };
 
-
-const scrapeSpecified = (pages) => {
+const scrapeSpecified = async (pages) => {
 
     // SCRAPE FROM LISTED INTENTS
-    scrapeList(pages.outline, "outline", pages.courseCode);
-    scrapeList(pages.assignment, "assignment", pages.courseCode);
-    scrapeList(pages.content, "content", pages.courseCode);
+    const outlineRes = await scrapeList(pages.outline, "outline", pages.courseCode);
+    const assignmentRes = await scrapeList(pages.assignment, "assignment", pages.courseCode);
+    const contentRes = await scrapeList(pages.content, "content", pages.courseCode);
 
     // SCRAPE FORUM STARTING AT ROOT PAGE
-    scrapeForum(pages.forum, pages.courseCode, "forum");
+    const forumRes = scrapeForum(pages.forum, pages.courseCode, "forum");
 
+    await Promise.all([outlineRes, assignmentRes, contentRes, forumRes]);
 };
 
 module.exports = {scrapeSpecified};

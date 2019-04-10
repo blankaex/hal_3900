@@ -12,9 +12,16 @@ const fs = require('fs');
 // TODO sort out synchronisation of components (step 1 must complete before starting step 2)
 
 // ------ GET INITIAL DATA OBJECTS ------
-// scraper.scrapeSpecified(require("./pagesToScrape.json"));
+
+const getDataToDb = async (input, db) => {
+    await scraper.scrapeSpecified(input);
+    task_queue.runAnalysis(db);
+};
+
+module.exports = {getDataToDb};
+
 
 // ------ RUN TASK QUEUE ------
 
-task_queue.runAnalysis();
+// task_queue.runAnalysis();
 

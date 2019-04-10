@@ -2,8 +2,8 @@ const fs = require('fs');
 const analyze = require('./analyze.js');
 const dataType = require('./getDataType.js');
 
-const data_forum_folder = "./data/data_forum/";
-const data_page_folder = "./data/data_page/";
+const data_forum_folder = "../data/data_forum/";
+const data_page_folder = "../data/data_page/";
 
 // Initialize the queues (3 types)
 
@@ -13,10 +13,10 @@ const init_page_stacks = () => {
     let blockList = [];        // add array from each file to the forumList
 
     fs.readdirSync(data_forum_folder).forEach(i => {
-        forumList = forumList.concat((require("." + data_forum_folder + i)).posts);
+        forumList = forumList.concat((require("../" + data_forum_folder + i)).posts);
     });
     fs.readdirSync(data_page_folder).forEach(i => {
-        const file = require("." + data_page_folder + i);
+        const file = require("../" + data_page_folder + i);
         groupList = groupList.concat(file.grouped);
         blockList = blockList.concat(file.block);
     });
@@ -48,9 +48,14 @@ const handle_block = async (item, db) => {
 const handle_group = async (group, db) => {
     const res = await analyze.process_grouped_item(group);
     // console.log(res);
-    const inserted = db.addToCollection(res.items, 'block');
-    const newGroup = dataType.getGrouped(res.intent, res.courseCode, res.tags, inserted.insertedIds);
-    db.addToCollection([newGroup], 'grouped');
+    try {
+        const inserted = db.addToCollection(res.items, 'block');
+        const newGroup = dataType.getGrouped(res.intent, res.courseCode, res.tags, inserted.insertedIds);
+        db.addToCollection([newGroup], 'grouped');
+    } catch (err) {
+        console.error(err);
+    }
+
 };
 
 const run_stack = async (stack, millisecWaitTime, db, type) => {
@@ -80,6 +85,8 @@ const run_stack = async (stack, millisecWaitTime, db, type) => {
 const runAnalysis = async (db) => {
     const capPerMinute = 500; // the capped rate of queries per minute for our QUOTA is 600, keep well under this and adjust later
     let millisecWaitTime = 60000 / capPerMinute; // calc millisecond wait time between requests
+
+    // fs.writeFileSync('../../data/')
 
     const stacks = init_page_stacks();
     console.log("forum list size = " + stacks.forumList.length);

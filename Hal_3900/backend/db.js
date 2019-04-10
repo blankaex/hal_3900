@@ -1,7 +1,7 @@
 const MongoClient = require('mongodb').MongoClient;
 const fs = require('fs');
 const logger = require('log4js').getLogger('Database');
-const dataExtraction = require('./data_extraction/taskQueue.js');
+const dataExtraction = require('./data_extraction/data_extraction.js');
 logger.level = 'info';
 
 // Helper function to make fs.readdir
@@ -63,7 +63,7 @@ module.exports = class DB {
 	}
 
 	async testTaskQueue () {
-		 dataExtraction.runAnalysis(this);
+		 await dataExtraction.getDataToDb(require("./pagesToScrape.json"), this);
 	}
 	
 	async initData () {
