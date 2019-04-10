@@ -10,7 +10,7 @@ const data_page_folder = "../data/data_page/";
 
 const getPage = async (linkInfo) => {
 
-    const myCookie = "session=.eJwljssOwiAUBf_lrru4bXn2ZwjQgxIVDLQr47-LujuZnEnmRS419CttRzsxkcs7baQXLaPXIYZdpVmCJWatYkyCbWKpaKLYW3JHvaGMv4cQge1qeN0hPYzVEBwVJ7GwFcOGVhx4ePnxROu1-ANDHKC2fMnF393Z0f7ou34hkq0xVr0_K3MxbQ.D38fKg.BaWk9qKOiurZck2yzvAhJzTg7G4; Domain=.webcms3.cse.unsw.edu.au; HttpOnly; Path=/"; // login session cookie
+    const myCookie = ""; // CAN SET THIS TO ACCESS FILES BEHIND A WALL.
 
     // This fetches the html from the page specified
     const html = await rp({

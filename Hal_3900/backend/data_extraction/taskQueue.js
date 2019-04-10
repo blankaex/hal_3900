@@ -34,20 +34,17 @@ const wait = async (ms) => {
 
 const handle_forum = async (item, db) => {
     const res = await analyze.process_forum_item(item);
-    // console.log(res);
     db.addToCollection([res], 'forum');
 };
 
 const handle_block = async (item, db) => {
     const res = await analyze.process_block_item(item);
-    // console.log(res);
     db.addToCollection([res], 'block');
 
 };
 
 const handle_group = async (group, db) => {
     const res = await analyze.process_grouped_item(group);
-    // console.log(res);
     try {
         const inserted = db.addToCollection(res.items, 'block');
         const newGroup = dataType.getGrouped(res.intent, res.courseCode, res.tags, inserted.insertedIds);
@@ -85,8 +82,6 @@ const run_stack = async (stack, millisecWaitTime, db, type) => {
 const runAnalysis = async (db) => {
     const capPerMinute = 500; // the capped rate of queries per minute for our QUOTA is 600, keep well under this and adjust later
     let millisecWaitTime = 60000 / capPerMinute; // calc millisecond wait time between requests
-
-    // fs.writeFileSync('../../data/')
 
     const stacks = init_page_stacks();
     console.log("forum list size = " + stacks.forumList.length);

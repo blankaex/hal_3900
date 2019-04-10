@@ -1,4 +1,3 @@
-const fs = require('fs');
 const cheerio = require('cheerio');
 const dataType = require('./getDataType.js');
 

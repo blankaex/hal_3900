@@ -41,8 +41,8 @@ module.exports = class DB {
 	}
 	
 	async dump(objects, collection='documents') {
-		const collection = this.dbConn.collection(collection);
-		const res = await collection.insertMany(objects);
+		const collectionRef = this.dbConn.collection(collection);
+		const res = await collectionRef.insertMany(objects);
 		logger.info(`Inserted ${res.insertedCount} objects into collection ${collection}`);
 	}
 	

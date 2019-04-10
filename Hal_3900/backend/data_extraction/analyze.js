@@ -31,8 +31,6 @@ const getNewTags = async (text) => {
     return await Promise.all(newTags);
 };
 
-// TODO process chatbot questions function
-
 const process_forum_item = async (item) => {
     const newTags = await getNewTags(item.question);
     return dataType.getForumObject(item.intent, item.courseCode, item.tags.concat(newTags), item.question, item.answers);
