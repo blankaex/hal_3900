@@ -44,25 +44,51 @@ const run_queue = async () => {
     console.log("group list size = " + stacks.groupList.length);
     console.log("block list size = " + stacks.blockList.length);
 
-    const numerrs = await run_forum(stack, millisecWaitTime);
+    // const forumErrs = await run_forum(stacks.forumList, millisecWaitTime, "forum");
+    // const groupErrs = await run_forum(stacks.groupList, millisecWaitTime, "group");
+    const blockErrs = await run_forum(stacks.blockList, millisecWaitTime, "block");
 
     // TODO run_block and run_queue, test against whole course data load, adjust params to speed up
-    
-    // console.log("finished with " + numerrs + " errs");
+
+    const total = forumErrs + groupErrs + blockErrs;
+    console.log("finished with " + total + " errs");
 };
 
-const run_forum = async (stack, millisecWaitTime) => {
+const handle_forum = async (item) => {
+    const res = await analyze.process_forum_item(item);
+
+    // TODO for now, print the object, just a test
+    console.log(res);
+    // TODO database insert to forum
+};
+
+const handle_block = async (item) => {
+    const res = await analyze.process_block_item(item);
+
+    // TODO for now, print the object, just a test
+    console.log(res);
+    // TODO database insert to block
+};
+
+const handle_group = async (group) => {
+    const res = await analyze.process_grouped_item(group);
+
+    // TODO for now, print the object, just a test
+    console.log(res);
+    // TODO database insert to group, handle change in group data structure
+    // https://stackoverflow.com/questions/14481521/get-the-id-of-inserted-document-in-mongo-database-in-nodejs
+};
+
+const run_forum = async (stack, millisecWaitTime, type) => {
     let numQuotaErrs = 0;
     while (stack.length > 0){
         const item = stack.pop();
-        let newTags;
         try {
-            newTags = await analyze.getNewTags(item.question); // question is the forum text we've been analyzing
-            // if success, add tags to the item and send to the DB
-            const res = dataType.getForumObject(item.intent, item.courseCode, item.tags.concat(newTags), item.question, item.answers);
-            // TODO for now, print the object, just a test
-            console.log(res);
-            // TODO database insert    https://stackoverflow.com/questions/14481521/get-the-id-of-inserted-document-in-mongo-database-in-nodejs
+            switch (type){
+                case "forum": await handle_forum(item); break;
+                case "group": await handle_group(item); break;
+                case "block": await handle_block(item); break;
+            }
             await wait(millisecWaitTime);  // short wait to space out API calls
 
         } catch (err) {
@@ -75,6 +101,9 @@ const run_forum = async (stack, millisecWaitTime) => {
     }
     return numQuotaErrs;
 };
+
+
+
 
 module.exports = {run_queue};
 

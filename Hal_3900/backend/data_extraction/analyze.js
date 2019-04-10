@@ -31,77 +31,25 @@ const getNewTags = async (text) => {
     return await Promise.all(newTags);
 };
 
-// feed me an object from the data_page directory
-// returns same object with added tags from analysis
-const analyzePageObject = async (dataObject) => {
+// TODO process chatbot questions function
 
-    const groupedList = async () => {
-
-        // returns promise of array of "group" type data items
-        const groupMap = dataObject.grouped.map(async (group) => {
-            // get tags for each group item
-            const itemMap = group.items.map(async (item) => {
-                const newTags = await getNewTags(item.text);
-                return dataType.getBlock(item.intent, item.courseCode, item.tags.concat(newTags), item.text);
-            });
-
-            let items = await Promise.all(itemMap);     // await ensures all items finished in itemMap before proceeding
-            return dataType.getGrouped(group.intent, group.courseCode, group.tags, items);
-        });
-        return Promise.all(groupMap);
-    };
-
-    // returns promise of array of "block" type data items
-    const blockList = async () => {
-        const blockMap = dataObject.block.map(async (item) => {
-            const newTags = await getNewTags(item.text);
-            const tags = item.tags.concat(newTags);
-            return dataType.getBlock(item.intent, item.courseCode, tags, item.text);
-        });
-        return Promise.all(blockMap);
-    };
-
-    // await used to ensure all analysis and tagging complete before returning the result
-    const grouped = await groupedList();
-    const block = await blockList();
-
-    return {grouped, block};
-
+const process_forum_item = async (item) => {
+    const newTags = await getNewTags(item.question);
+    return dataType.getForumObject(item.intent, item.courseCode, item.tags.concat(newTags), item.question, item.answers);
 };
 
-// feed me an object from the data_forum directory
-// returns same object with added tags from analysis
-const analyzeForumObject = async (forumObject) => {
-    // analyze question for tags
-    const postList = async () => {
-        const postMap = forumObject.posts.map(async (item) => {
-            const newTags = await getNewTags(item.question);
-            return dataType.getForumObject(item.intent, item.courseCode, item.tags.concat(newTags), item.question, item.answers);
-        });
-        return Promise.all(postMap);
-    };
-
-    const posts = await postList();
-    return {posts};
+const process_block_item = async (item) => {
+    const newTags = await getNewTags(item.text);
+    return dataType.getBlock(item.intent, item.courseCode, item.tags.concat(newTags), item.text);
 };
 
-// Runs analysis on all files found in the page type directory
-const analyzePageDirectory = (directory) => {
-    // read file entries from directory one at a time
-    fs.readdir(directory, function (err, items) {
-
-        items.forEach(async (i) => {
-            const dataObject = require(directory + i);
-            try {
-                const result = await analyzePageObject(dataObject);
-                fs.writeFileSync(directory + i, JSON.stringify(result));
-            } catch (err) {
-                console.error(err);
-            }
-        });
+const process_grouped_item = async (group) => {
+    const itemMap = group.items.map(async (item) => {
+        const newTags = await getNewTags(item.text);
+        return dataType.getBlock(item.intent, item.courseCode, item.tags.concat(newTags), item.text);
     });
+    let items = await Promise.all(itemMap);     // await ensures all items finished in itemMap before proceeding
+    return dataType.getGrouped(group.intent, group.courseCode, group.tags, items); // not altering group tags at this stage
 };
 
-
-
-module.exports = {analyzePageObject, analyzePageDirectory, getNewTags};
+module.exports = {getNewTags, process_forum_item, process_block_item, process_grouped_item};
