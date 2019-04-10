@@ -2,8 +2,8 @@ const fs = require('fs');
 const analyze = require('./analyze.js');
 const dataType = require('./getDataType.js');
 
-const data_forum_folder = "../data/data_forum/";
-const data_page_folder = "../data/data_page/";
+const data_forum_folder = "./data/data_forum/";
+const data_page_folder = "./data/data_page/";
 
 // Initialize the queues (3 types)
 
@@ -13,10 +13,10 @@ const init_page_stacks = () => {
     let blockList = [];        // add array from each file to the forumList
 
     fs.readdirSync(data_forum_folder).forEach(i => {
-        forumList = forumList.concat((require(data_forum_folder + i)).posts);
+        forumList = forumList.concat((require("." + data_forum_folder + i)).posts);
     });
     fs.readdirSync(data_page_folder).forEach(i => {
-        const file = require(data_page_folder + i);
+        const file = require("." + data_page_folder + i);
         groupList = groupList.concat(file.grouped);
         blockList = blockList.concat(file.block);
     });
@@ -49,7 +49,7 @@ const handle_group = async (group, db) => {
     const res = await analyze.process_grouped_item(group);
     // console.log(res);
     const inserted = db.addToCollection(res.items, 'block');
-    const newGroup = dataType.getDbGrouped(res.intent, res.courseCode, res.tags, inserted.insertedIds);
+    const newGroup = dataType.getGrouped(res.intent, res.courseCode, res.tags, inserted.insertedIds);
     db.addToCollection([newGroup], 'grouped');
 };
 

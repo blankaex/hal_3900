@@ -13,7 +13,8 @@ module.exports = class Bot {
 		// Async connection
 		this.db.connect().then(_=>{
 			logger.info("Initialising db with data");
-			this.db.initData();
+			// this.db.testTaskQueue();
+			// this.db.initData();
 		});
 		// Create DF session
 		const sessionId = uuid.v4();

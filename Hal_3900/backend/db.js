@@ -1,6 +1,7 @@
 const MongoClient = require('mongodb').MongoClient;
 const fs = require('fs');
 const logger = require('log4js').getLogger('Database');
+const dataExtraction = require('./data_extraction/taskQueue.js');
 logger.level = 'info';
 
 // Helper function to make fs.readdir
@@ -61,6 +62,9 @@ module.exports = class DB {
 		return results;
 	}
 
+	async testTaskQueue () {
+		 dataExtraction.runAnalysis(this);
+	}
 	
 	async initData () {
 		let knownCollections = await this.dbConn.listCollections().toArray();
