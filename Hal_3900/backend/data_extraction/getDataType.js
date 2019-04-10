@@ -19,8 +19,11 @@ const getGrouped = (intent, courseCode, tags, items) => {
     return {intent, courseCode, tags, items};
 };
 
+const getDbGrouped = (intent, courseCode, tags, itemIds) => {
+    return {intent, courseCode, tags, itemsIds};
+};
 const getForumObject = (intent, courseCode, tags, question, answers) => {
     return {intent, courseCode, tags, question, answers};
 };
 
-module.exports = {getTag, getAnswer, getBlock, getGrouped, getForumObject};
+module.exports = {getTag, getAnswer, getBlock, getGrouped, getDbGrouped, getForumObject};

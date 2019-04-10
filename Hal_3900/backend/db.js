@@ -50,6 +50,7 @@ module.exports = class DB {
 		const collectionRef = this.dbConn.collection(collection);
 		const res = await collectionRef.insertMany(objects);
 		logger.info(`Inserted ${res.insertedCount} objects into collection ${collection}`);
+		return res;
 	}
 	
 	async search(obj, collection='documents') {
@@ -59,6 +60,7 @@ module.exports = class DB {
 		cursor.close();
 		return results;
 	}
+
 	
 	async initData () {
 		let knownCollections = await this.dbConn.listCollections().toArray();

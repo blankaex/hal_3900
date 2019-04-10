@@ -1,6 +1,5 @@
 const fs = require('fs');
 const analyze = require('./analyze.js');
-const db = require('../db.js');
 const dataType = require('./getDataType.js');
 
 const data_forum_folder = "../data/data_forum/";
@@ -22,7 +21,6 @@ const init_page_stacks = () => {
         blockList = blockList.concat(file.block);
     });
 
-
     return {forumList, groupList, blockList};
 };
 
@@ -34,60 +32,36 @@ const wait = async (ms) => {
 };
 
 
-// Runs analysis on all forum objects found in the forum type directory
-const run_queue = async () => {
-    const capPerMinute = 500; // the capped rate of queries per minute for our QUOTA is 600, keep well under this and adjust later
-    let millisecWaitTime = 60000 / capPerMinute; // calc millisecond wait time between requests
-
-    const stacks = init_page_stacks();
-    console.log("forum list size = " + stacks.forumList.length);
-    console.log("group list size = " + stacks.groupList.length);
-    console.log("block list size = " + stacks.blockList.length);
-
-    // const forumErrs = await run_forum(stacks.forumList, millisecWaitTime, "forum");
-    // const groupErrs = await run_forum(stacks.groupList, millisecWaitTime, "group");
-    const blockErrs = await run_forum(stacks.blockList, millisecWaitTime, "block");
-
-    // TODO run_block and run_queue, test against whole course data load, adjust params to speed up
-
-    const total = forumErrs + groupErrs + blockErrs;
-    console.log("finished with " + total + " errs");
-};
-
-const handle_forum = async (item) => {
+const handle_forum = async (item, db) => {
     const res = await analyze.process_forum_item(item);
-
-    // TODO for now, print the object, just a test
-    console.log(res);
-    // TODO database insert to forum
+    // console.log(res);
+    db.addToCollection([res], 'forum');
 };
 
-const handle_block = async (item) => {
+const handle_block = async (item, db) => {
     const res = await analyze.process_block_item(item);
+    // console.log(res);
+    db.addToCollection([res], 'block');
 
-    // TODO for now, print the object, just a test
-    console.log(res);
-    // TODO database insert to block
 };
 
-const handle_group = async (group) => {
+const handle_group = async (group, db) => {
     const res = await analyze.process_grouped_item(group);
-
-    // TODO for now, print the object, just a test
-    console.log(res);
-    // TODO database insert to group, handle change in group data structure
-    // https://stackoverflow.com/questions/14481521/get-the-id-of-inserted-document-in-mongo-database-in-nodejs
+    // console.log(res);
+    const inserted = db.addToCollection(res.items, 'block');
+    const newGroup = dataType.getDbGrouped(res.intent, res.courseCode, res.tags, inserted.insertedIds);
+    db.addToCollection([newGroup], 'grouped');
 };
 
-const run_forum = async (stack, millisecWaitTime, type) => {
+const run_stack = async (stack, millisecWaitTime, db, type) => {
     let numQuotaErrs = 0;
     while (stack.length > 0){
         const item = stack.pop();
         try {
             switch (type){
-                case "forum": await handle_forum(item); break;
-                case "group": await handle_group(item); break;
-                case "block": await handle_block(item); break;
+                case "forum": await handle_forum(item, db); break;
+                case "group": await handle_group(item, db); break;
+                case "block": await handle_block(item, db); break;
             }
             await wait(millisecWaitTime);  // short wait to space out API calls
 
@@ -102,10 +76,25 @@ const run_forum = async (stack, millisecWaitTime, type) => {
     return numQuotaErrs;
 };
 
+// Runs analysis on all forum objects found in the forum type directory
+const runAnalysis = async (db) => {
+    const capPerMinute = 500; // the capped rate of queries per minute for our QUOTA is 600, keep well under this and adjust later
+    let millisecWaitTime = 60000 / capPerMinute; // calc millisecond wait time between requests
 
+    const stacks = init_page_stacks();
+    console.log("forum list size = " + stacks.forumList.length);
+    console.log("group list size = " + stacks.groupList.length);
+    console.log("block list size = " + stacks.blockList.length);
 
+    const forumErrs = await run_stack(stacks.forumList, millisecWaitTime, db, "forum");
+    const groupErrs = await run_stack(stacks.groupList, millisecWaitTime, db, "group");
+    const blockErrs = await run_stack(stacks.blockList, millisecWaitTime, db, "block");
 
-module.exports = {run_queue};
+    const total = forumErrs + groupErrs + blockErrs;
+    console.log("finished with " + total + " errs");
+};
+
+module.exports = {runAnalysis};
 
 
 
