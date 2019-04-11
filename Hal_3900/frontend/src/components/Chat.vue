@@ -39,9 +39,7 @@ import Message from './Message.vue'
 export default class Chat extends Vue {
   draft: string = ''
   inputFocused: Boolean = false
-  //TODO: move waiting/sopcket to be a redux items
-  waiting: Boolean = false
-  socket: WebSocket|null = null
+
   get inputColor () {
     if (!this.inputFocused) {
       return {}
@@ -52,73 +50,21 @@ export default class Chat extends Vue {
     }
   }
 
-  //TODO: call this from render
+  //TODO: call this at the end of a render cycle
   scrollEnd () {
     const container = this.$el.querySelector('#messages')
     if (container === null) return
     container.scrollTop = container.scrollHeight
   }
 
-  // TODO: move send and recv to be vuex actions :D
   send () {
     if (this.draft.trim() === '') return
-    if (!this.socket) throw Error("Socket hasn't been connected yet!")
-    this.$store.commit('sendMessage', this.draft)
-    this.$store.commit('log', `sent: ${this.draft}`)
-    this.waiting = true
-    this.socket.send(JSON.stringify({
-      type: 'message',
-      error: false,
-      text: this.draft
-    }))
-    this.draft = ''
-    this.scrollEnd()
-  }
-
-  recv (res: MessageEvent) {
-    const resObj:BotResponse = JSON.parse(res.data)
-
-    if (!resObj) {
-      this.$store.commit('log', `[ERROR] Recieved Empty Response`)
-      return
-    } else if (!resObj.data) {
-      this.$store.commit('log', `[ERROR] Recieved Empty Data field in response`)
-      return
-    }
-    this.$store.commit('log', `identified intent: ${resObj.data.intent}`)
-    this.$store.commit('log', `got response: ${resObj.data.response}`)
-    this.$store.commit('recvMessage', resObj.data.response)
-    if (resObj.data.options && resObj.data.options.length > 0) {
-      this.$store.commit('log', `got options: `)
-      let i = 1
-      for (let option of resObj.data.options) {
-        this.$store.commit('log', `${i}. ${option.text} (${option._score})`)
-        i++
-      }
-      this.$store.commit('recvOptions', resObj.data.options)
-    }
-    this.waiting = false
-    this.$nextTick(function () {
-      this.scrollEnd()
+    this.$store.dispatch('sendMessage',{
+      from: 'user',
+      type: 'simple',
+      body: this.draft
     })
-  }
-
-  socketErr (err) {
-    this.waiting = false
-    console.dir(err)
-  }
-
-  mounted () {
-    this.$nextTick(function () {
-      // Are we running in dev mode?
-      let host = 'backend.hal-3900.com'
-      if (window.location.host !== 'hal-3900.com') {
-        host = 'localhost:9447'
-      }
-      this.socket = new WebSocket(`ws://${host}/talk`)
-      this.socket.onmessage = this.recv
-      this.socket.onerror = this.socketErr
-    })
+    this.draft = '' 
   }
 }
 </script>

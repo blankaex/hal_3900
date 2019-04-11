@@ -21,6 +21,7 @@ export default class LoadingAnim extends Vue {
 </script>
 
 <style scoped lang="sass">
+//TODO: attribute this css to the site i stole it from ;)
 .spinner
   width: 40px
   height: 40px

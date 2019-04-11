@@ -19,13 +19,7 @@ export default class OptionsMessage extends Vue {
   // TODO: move socket logic to redux layer
   selectBest (choice:any, choiceIndex:number, messageId: string) {
     if (this.$store.state.activeMessage !== messageId) return
-    if (!this.socket) throw Error("Socket hasn't been connected yet!")
-    this.$store.commit('sendMessage', choiceIndex)
-    this.socket.send(JSON.stringify({
-      type: 'training',
-      error: false,
-      choice
-    }))
+    this.$store.dispatch('sendTraining', choice)
     this.$store.commit('recvMessage', 'Thanks!')
   }
 

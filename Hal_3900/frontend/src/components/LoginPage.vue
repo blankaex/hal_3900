@@ -8,9 +8,9 @@
 </template>
 <!--TODO: make it actually log in :'( -->
 <script>
-    export default {
-        name: "LoginPage"
-    }
+  export default {
+      name: "LoginPage"
+  }
 </script>
 
 <style scoped>
