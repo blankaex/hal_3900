@@ -21,7 +21,7 @@ import OptionsMessage from './OptionsMessage.vue'
   }
 })
 export default class Message extends Vue {
-    @Prop() message: any
+   @Prop() message: any
 }
 </script>
 

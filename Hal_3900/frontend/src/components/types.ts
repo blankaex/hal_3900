@@ -1,4 +1,4 @@
-import { Moment } from 'moment';
+import { Moment } from 'moment'
 
 export interface BotResponse {
     data?: {
@@ -20,7 +20,7 @@ export type Options = any[];
 
 export interface Message {
     id: string,
-    from: string, 
+    from: string,
     type: 'simple'|'options',
     body: string|Options
 }
@@ -45,5 +45,6 @@ export interface Store {
     status: AppState,
     log: Log[],
     theme: Theme,
-    themes: Theme[]
+    themes: Theme[],
+    socketURL: string
 }

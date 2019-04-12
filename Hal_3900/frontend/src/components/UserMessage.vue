@@ -27,7 +27,7 @@ export default class UserMessage extends Vue {
   @extend %flex-row
   width: 100%
   margin-bottom: 0.5rem
-  justify-content: flex-end
+  justify-content: dflex-end
 .userMsg img
   width: 48px
   height: 48px

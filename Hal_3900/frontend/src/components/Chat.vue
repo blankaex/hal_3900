@@ -50,7 +50,7 @@ export default class Chat extends Vue {
     }
   }
 
-  //TODO: call this at the end of a render cycle
+  // TODO: call this at the end of a render cycle
   scrollEnd () {
     const container = this.$el.querySelector('#messages')
     if (container === null) return
@@ -59,12 +59,12 @@ export default class Chat extends Vue {
 
   send () {
     if (this.draft.trim() === '') return
-    this.$store.dispatch('sendMessage',{
+    this.$store.dispatch('sendMessage', {
       from: 'user',
       type: 'simple',
       body: this.draft
     })
-    this.draft = '' 
+    this.draft = ''
   }
 }
 </script>
