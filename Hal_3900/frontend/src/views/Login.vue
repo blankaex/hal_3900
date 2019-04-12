@@ -25,8 +25,8 @@ export default class Login extends Vue {
       }
       this.$http.post(`http://${host}/api/users/set`, { body: { zid: this.username } })
         .then(res => {
+          console.log(res)
           if (res.ok) {
-            console.log('response ok')
             this.$store.commit('login', this.username)
             this.$router.push({ name: 'home' })
           }

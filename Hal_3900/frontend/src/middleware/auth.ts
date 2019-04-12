@@ -17,24 +17,19 @@ function parseCookies (cookie: string) {
   return cookies
 }
 
-function authWithCookies () {
+function isAuthedWithCookie () {
   const session = parseCookies(document.cookie).get('session')
-  if (session === undefined) {
-    console.log('session not set')
-    return router.push({ name: 'login' })
-  }
+  return session
+}
+
+function isAuthedSimple () {
+  return store.state.user
 }
 
 export default function checkAuth (context: Context) {
   console.log('checking Auth')
   const { router, next } = context
-  // const session = parseCookies(document.cookie).get('session')
-  // console.log(document.cookie)
-  // if (session === undefined) {
-  //   console.log('session not set')
-  //   return router.push({ name: 'login' })
-  // }
-  if (!store.state.user){
+  if (!isAuthedSimple()){
     return router.push({ name: 'login' })
   }
   return next()
