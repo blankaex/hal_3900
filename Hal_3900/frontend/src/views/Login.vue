@@ -6,26 +6,31 @@
       <!--    <input type="password" name="password" v-model.trim="password" placeholder="Password"/>-->
       <button type="button" v-on:click.prevent="login()">SIGN IN</button>
     </form>
+<!--    <div v-if="submitted">login failed</div>-->
   </div>
 </template>
 
 <script lang="ts">
 import { Vue } from 'vue-property-decorator'
-import router from "@/router";
 
 // export default class Login extends Vue
 export default class Login extends Vue {
   username: any;
+  // submitted: false;
   login () {
     if (this.username) {
-
       let host = 'backend.hal-3900.com'
       if (window.location.host !== 'hal-3900.com') {
         host = 'localhost:9447'
       }
       this.$http.post(`http://${host}/api/users/set`, { body: { zid: this.username } })
-        .then(data => console.log(data))
-      this.$router.push('/')
+        .then(res => {
+          if (res.ok) {
+            console.log('response ok')
+            this.$store.commit('login', this.username)
+            this.$router.push({ name: 'home' })
+          }
+        })
     }
   }
 }
@@ -42,5 +47,4 @@ export default class Login extends Vue {
   margin-top: auto
   color: #FFFFFF
   background-color: #5C5C5C
-
 </style>

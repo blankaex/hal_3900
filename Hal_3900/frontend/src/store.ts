@@ -8,6 +8,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    user: null,
     messages: [
       {
         id: '0',
@@ -52,6 +53,12 @@ export default new Vuex.Store({
     ]
   },
   mutations: {
+    login(state, user) {
+      state.user = user
+    },
+    logout(state, user) {
+      state.user = null
+    },
     sendMessage (state, payload) {
       const generatedUuid = uuid()
       state.messages.push({
