@@ -56,7 +56,6 @@ module.exports = class DB {
 		const collectionRef = this.dbConn.collection(collection);
 		let results = [];
 		results = await collectionRef.find(obj).toArray();
-		cursor.close();
 		return results;
 	}
 	
