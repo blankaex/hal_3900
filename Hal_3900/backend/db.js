@@ -150,16 +150,19 @@ module.exports = class DB {
 		return Array.from(tagSet);
 	};
 	
-	async getDataPoints(tags) {
+	async getDataPoints(tags, intent) {
 		let candidates = await this.findAllFromCollection('grouped');
 		candidates = candidates.concat(await this.findAllFromCollection('block'));
 		candidates = candidates.concat(await this.findAllFromCollection('forum'));
 
-		//calculate scores for each candidate
+		// kill all non intent matches items 
+		candidates = candidates.filter(c=>c.intent === intent)
+		
+		// calculate scores for each candidate
 		candidates = candidates.map((candidate)=>{
 				return {
 						...candidate,
-						_score: calcScore(tags, candidate)
+						_score: calcScore(tags, candidate),
 				}
 		});
 		
