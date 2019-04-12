@@ -1,6 +1,7 @@
 const MongoClient = require('mongodb').MongoClient;
 const fs = require('fs');
 const logger = require('log4js').getLogger('Database');
+const dataExtraction = require('./data_extraction/data_extraction.js');
 logger.level = 'info';
 
 // Helper function to make fs.readdir
@@ -40,8 +41,8 @@ module.exports = class DB {
 	}
 	
 	async dump(objects, collection='documents') {
-		const collection = this.dbConn.collection(collection);
-		const res = await collection.insertMany(objects);
+		const collectionRef = this.dbConn.collection(collection);
+		const res = await collectionRef.insertMany(objects);
 		logger.info(`Inserted ${res.insertedCount} objects into collection ${collection}`);
 	}
 	
@@ -50,14 +51,18 @@ module.exports = class DB {
 		const collectionRef = this.dbConn.collection(collection);
 		const res = await collectionRef.insertMany(objects);
 		logger.info(`Inserted ${res.insertedCount} objects into collection ${collection}`);
+		return res;
 	}
 	
 	async search(obj, collection='documents') {
 		const collectionRef = this.dbConn.collection(collection);
 		let results = [];
 		results = await collectionRef.find(obj).toArray();
-		cursor.close();
 		return results;
+	}
+
+	async runTaskQueue () {
+		 await dataExtraction.getDataToDb(require("./pagesToScrape.json"), this);
 	}
 	
 	async initData () {
@@ -67,23 +72,15 @@ module.exports = class DB {
 			logger.info(`Detected collections, skipping init step`);
 			return;
 		}
-		
-		const forumDir = "data/data_forum";
-		const dataDir = "data/data_page";
-	
-		logger.info(`Reading forum posts from ${forumDir}`);
-		let items = await asyncReadDir(forumDir);
-		for (const item of items) {
-			await this.addToCollection(require(`./${forumDir}/${item}`).posts, 'forum');
+
+		if (fs.existsSync('../data/db_backup.json')){
+			logger.info(`Restoring data from backup`);
+			this.restore();
+			return;
 		}
 
-		logger.info(`Reading blocked and grouped posts from ${dataDir}`);
-		items = await asyncReadDir(dataDir);
-		for (const item of items) {
-			const dataObject = require(`./${dataDir}/${item}`);
-			await this.addToCollection(dataObject.grouped, 'grouped');
-			await this.addToCollection(dataObject.block, 'block');
-		}
+		logger.info('Starting scraper to initialize data. This might take a while');
+		this.runTaskQueue();
 	};
 	
 	async findAllFromCollection(collectionName) {
@@ -184,5 +181,27 @@ module.exports = class DB {
 			}
 		}
 	};
+
+	async backup() {
+		// backup db to this file
+		const filename = '../data/db_backup.json';
+		const forum = await this.findAllFromCollection('forum');
+		const grouped = await this.findAllFromCollection('grouped');
+		const block = await this.findAllFromCollection('block');
+
+		fs.writeFileSync(filename, JSON.stringify({forum, grouped, block}));
+	}
+
+	async restore() {
+		const filename = '../data/db_backup.json';
+
+		const items = require(filename);
+		this.addToCollection(items.forum, 'forum');
+		this.addToCollection(items.grouped, 'grouped');
+		this.addToCollection(items.block, 'block');
+
+
+
+	}
 };
 
