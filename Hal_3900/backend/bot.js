@@ -1,15 +1,15 @@
 const DB = require('./db');
 const dialogflow = require('dialogflow');
 const uuid = require('uuid');
+const DFconfig = require('./DFServiceAccount.json');
 const logger = require('log4js').getLogger('Bot');
 logger.level = 'info';
 
 module.exports = class Bot {
 	constructor() {
 		this.version = '0.1';
-		let url = 'mongodb://localhost:27017';
-		if (process.env.PRODUCTION) url = 'mongodb://database:27017';
-		this.db = new DB(url,'database');
+				
+		this.db = new DB();
 		// Async connection
 		this.db.connect().then(_=>{
 			logger.info("Initialising db with data");
@@ -17,12 +17,11 @@ module.exports = class Bot {
 		});
 		// Create DF session
 		const sessionId = uuid.v4();
+		
 		// Create a new session
 		this.DF = {};
 		this.DF.sessionClient = new dialogflow.SessionsClient();
-		// TODO: move these into env vars
-		const projectId = "test-53d52";
-		this.DF.sessionPath = this.DF.sessionClient.sessionPath(projectId, sessionId);
+		this.DF.sessionPath = this.DF.sessionClient.sessionPath(DFconfig.project_id, sessionId);
 	}
 	async train(choice) {
 		logger.info(`TRAINING FROM CHOICE ${choice.text}`);

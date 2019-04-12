@@ -22,6 +22,8 @@
     "cors": "^2.8.5",
     "dialogflow": "^0.8.2",
     "express": "^4.16.4",
+    "express-handlebars": "^3.0.2",
+    "express-session": "^1.15.6",
     "express-ws": "^4.0.0",
     "fs": "0.0.1-security",
     "log4js": "^4.1.0",
