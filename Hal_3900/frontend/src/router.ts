@@ -22,11 +22,15 @@ const router = new Router({
       name: 'login',
       component: Login
     },
-    // {
-    //   path: '/admin',
-    //   name: 'admin',
-    //   component: Admin
-    // }
+    {
+      path: '/admin',
+      name: 'admin',
+      component: Admin
+    },
+    {
+      path: '*',
+      redirect: '/'
+    }
   ]
 })
 

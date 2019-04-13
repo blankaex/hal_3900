@@ -1,6 +1,7 @@
 <template>
     <div class="setup">
       <h1>Set up a new course</h1>
+      <p>Enter the urls of pages on webcms3 below. Data will be taken from these pages and added to the chat database. Please allow time for the setup to complete: you can check up on the status here.</p>
       <form>
         <input type="text" v-model.trim="courseCode" placeholder="Course Code"/><br>
         <input type="text" v-model.trim="forum" placeholder="Forum URL"/><br>
