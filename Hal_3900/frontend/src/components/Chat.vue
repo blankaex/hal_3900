@@ -6,7 +6,7 @@
       :key="message.id"
       :message="message">
     </Message>
-    <LoadingAnim v-if="$store.state.status === AppState.PENDING"></LoadingAnim>
+    <LoadingAnim v-if="loading()"></LoadingAnim>
   </div>
   <div class="input" v-on:keydown.enter="send" >
     <input type="text"
@@ -29,11 +29,13 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 import { BotResponse, Theme, AppState } from './types'
 import ThemedIcon from './ThemedIcon.vue'
 import Message from './Message.vue'
+import LoadingAnim from './LoadingAnim.vue'
 
 @Component({
   components: {
     ThemedIcon,
-    Message
+    Message,
+    LoadingAnim
   }
 })
 export default class Chat extends Vue {
@@ -50,7 +52,6 @@ export default class Chat extends Vue {
     }
   }
 
-  // TODO: call this at the end of a render cycle
   scrollEnd () {
     const container = this.$el.querySelector('#messages')
     if (container === null) return
@@ -59,12 +60,15 @@ export default class Chat extends Vue {
 
   send () {
     if (this.draft.trim() === '') return
-    this.$store.dispatch('sendMessage', {
-      from: 'user',
-      type: 'simple',
-      body: this.draft
-    })
+    this.$store.dispatch('sendMessage', this.draft)
     this.draft = ''
+    this.$nextTick(function () {
+      this.scrollEnd()
+    })
+  }
+
+  loading () {
+    return this.$store.state.status === AppState.PENDING
   }
 }
 </script>

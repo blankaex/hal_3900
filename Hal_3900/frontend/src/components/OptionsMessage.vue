@@ -16,11 +16,15 @@ import { BotResponse, Theme } from './types'
 export default class OptionsMessage extends Vue {
   @Prop() options:any
 
-  // TODO: move socket logic to redux layer
   selectBest (choice:any, choiceIndex:number, messageId: string) {
     if (this.$store.state.activeMessage !== messageId) return
+
     this.$store.dispatch('sendTraining', choice)
-    this.$store.commit('recvMessage', 'Thanks!')
+    this.$store.commit('storeMessage', {
+      type: 'simple',
+      from: 'bot',
+      body: 'Thanks!'
+    })
   }
 
   getGradient () {
