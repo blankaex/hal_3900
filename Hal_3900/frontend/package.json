@@ -11,6 +11,7 @@
     "@/components": "latest",
     "@types/uuid": "^3.4.4",
     "moment": "^2.24.0",
+    "tslint": "^5.15.0",
     "uuid": "^3.3.2",
     "vue": "^2.6.6",
     "vue-class-component": "^6.0.0",

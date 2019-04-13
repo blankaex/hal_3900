@@ -16,12 +16,7 @@
     </div>
   </div>
   <div class="content">
-    <div class="log">
-      <div class="logline" v-for="logItem in $store.state.log" :key="logItem.id">
-        <span>{{logItem.timestamp.calendar()}}</span><br>
-        {{logItem.message}}
-      </div>
-    </div>
+    <Log></Log>
   </div>
 </div>
 </template>
@@ -29,8 +24,8 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import { Theme } from './types'
-import ThemedIcon from './ThemedIcon.vue'
-import Log from './Log.vue'
+import ThemedIcon from './utility/ThemedIcon.vue'
+import Log from './utility/Log.vue'
 
 @Component({
   components: {
