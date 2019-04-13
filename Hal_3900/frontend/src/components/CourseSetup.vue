@@ -1,6 +1,7 @@
 <template>
     <div class="setup">
       <h1>Set up a new course</h1>
+      <p>Enter the urls of pages on webcms3 below. Data will be taken from these pages and added to the chat database. Please allow time for the setup to complete: you can check up on the status here.</p>
       <form>
         <input type="text" v-model.trim="courseCode" placeholder="Course Code"/><br>
         <input type="text" v-model.trim="forum" placeholder="Forum URL"/><br>
@@ -8,19 +9,19 @@
 <!--        <input v-for="item in assignment" v-model="item.name" placeholder="name"/>-->
         <div :key="assignmentKey" class="expandingFields">
           <h3>assignments</h3>
-          <div class="listItem" v-for="item in assignment">
+          <div class="listItem" v-for="(item, index) in assignment">
             <input v-model.trim="item.name" placeholder="name"/>
-            <input v-model.trim="item.url" placeholder="URL"/>
-            <button type="button" v-on:click="removeAssignment()">-</button>
+            <input v-model.trim="item.address" placeholder="URL"/>
+            <button type="button" v-on:click="removeAssignment(index)">-</button>
           </div>
           <button type="button" v-on:click="addAssignment()">+</button>
         </div>
         <div class="expandingFields">
           <h3>content pages</h3>
-          <div class="listItem" v-for="item in content">
+          <div class="listItem" v-for="(item, index) in content">
             <input v-model.trim="item.name" placeholder="name"/>
-            <input v-model.trim="item.url" placeholder="URL"/>
-            <button type="button" v-on:click="removeContent()">-</button>
+            <input v-model.trim="item.address" placeholder="URL"/>
+            <button type="button" v-on:click="removeContent(index)">-</button>
           </div>
           <button type="button" v-on:click="addContent()">+</button>
         </div>
@@ -37,40 +38,53 @@ export default class CourseSetup extends Vue {
   courseCode: string =''
   forum: string =''
   outline: string =''
-  assignment: { name: string, url: string }[] = [
-    { name: '', url: '' }
+  assignment: { name: string, address: string }[] = [
+    { name: '', address: '' }
   ]
-  content: { name: string, url: string }[] = [
-    { name: '', url: '' }
+  content: { name: string, address: string }[] = [
+    { name: '', address: '' }
   ]
   assignmentKey: number = 0
   contentKey: number = 0
 
   addAssignment () {
-    this.assignment.push({ name: '', url: '' })
-    this.assignmentKey ++
+    this.assignment.push({ name: '', address: '' })
+    this.assignmentKey++
+    console.log(this.assignment)
   }
 
-  removeAssignment () {
-    console.log('I don\'t do anything')
+  removeAssignment (index: number) {
+    this.assignment.splice(index, 1)
+    this.assignmentKey--
+    console.log(this.assignment)
   }
 
   addContent () {
-    this.content.push({ name: '', url: '' })
-    this.contentKey ++
+    this.content.push({ name: '', address: '' })
+    this.contentKey++
+    console.log(this.content)
   }
 
-  removeContent () {
-    console.log('I don\'t do anything')
+  removeContent (index: number) {
+    this.content.splice(index, 1)
+    this.contentKey--
+    console.log(this.content)
   }
 
   sendSetup () {
-    console.log(this.assignment)
     let host = 'backend.hal-3900.com'
     if (window.location.host !== 'hal-3900.com') {
       host = 'localhost:9447'
     }
     // TODO make sure wrapped as correct formatted JS object
+    const courseCode = this.courseCode
+    const forum = this.forum
+    const outline = [{ "name": "course_outline", "address": this.outline}]
+    const assignment = this.assignment
+    const content = this.content
+
+    const pages = { courseCode, forum, outline, assignment, content }
+    console.log(pages);
     // TODO post to backend API (not set up yet)
     // TODO then load confirmation page w/option to go back to admin
   }
