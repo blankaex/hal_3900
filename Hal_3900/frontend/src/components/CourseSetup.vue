@@ -3,9 +3,9 @@
       <form>
         <input type="text" v-model.trim="courseCode" placeholder="Course Code"/>
         <input type="text" v-model.trim="forum" placeholder="Forum URL"/>
-        <input type="text" v-model.trim="outline.1" placeholder="Course Outline"/>
-        <input v-for="item in assignment" v-model.trim="item.name" @change.once="addAssignment()"/>
-        <input v-for="item in content" v-model.trim="item.name" @change.once="addAssignment()"/>
+<!--        <input type="text" v-model.trim="outline.item" placeholder="Course Outline"/>-->
+<!--        <input v-for="item in assignment" v-model.trim="item.name" @change.once="addAssignment()"/>-->
+<!--        <input v-for="item in content" v-model.trim="item.name" @change.once="addContent()"/>-->
         <button type="submit" v-on:click.prevent="send()">SUBMIT</button>
      </form>
     </div>
@@ -17,12 +17,24 @@
   export default class CourseSetup extends Vue {
     courseCode: string =''
     forum: string=''
-    outline: [{
-      name: '',
-      url: ''
-    }]
-    assignment: []
-    content: []
+    // outline: [{
+    //   name: '',
+    //   url: ''
+    // }]
+    // assignment: [{
+    //   name: '',
+    //   url: ''
+    // }]
+    // content: [{
+    //   name: '',
+    //   url: ''
+    // }]
+    // addAssignment() {
+    //   this.assignment.push({ name: '', url: '' })
+    // }
+    // addContent() {
+    //   this.content.push({ name: '', url: '' })
+    // }
     send() {
       let host = 'backend.hal-3900.com'
       if (window.location.host !== 'hal-3900.com') {

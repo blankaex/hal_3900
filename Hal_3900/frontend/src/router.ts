@@ -22,11 +22,11 @@ const router = new Router({
       name: 'login',
       component: Login
     },
-    {
-      path: '/admin',
-      name: 'admin',
-      component: Admin//TODO ADD MIDDLEWARE
-    }
+    // {
+    //   path: '/admin',
+    //   name: 'admin',
+    //   component: Admin
+    // }
   ]
 })
 
