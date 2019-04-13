@@ -1,5 +1,8 @@
 <template>
-    <div class="setup">
+  <div v-if="submitted" class="confirmation">
+    <p> Submitted Setup form </p>
+  </div>
+  <div v-else class="setup">
       <h1>Set up a new course</h1>
       <p>Enter the urls of pages on webcms3 below. Data will be taken from these pages and added to the chat database. Please allow time for the setup to complete: you can check up on the status here.</p>
       <form>
@@ -35,6 +38,7 @@
 import { Vue } from 'vue-property-decorator'
 
 export default class CourseSetup extends Vue {
+  submitted: boolean = false
   courseCode: string =''
   forum: string =''
   outline: string =''
@@ -88,12 +92,12 @@ export default class CourseSetup extends Vue {
       host = 'localhost:9447'
     }
     // post setup info to backend
-    this.$http.post(`http://${host}/api/admin/setup`, { body: { pagesToScrape } })
+    this.$http.post(`http://${host}/api/admin/setup`, { pagesToScrape })
       .then(res => {
         console.log(res)
         if (res.ok) {
           // TODO if backend response ok, show confirmation page
-          console.log("Confirmed received")
+          this.submitted = true
         }
       })
   }
