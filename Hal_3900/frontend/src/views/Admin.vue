@@ -5,16 +5,15 @@
 </template>
 
 <script lang="ts">
-  import { Component, Vue } from 'vue-property-decorator'
-  import CourseSetup from '@/components/CourseSetup.vue'
+import { Component, Vue } from 'vue-property-decorator'
+import CourseSetup from '@/components/CourseSetup.vue'
 
-  @Component({
-    components: {
-      CourseSetup
-    }
-  })
-
-  export default class Admin extends Vue {}
+@Component({
+  components: {
+    CourseSetup
+  }
+})
+export default class Admin extends Vue {}
 </script>
 
 <style scoped lang="sass">

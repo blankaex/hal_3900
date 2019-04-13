@@ -29,7 +29,7 @@ function isAuthedSimple () {
 export default function checkAuth (context: Context) {
   console.log('checking Auth')
   const { router, next } = context
-  if (!isAuthedSimple()){
+  if (!isAuthedSimple()) {
     return router.push({ name: 'login' })
   }
   return next()
