@@ -18,7 +18,7 @@ export default class Login extends Vue {
   username: any;
   login () {
     if (this.username) {
-      // get URL for backend
+      // get URL for backend API
       let host = 'backend.hal-3900.com'
       if (window.location.host !== 'hal-3900.com') {
         host = 'localhost:9447'
