@@ -1,39 +1,39 @@
 <template>
-  <div class="userMsg">
+  <div class="halMsg">
+    <img src="../../assets/hal.png">
     <div v-if="message.type == 'simple'" class="text"
       :style="{'background': getGradient(message.from)}">{{message.body}}</div>
-    <img src="../assets/user.png">
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
-import { BotResponse, Theme } from './types'
+import { BotResponse, Theme } from './../types'
 
 @Component
-export default class UserMessage extends Vue {
+export default class HalMessage extends Vue {
   @Prop() message:any
 
   getGradient () {
     const theme:Theme = this.$store.state.theme
-    const pg = theme.primaryGradient
-    return `linear-gradient(to right, ${pg[0]}, ${pg[1]})`
+    const sg = theme.secondaryGradient
+    return `linear-gradient(to right, ${sg[0]}, ${sg[1]})`
   }
 }
 </script>
 
 <style scoped lang="sass">
-.userMsg
+.halMsg
   @extend %flex-row
   width: 100%
   margin-bottom: 0.5rem
-  justify-content: flex-end
-.userMsg img
+  justify-content: flex-start
+.halMsg img
   width: 48px
   height: 48px
   border-radius: 50%
   margin: 0.5rem
-.userMsg .text
+.halMsg .text
   padding: 0.5rem 1rem
   position: relative
   font-family: 'Raleway', sans-serif

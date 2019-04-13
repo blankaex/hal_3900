@@ -1,6 +1,6 @@
 <template>
     <div class="log">
-      <div class="logline" v-for="logItem in $store.state.log" :key="logItem.timestamp.unix()">
+      <div class="logline" v-for="logItem in $store.state.log" :key="logItem.id">
         <span>{{logItem.timestamp.calendar()}}</span><br>
         {{logItem.message}}
       </div>

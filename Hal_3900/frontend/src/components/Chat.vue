@@ -6,7 +6,7 @@
       :key="message.id"
       :message="message">
     </Message>
-    <LoadingAnim v-if="loading()"></LoadingAnim>
+    <LoadingMessage v-if="loading()"></LoadingMessage>
   </div>
   <div class="input" v-on:keydown.enter="send" >
     <input type="text"
@@ -27,9 +27,9 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import { BotResponse, Theme, AppState } from './types'
-import ThemedIcon from './ThemedIcon.vue'
+import ThemedIcon from './utility/ThemedIcon.vue'
 import Message from './Message.vue'
-import LoadingAnim from './LoadingAnim.vue'
+import LoadingAnim from './messages/LoadingMessage.vue'
 
 @Component({
   components: {

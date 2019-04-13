@@ -1,6 +1,6 @@
 <template>
   <div class="halMsg">
-    <img src="../assets/hal.png">
+    <img src="../../assets/hal.png">
     <div class="options" :style="{'background': getGradient()}">
         <div class="item" v-for="(option,i) in options" :key="option._id">
           <div class="selectBest" @click="selectBest(option,i, message.id)"></div>{{option.text.trim()}}</div>
@@ -10,7 +10,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
-import { BotResponse, Theme } from './types'
+import { BotResponse, Theme } from './../types'
 
 @Component
 export default class OptionsMessage extends Vue {
@@ -36,7 +36,7 @@ export default class OptionsMessage extends Vue {
 </script>
 
 <style scoped lang="sass">
- .options
+.options
   padding: 0.5rem 1rem
   position: relative
   font-family: 'Raleway', sans-serif
@@ -48,4 +48,14 @@ export default class OptionsMessage extends Vue {
   white-space: -pre-wrap
   white-space: -o-pre-wrap
   word-wrap: break-word
+.halMsg
+  @extend %flex-row
+  width: 100%
+  margin-bottom: 0.5rem
+  justify-content: flex-start
+.halMsg img
+  width: 48px
+  height: 48px
+  border-radius: 50%
+  margin: 0.5rem
 </style>

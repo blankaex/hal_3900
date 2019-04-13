@@ -1,6 +1,6 @@
 <template>
   <div class="halMsg">
-    <img src="../assets/hal.png">
+    <img src="../../assets/hal.png">
     <div class="spinner">
       <div class="double-bounce1"
         :style="{'background-color': this.$store.state.theme.secondary}"></div>
@@ -66,18 +66,4 @@ export default class LoadingAnim extends Vue {
   height: 48px
   border-radius: 50%
   margin: 0.5rem
-
-.halMsg .text
-  padding: 0.5rem 1rem
-  position: relative
-  font-family: 'Raleway', sans-serif
-  border-radius: 10px
-  color: white
-  max-width: 60%
-  white-space: pre-wrap
-  white-space: -moz-pre-wrap
-  white-space: -pre-wrap
-  white-space: -o-pre-wrap
-  word-wrap: break-word
-
 </style>

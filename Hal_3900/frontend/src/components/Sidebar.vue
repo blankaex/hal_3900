@@ -24,8 +24,8 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import { Theme } from './types'
-import ThemedIcon from './ThemedIcon.vue'
-import Log from './Log.vue'
+import ThemedIcon from './utility/ThemedIcon.vue'
+import Log from './utility/Log.vue'
 
 @Component({
   components: {
