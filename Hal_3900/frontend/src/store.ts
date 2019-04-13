@@ -82,6 +82,7 @@ function training (payload: string):string {
 
 export default new Vuex.Store<Store>({
   state: {
+    user: null,
     messages: [
       {
         id: '0',
@@ -129,6 +130,12 @@ export default new Vuex.Store<Store>({
     ]
   },
   mutations: {
+    login(state, user) {
+      state.user = user
+    },
+    logout(state, user) {
+      state.user = null
+    },
     storeMessage (state, payload) {
       const generatedUuid = uuid()
       state.messages.push({

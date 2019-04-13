@@ -16,7 +16,6 @@ import Sidebar from '@/components/Sidebar.vue'
     Sidebar
   }
 })
-
 export default class Home extends Vue {}
 </script>
 

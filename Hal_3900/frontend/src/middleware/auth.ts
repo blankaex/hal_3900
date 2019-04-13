@@ -1,5 +1,6 @@
 import VueRouter, { Route } from 'vue-router'
 import Vue from 'vue'
+import store from '../store'
 
 type Context = {
   from: Route,
@@ -16,10 +17,19 @@ function parseCookies (cookie: string) {
   return cookies
 }
 
-export default function checkAuth (context: Context) {
-  const { router, next } = context
+function isAuthedWithCookie () {
   const session = parseCookies(document.cookie).get('session')
-  if (session === undefined) {
+  return session
+}
+
+function isAuthedSimple () {
+  return store.state.user
+}
+
+export default function checkAuth (context: Context) {
+  console.log('checking Auth')
+  const { router, next } = context
+  if (!isAuthedSimple()) {
     return router.push({ name: 'login' })
   }
   return next()
