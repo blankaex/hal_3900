@@ -8,6 +8,10 @@ module.exports = function(app)
     // User API endpoint
     const users = require('./api/users');
     app.use('/api/users', users)
+    
+    // Admin API endpoint
+    const admin = require('./api/admin');
+    app.use('/api/admin', admin)
 
     // Quiz API endpoint
     const quiz = require('./api/quiz');
