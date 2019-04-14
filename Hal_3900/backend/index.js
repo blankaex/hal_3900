@@ -8,7 +8,22 @@ logger.level = 'info';
 require('express-ws')(app);
 
 // Middleware
-app.use(cors());
+var whitelist = [
+    'http://hal-3900.com',
+    'http://localhost:8080'
+]
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  },
+  credentials: true
+}
+
+app.use(cors(corsOptions));
 app.use(bodyParser.json({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
 
