@@ -5,19 +5,18 @@ const db = new DB();
 
 // lists all admins
 router.get('/all', async (req, res) => {
-    if(req.session.admin === true) {
-        if (!db.connected)
-            await db.connect();
+    if(!req.session.admin)
+        res.status(401).json({'response': 'You are not authorized to make this request.'});
 
-        const result = await db.search({}, 'admins');
+    if (!db.connected)
+        await db.connect();
 
-        if (result.length > 0)
-            res.status(200).json(result);
-        else
-            res.status(400).json({'response': 'No users found.'});
-    } else {
-            res.status(401).json({'response': 'You are not authorized to make this request.'});
-    }
+    const result = await db.search({}, 'admins');
+
+    if (result.length > 0)
+        res.status(200).json(result);
+    else
+        res.status(400).json({'response': 'No users found.'});
 });
 
 // registers user as admin
