@@ -25,12 +25,12 @@ router.post('/register', async (req, res) => {
     if (!db.connected)
         await db.connect();
 
-    const query = {
-        username: { req.body.username }, 
-        password: { req.body.password } 
+    const obj = {
+        username: req.body.username, 
+        password: req.body.password 
     };
 
-    db.addToCollection([query], 'admins');
+    db.addToCollection([obj], 'admins');
     res.status(200).json({'response': 'Username ' + req.session.user + ' registered as admin.'});
 });
 
