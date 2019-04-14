@@ -39,6 +39,7 @@ export interface Theme {
 }
 
 export interface Store {
+    user: string|null,
     messages: Message[],
     socket: WebSocket|null,
     activeMessage: string,
@@ -46,5 +47,5 @@ export interface Store {
     log: Log[],
     theme: Theme,
     themes: Theme[],
-    socketURL: string
+    host: string
 }

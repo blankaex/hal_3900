@@ -8,7 +8,7 @@ Vue.use(Vuex)
 
 function messageHandler (commit: Commit, res: MessageEvent) {
   const resObj:BotResponse = JSON.parse(res.data)
-
+  commit('changeStatus', AppState.READY)
   if (!resObj) {
     commit('log', `[ERROR] Recieved Empty Response`)
     return
@@ -16,8 +16,8 @@ function messageHandler (commit: Commit, res: MessageEvent) {
     commit('log', `[ERROR] Recieved Empty Data field in response`)
     return
   }
+
   commit('log', `identified intent: ${resObj.data.intent}`)
-  commit('log', `got response: ${resObj.data.response}`)
   commit('storeMessage', {
     type: 'simple',
     from: 'bot',
@@ -52,7 +52,7 @@ function socketReady (state: Store, commit: Commit):Promise<{}> {
     if (sock && (sock.readyState === sock.CLOSED || sock.readyState === sock.CLOSING)) {
       commit('log', '[ERROR] Socket is closed? Reconnecting...')
     }
-    state.socket = new WebSocket(state.socketURL)
+    state.socket = new WebSocket(`ws://${state.host}/talk`)
     ready = new Promise(resolve => {
       state.socket!.onopen = resolve
       state.socket!.onmessage = (res:MessageEvent) => messageHandler(commit, res)
@@ -91,7 +91,7 @@ export default new Vuex.Store<Store>({
         body: 'Hello, welcome back!'
       }
     ],
-    socketURL: process.env.PROD ? 'wsL//backend.hal-3900.com/talk' : 'ws://localhost:9447/talk',
+    host: process.env.PROD ? 'backend.hal-3900.com' : 'localhost:9447',
     socket: null,
     activeMessage: '0',
     status: AppState.READY,
@@ -130,10 +130,10 @@ export default new Vuex.Store<Store>({
     ]
   },
   mutations: {
-    login(state, user) {
+    login (state, user) {
       state.user = user
     },
-    logout(state, user) {
+    logout (state) {
       state.user = null
     },
     storeMessage (state, payload) {
@@ -163,6 +163,7 @@ export default new Vuex.Store<Store>({
   },
   actions: {
     sendMessage ({ commit, state }, payload) {
+      commit('changeStatus', AppState.PENDING)
       socketReady(state, commit)
         .then(() => state.socket!.send(msg(payload)))
       commit('storeMessage', {

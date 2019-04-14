@@ -1,6 +1,6 @@
 <template>
     <div class="admin">
-      <CourseSetup/>
+      <!-- <CourseSetup/> -->
     </div>
 </template>
 

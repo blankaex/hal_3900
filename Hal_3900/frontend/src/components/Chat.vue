@@ -29,13 +29,13 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 import { BotResponse, Theme, AppState } from './types'
 import ThemedIcon from './utility/ThemedIcon.vue'
 import Message from './Message.vue'
-import LoadingAnim from './messages/LoadingMessage.vue'
+import LoadingMessage from './messages/LoadingMessage.vue'
 
 @Component({
   components: {
     ThemedIcon,
     Message,
-    LoadingAnim
+    LoadingMessage
   }
 })
 export default class Chat extends Vue {
