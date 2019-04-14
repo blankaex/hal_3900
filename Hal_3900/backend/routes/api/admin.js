@@ -30,7 +30,7 @@ router.post('/register', async (req, res) => {
     };
 
     db.addToCollection([obj], 'admins');
-    res.status(200).json({'response': 'Username ' + req.session.user + ' registered as admin.'});
+    res.status(200).json({'response': 'Username ' + req.body.username + ' registered as admin.'});
 });
 
 // log in as an admin
@@ -52,6 +52,13 @@ router.post('/login', async (req, res) => {
     } else {
         res.status(400).json({'response': 'Username or password invalid.'});
     }
+});
+
+// log out as an admin
+router.post('/logout', async (req, res) => {
+    req.session.user = undefined;
+    req.session.admin = undefined;
+    res.status(200).json({'response': 'Logged out successfully.'});
 });
 
 module.exports = router;
