@@ -22,7 +22,7 @@ const getPage = async (linkInfo) => {
 };
 
 
-const scrapeForum = async (forumRoot, courseCode, intent) => {
+const scrapeForum = async (forumRoot, courseCode) => {
 
     // GET FORUM HTML
     const linkInfo = {"address": forumRoot};
@@ -71,6 +71,12 @@ const scrapeForum = async (forumRoot, courseCode, intent) => {
                 // const questionPage = await getPage({address});
                 const apiResponse = await getPage({"address": url});
                 const responseObject = JSON.parse(apiResponse);
+                let intent = "content";
+                if (pageList.tags.filter(tag => tag.name === "assignments")){
+                    intent = "assignments";
+                } else if (pageList.tags.filter(tag => tag.name === "course outline")){
+                    intent = "outline";
+                }
                 return process.getForumPostObject(responseObject, pageList.tags, intent, courseCode);
             } catch (err) {
                 console.error(err);
@@ -80,8 +86,9 @@ const scrapeForum = async (forumRoot, courseCode, intent) => {
         // GETS ARRAY OF POST OBJECTS FROM THE MAP
         const postsArray = await Promise.all(postObjects);
 
-        // FILTER NULL RESULTS
-        const posts = postsArray.filter(item => item != null);
+        // FILTER NULL RESULTS AND POSTS WITH 0 ANSWERS
+        const posts = postsArray.filter(item => item != null && item.answers.length > 0);
+
 
         // SAVE JSON TO FILE
         fs.writeFileSync(data_forum_folder + pageList.topicPageId + ".json", JSON.stringify({posts}));

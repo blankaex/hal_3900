@@ -83,7 +83,7 @@ module.exports = class DB {
 		logger.info('Starting scraper to initialize data. This might take a while');
 		this.runTaskQueue(require("./pagesToScrape.json"))
 
-		// this.backup();
+		// this.backup(); // careful with synchronisation
 
 	};
 	

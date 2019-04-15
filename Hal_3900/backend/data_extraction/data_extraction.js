@@ -1,5 +1,6 @@
 const scraper = require('./scrape.js');
 const task_queue = require('./taskQueue.js');
+const test_new = require('./testRunAnalysis.js');
 
 /**
  * Steps from start to finish:
@@ -8,8 +9,9 @@ const task_queue = require('./taskQueue.js');
  */
 
 const getDataToDb = async (input, db) => {
-    await scraper.scrapeSpecified(input);
-    task_queue.runAnalysis(db);
+    // await scraper.scrapeSpecified(input);
+    // consider running intent grouping to make the new tagging method easier - discuss with Yi
+    await test_new.runAnalysis(db);
 };
 
 module.exports = {getDataToDb};
