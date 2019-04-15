@@ -9,7 +9,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
-import { BotResponse, Theme } from './types'
+import { BotResponse, Theme } from './../types'
 
 @Component
 export default class ThemedIcon extends Vue {
