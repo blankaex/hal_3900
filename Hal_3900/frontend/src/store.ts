@@ -64,18 +64,20 @@ function socketReady (state: Store, commit: Commit):Promise<{}> {
   return ready
 }
 
-function msg (payload: string):string {
+function msg (course: string|null, payload: string):string {
   return JSON.stringify({
     type: 'message',
+    course,
     error: false,
     text: payload
   })
 }
 
-function training (payload: string):string {
+function training (course: string|null, payload: string):string {
   return JSON.stringify({
     type: 'training',
     error: false,
+    course,
     choice: payload
   })
 }
@@ -112,7 +114,7 @@ export default new Vuex.Store<Store>({
       {
         code: 'COMP0000',
         name: 'Refactoring with Marie Kondo'
-      },
+      }
     ],
     host: process.env.PROD ? 'backend.hal-3900.com' : 'localhost:9447',
     socket: null,
@@ -192,7 +194,7 @@ export default new Vuex.Store<Store>({
     sendMessage ({ commit, state }, payload) {
       commit('changeStatus', AppState.PENDING)
       socketReady(state, commit)
-        .then(() => state.socket!.send(msg(payload)))
+        .then(() => state.socket!.send(msg(state.course, payload)))
       commit('storeMessage', {
         type: 'simple',
         from: 'user',
@@ -202,7 +204,7 @@ export default new Vuex.Store<Store>({
     },
     sendTraining ({ state, commit }, payload) {
       socketReady(state, commit)
-        .then(() => state.socket!.send(training(payload)))
+        .then(() => state.socket!.send(training(state.course, payload)))
       commit('log', `sent training data: ${payload}`)
     }
   }
