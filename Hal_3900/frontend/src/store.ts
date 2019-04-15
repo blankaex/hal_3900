@@ -82,7 +82,8 @@ function training (payload: string):string {
 
 export default new Vuex.Store<Store>({
   state: {
-    user: null,
+    user: localStorage.getItem('user'),
+    course: localStorage.getItem('course'),
     messages: [
       {
         id: '0',
@@ -90,6 +91,28 @@ export default new Vuex.Store<Store>({
         type: 'simple',
         body: 'Hello, welcome back!'
       }
+    ],
+    courses: [
+      {
+        code: 'COMP1521',
+        name: 'Intro to OS'
+      },
+      {
+        code: 'COMP1511',
+        name: 'Introduction to programming'
+      },
+      {
+        code: 'COMP3131',
+        name: 'Compiler Theory and Design'
+      },
+      {
+        code: 'COMP1000',
+        name: 'How not to cry'
+      },
+      {
+        code: 'COMP0000',
+        name: 'Refactoring with Marie Kondo'
+      },
     ],
     host: process.env.PROD ? 'backend.hal-3900.com' : 'localhost:9447',
     socket: null,
@@ -135,6 +158,7 @@ export default new Vuex.Store<Store>({
     },
     logout (state) {
       state.user = null
+      state.course = null
     },
     storeMessage (state, payload) {
       const generatedUuid = uuid()
@@ -152,6 +176,9 @@ export default new Vuex.Store<Store>({
     },
     changeStatus (state, status) {
       state.status = status
+    },
+    pickCourse(state, course) {
+      state.course = course
     },
     log (state, payload) {
       state.log.push({

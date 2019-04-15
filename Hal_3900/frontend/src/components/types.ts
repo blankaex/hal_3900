@@ -38,8 +38,15 @@ export interface Theme {
     secondaryGradient: [string, string]
 }
 
+export interface Course {
+    code: string,
+    name: string
+}
+
 export interface Store {
     user: string|null,
+    course: string|null,
+    courses: Course[],
     messages: Message[],
     socket: WebSocket|null,
     activeMessage: string,

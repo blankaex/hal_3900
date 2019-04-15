@@ -13,6 +13,8 @@ export default function checkAuth (context: Context) {
   const { router, next } = context
   if (!store.state.user) {
     return router.push({ name: 'login' })
+  } else if (!store.state.course) {
+    return router.push({ name: 'course' })
   }
   return next()
 }
