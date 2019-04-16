@@ -83,7 +83,7 @@ module.exports = class DB {
 		logger.info('Starting scraper to initialize data. This might take a while');
 		this.runTaskQueue(require("./pagesToScrape.json"))
 
-		// this.backup();
+		// this.backup(); // careful with synchronisation
 
 	};
 	
@@ -95,6 +95,17 @@ module.exports = class DB {
 		cursor.close();
 		return results;
 	};
+
+	// pass in a group object, returns array of items from the group
+	async findItemsByGroup(group){
+		const itemIds = group.items.map(id => ObjectId(id));
+		const collection = this.dbConn.collection('block');
+		let results = [];
+		const cursor = await collection.find({_id: {$in: itemIds}});
+		results = await cursor.toArray();
+		cursor.close();
+		return results;
+	}
 	
 	async findForumQuestionsByTopic(tag) {
 		const collection = this.dbConn.collection('forum');
