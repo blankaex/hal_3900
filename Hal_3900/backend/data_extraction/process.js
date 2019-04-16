@@ -3,8 +3,9 @@ const dataType = require('./getDataType.js');
 
 
 const stripText = (text) => {
-    let newText = text.replace(/<(?:.|\n)*?>/gm, '');   // strip html tags
-    newText = newText.replace(/[\W_]+/g," ");           // strip non-alphanumeric, replace with space
+    let newText = text.replace(/<small>(.*?)<\/small>/gm, ' ');   // strip <small></small> and anything in between
+    newText = newText.replace(/<(?:.|\n)*?>/gm, ' ');   // strip html tags
+    newText = newText.replace(/[\W\S^\$^\.]+/g, ' ');           // strip non-alphanumeric, replace with space
     newText = newText.replace(/\s+/g, ' ');             // remove excess whitespace
     newText = newText.toLowerCase().trim();             // tolower() and trim start/end whitespace
     return newText;
@@ -29,9 +30,12 @@ const parseData = (html, intent, courseCode) => {
             // get the tablerow text, strip whitespace to singles
             const td = [];
             $(e).find("td").map((i, e) => {
-                td.push($(e).text());
+                if ($(e).text().match(/[a-z]/i)){
+                    // only push if contains ANY alphabet chars
+                    td.push(stripText($(e).text()));
+                }
             });
-            const text = stripText(td.toString());
+            const text = td.join(', ');
             // construct js object
             items.push(dataType.getBlock(intent, courseCode, [], text));
         });

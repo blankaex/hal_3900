@@ -67,6 +67,7 @@ module.exports = class DB {
 	}
 	
 	async initData () {
+		this.backup();
 		let knownCollections = await this.dbConn.listCollections().toArray();
 		knownCollections = knownCollections.map(x=>x.name);
 		if (knownCollections.indexOf("forum") !== -1) {
