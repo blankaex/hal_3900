@@ -3,11 +3,19 @@ const dataType = require('./getDataType.js');
 
 
 const stripText = (text) => {
-    let newText = text.replace(/<small>(.*?)<\/small>/gm, ' ');   // strip <small></small> and anything in between
-    newText = newText.replace(/<(?:.|\n)*?>/gm, ' ');   // strip html tags
-    newText = newText.replace(/[\W\S^\$^\.]+/g, ' ');           // strip non-alphanumeric, replace with space
-    newText = newText.replace(/\s+/g, ' ');             // remove excess whitespace
-    newText = newText.toLowerCase().trim();             // tolower() and trim start/end whitespace
+    let newText = text.replace(/<small>(.*?)<\/small>/gm, ' ');  // strip <small></small> and anything in between
+    newText = newText.replace(/<(?:.|\n)*?>/gm, ' ');            // strip html tags
+    newText = newText.replace(/[^a-z0-9'/$\-._ ]/gi, ' ');    // strip certain non-alphanumeric, leave punctuation, replace with space
+    // newText = text.replace(/[\W_]+/g, ' ');                      // strip ALL non-alphanumeric, replace with space
+    newText = newText.replace(/\s+/g, ' ');                      // remove excess whitespace
+    newText = newText.toLowerCase().trim();                      // tolower() and trim start/end whitespace
+    return newText;
+};
+
+const stripTextForTags = (text) => {
+    let newText = text.replace(/[\W_]+/g, ' ');              // strip ALL non-alphanumeric, replace with space
+    newText = newText.replace(/\s+/g, ' ');                     // remove excess whitespace
+    newText = newText.toLowerCase().trim();                     // tolower() and trim start/end whitespace
     return newText;
 };
 
@@ -23,23 +31,24 @@ const parseData = (html, intent, courseCode) => {
         const prev = $(element).prev();
         if (prev.is("h1") ||  prev.is("h2") || prev.is("h3")
             || prev.is("h4") || prev.is("h5") || prev.is("h6")){
-            const name = stripText(prev.text());
+            const name = stripTextForTags(prev.text());
             tags.push(dataType.getTag(name));
         }
         $(element).find("tr").map((i, e) => {
             // get the tablerow text, strip whitespace to singles
             const td = [];
             $(e).find("td").map((i, e) => {
-                if ($(e).text().match(/[a-z]/i)){
-                    // only push if contains ANY alphabet chars
-                    td.push(stripText($(e).text()));
-                }
+                td.push(stripText($(e).text()));
             });
             const text = td.join(', ');
             // construct js object
-            items.push(dataType.getBlock(intent, courseCode, [], text));
+            if (text){
+                items.push(dataType.getBlock(intent, courseCode, [], text));
+            }
         });
-        grouped.push(dataType.getGrouped(intent, courseCode, tags, items));
+        if (items.length > 0){
+            grouped.push(dataType.getGrouped(intent, courseCode, tags, items));
+        }
     });
 
     // GET ALL LIST DATA
@@ -50,13 +59,15 @@ const parseData = (html, intent, courseCode) => {
         const prev = $(element).prev();
         if (prev.is("h1") ||  prev.is("h2") || prev.is("h3")
             || prev.is("h4") || prev.is("h5") || prev.is("h6")){
-            const name = stripText(prev.text());
+            const name = stripTextForTags(prev.text());
             tags.push(dataType.getTag(name));
         }
         $(element).find("li").each((i, e) => {
             // paragraph with stripped whitespace. could break them up further if needed
             const text = stripText($(e).text());
-            items.push(dataType.getBlock(intent, courseCode, [], text));
+            if (text) {
+                items.push(dataType.getBlock(intent, courseCode, [], text));
+            }
         });
         grouped.push(dataType.getGrouped(intent, courseCode, tags, items));
     });
@@ -69,11 +80,14 @@ const parseData = (html, intent, courseCode) => {
         const prev = $(element).prev();
         if (prev.is("h1") ||  prev.is("h2") || prev.is("h3")
             || prev.is("h4") || prev.is("h5") || prev.is("h6")){
-            const name = stripText(prev.text());
+            const name = stripTextForTags(prev.text());
             tags.push(dataType.getTag(name));
         }
-        // paragraph with stripped whitespace. could break them up further if needed
-        const text = stripText($(element).text());
+
+        let text;
+        // TODO if element contains table row, treat this as above and string the <small> tag
+            // paragraph with stripped whitespace. could break them up further if needed
+        text = stripText($(element).text());
 
         if (text){ // text is not falsy value or "",
             block.push(dataType.getBlock(intent, courseCode, tags, text));
@@ -147,18 +161,21 @@ const extractMessage = (messageItem) => {
 
 const getForumPostObject = (apiResponseObject, tags, intent, courseCode) => {
 
-    const question = stripText(apiResponseObject.result.messages[0].body);
-    const answers = [];
-    apiResponseObject.result.messages[0].children.forEach(child => {
-        const results = extractMessage(child);
-        results.forEach(result => {
-            if (result != null){
-                answers.push(result);
-            }
+    try {
+        const question = stripText(apiResponseObject.result.messages[0].body);
+        const answers = [];
+        apiResponseObject.result.messages[0].children.forEach(child => {
+            const results = extractMessage(child);
+            results.forEach(result => {
+                if (result != null){
+                    answers.push(result);
+                }
+            });
         });
-    });
-
-    return dataType.getForumObject(intent, courseCode, tags, question, answers);
+        return dataType.getForumObject(intent, courseCode, tags, question, answers);
+    } catch (err){
+        console.log("Item not available")
+    }
 };
 
 

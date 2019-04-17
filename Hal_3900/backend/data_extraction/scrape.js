@@ -6,7 +6,7 @@ const process = require('./process.js');
 
 const getPage = async (linkInfo) => {
 
-    const myCookie = "session=.eJwljs0OwiAQhN9lzz0sPwulL0Mo7CpRWwPtyfjuot4mX-abzAuiNO5XWI528gSxFliA7Fr8ykoVoqACkc4hOTFalGCyAhPk3iQe-4230XcGMWc0aNmyIjtn0TqZkrLBEcZK8c6LGV59PLn1fUsHD3GAvdVL3dI9np3bH33T7whhmOfg3h8K_TFU.D5dVgg.xZz7kxoJKsO8r_t4ThYMx4kyD4s; Domain=.webcms3.cse.unsw.edu.au; HttpOnly; Path=/"; // CAN SET THIS TO ACCESS FILES BEHIND A WALL.
+    const myCookie = "session=.eJwljksOwjAMBe_idRfO10kvE7mpAxHQoqRdIe5OgN3T6I00L0ilSb_CfLRTJkh1hRmy5cBsIope8opWOWaLJZJfSrY2wwS5t5KO_Sbb-JPOVLBoUmiCsaICGUZDxOiVW9FpjwXZDa8-ntL6vvEhQxxgb_VSN76ns0v7o-_6hTiMIUT__gANFDDr.D5g7_g.QzeMQhgOxKszCWNFwRXEGnOeXzQ; Domain=.webcms3.cse.unsw.edu.au; HttpOnly; Path=/"; // CAN SET THIS TO ACCESS FILES BEHIND A WALL.
 
     // This fetches the html from the page specified
     const html = await rp({
@@ -32,7 +32,7 @@ const scrapeForum = async (forumRoot, courseCode, dest) => {
     try {
         forumRootHtml = await getPage(linkInfo);
     } catch (err){
-        console.error(err);
+        // console.error(err);
     }
 
     // GET TOPIC PAGE LINKS FROM FORUM ROOT HTML

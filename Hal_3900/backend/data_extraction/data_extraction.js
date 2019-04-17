@@ -19,8 +19,7 @@ const getDataToDb = async (input, db) => {
         console.error(err);
     }
 
-    // await scraper.scrapeSpecified(input, data_forum_folder, data_page_folder);
-
+    await scraper.scrapeSpecified(input, data_forum_folder, data_page_folder);
     // consider running intent grouping to make the new tagging method easier - discuss with Yi
 
     await test_new.runAnalysis(db, data_forum_folder, data_page_folder);
