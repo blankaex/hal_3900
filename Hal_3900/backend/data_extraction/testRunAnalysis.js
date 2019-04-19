@@ -38,8 +38,8 @@ const run_stack = async (stack, db, type) => {
     if (stack.length === 0) return;
 
     switch (type){
-        case "forum": db.addToCollection(stack, 'forum'); break;
-        case "block": db.addToCollection(stack, 'block'); break;
+        case "forum": await db.addToCollection(stack, 'forum'); break;
+        case "block": await db.addToCollection(stack, 'block'); break;
         case "group":
             stack.forEach(item => handle_group(item, db));
             break;

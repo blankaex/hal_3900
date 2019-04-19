@@ -6,15 +6,20 @@ const process = require('./process.js');
 
 const getPage = async (linkInfo) => {
 
-    const myCookie = "session=.eJwljksOwjAMBe_idRfO10kvE7mpAxHQoqRdIe5OgN3T6I00L0ilSb_CfLRTJkh1hRmy5cBsIope8opWOWaLJZJfSrY2wwS5t5KO_Sbb-JPOVLBoUmiCsaICGUZDxOiVW9FpjwXZDa8-ntL6vvEhQxxgb_VSN76ns0v7o-_6hTiMIUT__gANFDDr.D5g7_g.QzeMQhgOxKszCWNFwRXEGnOeXzQ; Domain=.webcms3.cse.unsw.edu.au; HttpOnly; Path=/"; // CAN SET THIS TO ACCESS FILES BEHIND A WALL.
+    const myCookie = "session=.eJwljkEOgyAQRe_C2gWDDDhehsAwtKStNqAr07tX293Py3_JO1QoTfpdzVvbZVChZjUrtCn7JAAZkYAQDVN0ZTQFio62qEFxbyVs60OW8x9Hb1OyoNEi5eQNJxk9sAEEZqcdkUfNl1dfb2l9XeImp3iCtdVbXeIz7F3aH13rF4Kaponc5wsHHDE2.D5oE4g.g8lp_jOaVVzc2GduoMj58XAB3Pw; Domain=.webcms3.cse.unsw.edu.au; HttpOnly; Path=/"; // CAN SET THIS TO ACCESS FILES BEHIND A WALL.
 
     // This fetches the html from the page specified
-    const html = await rp({
-        uri: linkInfo.address,
-        headers: { Cookie: myCookie }
-    });
+    try {
+        const html = await rp({
+            uri: linkInfo.address,
+            headers: { Cookie: myCookie }
+        });
 
-    return html;
+        return html;
+    } catch (err){
+        console.log("Couldn't read this url")
+    }
+
 };
 
 // code suggestion from https://codingwithspike.wordpress.com/2018/03/10/making-settimeout-an-async-await-function/

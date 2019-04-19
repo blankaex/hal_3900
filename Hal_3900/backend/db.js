@@ -63,11 +63,20 @@ module.exports = class DB {
 
 	// pagesToScrape must be a js object formatted as per spec in wiki
 	async runTaskQueue (pagesToScrape) {
+		if (!this.connected)
+			await this.connect();
+
 		 await dataExtraction.getDataToDb(pagesToScrape, this);
 	}
 	
 	async initData () {
-		// this.backup();
+		//TODO remove before merge master
+	    // this.backupCourse('COMP1521');
+		// this.backupCourse('COMP1531');
+
+		// const courseCode = 'COMP1531';
+        // await this.runTaskQueue({courseCode});
+
 		let knownCollections = await this.dbConn.listCollections().toArray();
 		knownCollections = knownCollections.map(x=>x.name);
 		if (knownCollections.indexOf("forum") !== -1) {
@@ -147,6 +156,23 @@ module.exports = class DB {
 		
 		return {grouped, forum, block};
 	};
+
+	async findByCourseCode(courseCode, collectionName) {
+		const collection = this.dbConn.collection(collectionName);
+		// find all objects where tags contains an array elem with name = tag
+		const cursor = await collection.find({ courseCode: courseCode });
+		const results = await cursor.toArray();
+		cursor.close();
+		return results;
+	};
+
+	async findAllByCourseCode(courseCode) {
+		const grouped = await this.findByCourseCode(courseCode, 'grouped');
+		const block = await this.findByCourseCode(courseCode, 'block');
+		const forum = await this.findByCourseCode(courseCode, 'forum');
+
+		return {grouped, forum, block};
+	};
 	
 	async getUniqueTagsFromCollection(collectionName) {
 		const collection = this.dbConn.collection(collectionName);
@@ -198,8 +224,9 @@ module.exports = class DB {
 		}
 	};
 
+	// backup whole db to this file
 	async backup() {
-		// backup db to this file
+
 		const filename = '../data/db_backup.json';
 		const forum = await this.findAllFromCollection('forum');
 		const grouped = await this.findAllFromCollection('grouped');
@@ -208,16 +235,35 @@ module.exports = class DB {
 		fs.writeFileSync(filename, JSON.stringify({forum, grouped, block}));
 	}
 
+	// backup single course to this file
+	async backupCourse(courseCode) {
+		const dirname = '../data/backups/';
+		const filename = `${dirname}${courseCode}.json`;
+		try {
+			fs.mkdirSync(dirname, {recursive: true});
+		} catch (err){
+			console.log(err);
+		}
+		const data = await this.findAllByCourseCode(courseCode);
+		fs.writeFileSync(filename, JSON.stringify(data));
+	}
+
 	async restore() {
 		const filename = '../data/db_backup_old_1.json';
-
 		const items = require(filename);
 		this.addToCollection(items.forum, 'forum');
 		this.addToCollection(items.grouped, 'grouped');
 		this.addToCollection(items.block, 'block');
 
+	}
 
-
+	async restoreCourse(courseCode){
+		const dirname = '../data/backups/';
+		const filename = `${dirname}${courseCode}.json`;
+		const items = require(filename);
+		this.addToCollection(items.forum, 'forum');
+		this.addToCollection(items.grouped, 'grouped');
+		this.addToCollection(items.block, 'block');
 	}
 };
 
