@@ -23,4 +23,8 @@ const getForumObject = (intent, courseCode, tags, question, answers) => {
     return {intent, courseCode, tags, question, answers};
 };
 
-module.exports = {getTag, getAnswer, getBlock, getGrouped, getForumObject};
+const getQuizObject = (id, question, answer, tags=[]) => {
+    return {id, question, answer, tags};
+};
+
+module.exports = {getTag, getAnswer, getBlock, getGrouped, getForumObject, getQuizObject};

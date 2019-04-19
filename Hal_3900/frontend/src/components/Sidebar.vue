@@ -1,10 +1,16 @@
 <template>
 <div :class="{'sidebar':true,'open': open}">
   <div class="menu">
-    <ThemedIcon
-    @click="open = !open"
-    padding="0.45rem 0.5rem 0.35rem 0.5rem"
-    name="menu"></ThemedIcon>
+    <div class="actions">
+      <ThemedIcon
+      @click="open = !open"
+      padding="0.45rem 0.5rem 0.35rem 0.5rem"
+      name="menu"></ThemedIcon>
+      <ThemedIcon
+      @click="logout()"
+      padding="0.45rem 0.5rem 0.35rem 0.5rem"
+      name="logout-variant"></ThemedIcon>
+    </div>
     <div class="themes">
       <div v-for="theme in $store.state.themes"
         :key="theme.primary"
@@ -16,12 +22,7 @@
     </div>
   </div>
   <div class="content">
-    <div class="log">
-      <div class="logline" v-for="logItem in $store.state.log" :key="logItem.id">
-        <span>{{logItem.timestamp.calendar()}}</span><br>
-        {{logItem.message}}
-      </div>
-    </div>
+    <Log></Log>
   </div>
 </div>
 </template>
@@ -29,15 +30,23 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import { Theme } from './types'
-import ThemedIcon from './ThemedIcon.vue'
+import ThemedIcon from './utility/ThemedIcon.vue'
+import Log from './utility/Log.vue'
 
 @Component({
   components: {
-    ThemedIcon
+    ThemedIcon,
+    Log
   }
 })
 export default class Sidebar extends Vue {
   open:boolean = false
+  logout () {
+    localStorage.removeItem('user')
+    localStorage.removeItem('course')
+    this.$store.commit('logout')
+    this.$router.push({ name: 'login' })
+  }
 }
 </script>
 
@@ -62,35 +71,14 @@ export default class Sidebar extends Vue {
   flex-direction: column
   height: 100%
   width: 50px
+.actions
+  display: flex
+  flex-direction: column
 .content
   display: flex
   flex-direction: column
   height: 100%
   width: calc(100% - 50px)
-.content .log
-  width: calc(100% - 2rem)
-  height: calc(40% - 1rem)
-  overflow-y: scroll
-  margin-top: 1rem
-  margin-left: 1rem
-  margin-right: 1rem
-  border: 1px solid #EBEBEB
-  border-radius: 10px
-.content .log .logline
-  width: calc(100% - 2rem)
-  padding-left: 1rem
-  padding-right: 1rem
-  padding-top: 0.5rem
-  padding-bottom: 0.5rem
-  font-family: 'Raleway', sans-serif
-  color: #444
-  border-bottom: 1px solid #EBEBEB
-.content .log .logline span
-  font-family: 'Raleway', sans-serif
-  color: #777
-  margin-right: 1rem
-  width: 100%
-  font-size: 0.7rem
 .menu i
   color: #777
   font-size: 1.5rem
