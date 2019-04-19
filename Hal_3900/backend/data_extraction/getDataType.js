@@ -1,7 +1,7 @@
 // Use to enforce our data structures across the code base
 
 const getTag = (name, salience = 0.5) => {
-    const theta = 1;
+    const theta = salience;
     return {name, salience, theta};
 };
 

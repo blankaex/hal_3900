@@ -70,13 +70,7 @@ module.exports = class DB {
 	}
 	
 	async initData () {
-		//TODO remove before merge master
-	    // this.backupCourse('COMP1521');
-		// this.backupCourse('COMP1531');
-
-		// const courseCode = 'COMP1531';
-        // await this.runTaskQueue({courseCode});
-
+		// this.backup();
 		let knownCollections = await this.dbConn.listCollections().toArray();
 		knownCollections = knownCollections.map(x=>x.name);
 		if (knownCollections.indexOf("forum") !== -1) {

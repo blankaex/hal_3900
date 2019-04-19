@@ -19,11 +19,14 @@ const getDataToDb = async (input, db) => {
         console.error(err);
     }
 
+    // save pagesToScrape for laters :)
+    fs.writeFileSync(`../data/${input.courseCode}`, JSON.stringify(input));
+
     await scraper.scrapeSpecified(input, data_forum_folder, data_page_folder);
 
     // consider running intent grouping to make the new tagging method easier - discuss with Yi
-
-    await test_new.runAnalysis(db, data_forum_folder, data_page_folder);
+    // await task_queue.runAnalysis(db);  --> if running through NLP analysis
+    await test_new.runAnalysis(db, data_forum_folder, data_page_folder); // --> if putting from json straight to db
 };
 
 module.exports = {getDataToDb};
