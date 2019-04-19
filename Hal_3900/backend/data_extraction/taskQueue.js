@@ -37,6 +37,7 @@ const handle_forum = async (item, db) => {
     db.addToCollection([res], 'forum');
 };
 
+
 const handle_block = async (item, db) => {
     const res = await analyze.process_block_item(item);
     db.addToCollection([res], 'block');
@@ -47,6 +48,7 @@ const handle_group = async (group, db) => {
     const res = await analyze.process_grouped_item(group);
     try {
         const inserted = db.addToCollection(res.items, 'block');
+        console.log(inserted);
         const newGroup = dataType.getGrouped(res.intent, res.courseCode, res.tags, inserted.insertedIds);
         db.addToCollection([newGroup], 'grouped');
     } catch (err) {
