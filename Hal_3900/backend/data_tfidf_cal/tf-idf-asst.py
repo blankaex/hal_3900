@@ -6,7 +6,7 @@ from sklearn.feature_extraction.text import TfidfTransformer
 np.set_printoptions(threshold=np.inf)
 
 
-with open('data_page/assignment_2.json','r',encoding = 'utf-8') as f2:
+with open('COMP1521/data_page/assignment_2.json','r',encoding = 'utf-8') as f2:
     dic = json.load(f2)
 
 corpus = []
@@ -24,7 +24,7 @@ for texts in dic['grouped']:
 
 f2.close()
 
-with open('data_page/assignment_1.json',encoding = 'utf-8') as f1:
+with open('COMP1521/data_page/assignment_1.json',encoding = 'utf-8') as f1:
     dic = json.load(f1)
 
 for texts in dic['block']:

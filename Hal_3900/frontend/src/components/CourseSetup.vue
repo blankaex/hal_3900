@@ -113,6 +113,7 @@ export default class CourseSetup extends Vue {
           // TODO if backend response ok, show confirmation page
           this.submitted = true
         }
+        this.$forceUpdate()
       })
   }
 }

@@ -31,6 +31,11 @@ const getNewTags = async (text) => {
     return await Promise.all(newTags);
 };
 
+const process_quiz_item = async (item) => {
+    const newTags = await getNewTags(`${item.question} ${item.answer}`);
+    return dataType.getQuizObject(item.id, item.question, item.answer, newTags);
+};
+
 const process_forum_item = async (item) => {
     const newTags = await getNewTags(item.question);
     return dataType.getForumObject(item.intent, item.courseCode, item.tags.concat(newTags), item.question, item.answers);
@@ -50,4 +55,4 @@ const process_grouped_item = async (group) => {
     return dataType.getGrouped(group.intent, group.courseCode, group.tags, items); // not altering group tags at this stage
 };
 
-module.exports = {getNewTags, process_forum_item, process_block_item, process_grouped_item};
+module.exports = {getNewTags, process_quiz_item, process_forum_item, process_block_item, process_grouped_item};
