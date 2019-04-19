@@ -61,7 +61,7 @@ with open('corpus.csv','w',encoding = 'utf-8',newline = '') as c:
         writer.writerow([item])
 c.close()
 
-vectorizer = CountVectorizer()
+vectorizer = CountVectorizer(token_pattern='[A-Za-z0-9]+')
 #count numbers of each word
 X = vectorizer.fit_transform(corpus)
 #get words form word bag model
@@ -69,7 +69,7 @@ word = vectorizer.get_feature_names()
 with open('word_bag.csv','w',encoding = 'utf-8',newline = '') as c:
     writer = csv.writer(c)
     for item in word:
-        writer.writerow([item])
+        writer.writerow([item,item])
 c.close()
 with open('frenquce.csv','w',encoding = 'utf-8',newline = '') as c:
     writer = csv.writer(c)
