@@ -1,3 +1,4 @@
+const {ObjectId} = require('mongodb');
 const MongoClient = require('mongodb').MongoClient;
 const fs = require('fs');
 const logger = require('log4js').getLogger('Database');
@@ -78,9 +79,10 @@ module.exports = class DB {
 			return;
 		}
 
-		if (fs.existsSync('../data/db_backup.json')){
+		const filename = '../data/db_backup.json';
+		if (fs.existsSync(filename)){
 			logger.info(`Restoring data from backup`);
-			this.restore();
+			this.restore(filename);
 			return;
 		}
 
@@ -180,8 +182,8 @@ module.exports = class DB {
 		
 		// reduce to single array of unique
 		let tagSet = new Set(grouped);
-		block.map(b=>tagSet.add(b))
-		forum.map(f=>tagSet.add(f))
+		block.map(b=>tagSet.add(b));
+		forum.map(f=>tagSet.add(f));
 		return Array.from(tagSet);
 	};
 	
@@ -203,7 +205,28 @@ module.exports = class DB {
 		
 		// filter out duplicates
 		const response = candidates.filter((value, index, self)=>self.indexOf(value) === index);
-		return response.slice(0,4); // output top 3 results
+
+		// Format group and forum responses for item.
+		const tempResult = response.slice(0,4); // output top 3 results
+
+		const resultMap = tempResult.map(async (item) => {
+			if (item.items) { // if item is grouped it contains this field
+				// If candidate grouped, fetch items, construct text
+				const itemsList = await this.findItemsByGroup(item);
+				const textList = itemsList.map(i => i.text);
+				const text = textList.join("\n");
+				const newProp = {text};
+				return {...item, ...newProp};
+			} else if (item.answers){ // if item is forum question it contains this field.
+				// JUST SELECT THE 1st ANSWER FOR NOW
+				const text = item.answers[0].text;
+				const newProp = {text};
+				return {...item, ...newProp};
+			} else {
+				return item;
+			}
+		});
+		return await Promise.all(resultMap);
 	};
 
 	async train(bestResponse, ct, tags) {
@@ -221,7 +244,7 @@ module.exports = class DB {
 	// backup whole db to this file
 	async backup() {
 
-		const filename = '../data/db_backup.json';
+		const filename = '../data/db_backup_tags_with_google_cloud_nlp.json';
 		const forum = await this.findAllFromCollection('forum');
 		const grouped = await this.findAllFromCollection('grouped');
 		const block = await this.findAllFromCollection('block');
@@ -242,9 +265,8 @@ module.exports = class DB {
 		fs.writeFileSync(filename, JSON.stringify(data));
 	}
 
-	async restore() {
-		const filename = '../data/db_backup_old_1.json';
-		const items = require(filename);
+	async restore(backup_file) {
+		const items = require(backup_file);
 		this.addToCollection(items.forum, 'forum');
 		this.addToCollection(items.grouped, 'grouped');
 		this.addToCollection(items.block, 'block');

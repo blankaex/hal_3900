@@ -43,7 +43,9 @@ module.exports = class Bot {
 			let searchTags = responses[0].queryResult.parameters.fields.content.listValue.values;
 			searchTags = searchTags.map(x=>x.stringValue);
 			let options = await this.db.getDataPoints(searchTags);
+
 			options = options.map(x => {return{...x,question: msg}});
+
 			return {
 				response: result.fulfillmentText,
 				options,
