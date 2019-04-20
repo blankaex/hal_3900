@@ -56,12 +56,12 @@ router.post('/add', async (req, res) => {
     };
 
     // Classify content with tags
-
+    // NOTE you will need to have NLP service account set up to use this: same process as DF service account.
     const itemWithTags = analyzer.process_quiz_item(quizItem);
 
     // add to db
     if (!db.connected)
-        await db.connect()
+        await db.connect();
 
     db.addToCollection([itemWithTags], 'quiz');
 

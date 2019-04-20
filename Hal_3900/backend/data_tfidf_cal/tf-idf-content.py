@@ -9,7 +9,7 @@ np.set_printoptions(threshold=np.inf)
 
 corpus = []
 
-notes = ['data_page/notes_a.json','data_page/notes_b.json','data_page/notes_c.json','data_page/notes_d.json']
+notes = ['COMP1521/data_page/notes_a.json','COMP1521/data_page/notes_b.json','COMP1521/data_page/notes_c.json','COMP1521/data_page/notes_d.json']
 for path in notes:
     with open(path,'r',encoding = 'utf-8') as f:
         dic = json.load(f)

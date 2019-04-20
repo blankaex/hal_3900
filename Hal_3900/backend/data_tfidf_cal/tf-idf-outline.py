@@ -8,7 +8,7 @@ np.set_printoptions(threshold=np.inf)
 
 corpus = []
 
-with open('data_page/course_outline.json','r',encoding = 'utf-8') as fc:
+with open('COMP1521/data_page/course_outline.json','r',encoding = 'utf-8') as fc:
     dic = json.load(fc)
 for texts in dic['block']:
         if isinstance(texts['text'], str):
