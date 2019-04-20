@@ -3,9 +3,9 @@ import Router from 'vue-router'
 import Home from './views/Home.vue'
 import Login from './views/Login.vue'
 import Admin from './views/Admin.vue'
+import AdminLogin from './views/AdminLogin.vue'
 import checkAuth from './middleware/auth'
 import CourseSelect from './views/CourseSelect.vue'
-
 Vue.use(Router)
 
 const router = new Router({
@@ -23,6 +23,11 @@ const router = new Router({
       name: 'login',
       component: Login
     },
+    {
+      path: '/adminLogin',
+      name: 'adminLogin',
+      component: AdminLogin
+    },    
     {
       path: '/course',
       name: 'course',

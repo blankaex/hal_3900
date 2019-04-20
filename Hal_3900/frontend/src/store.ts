@@ -128,12 +128,18 @@ export default new Vuex.Store<Store>({
       }
     ],
     theme: {
-      primary: '#fd746c',
-      secondary: '#457fca',
-      primaryGradient: ['#ff9068', '#fd746c'],
-      secondaryGradient: ['#5691c8', '#457fca']
+      primary: '#F15F79',
+      secondary: '#B24592',
+      primaryGradient: ['#FFB75E', '#ED8F03'],
+      secondaryGradient: ['#F15F79', '#B24592']
     },
     themes: [
+      {
+        primary: '#F15F79',
+        secondary: '#B24592',
+        primaryGradient: ['#FFB75E', '#ED8F03'],
+        secondaryGradient: ['#F15F79', '#B24592']
+      },
       {
         primary: '#fd746c',
         secondary: '#457fca',
@@ -179,7 +185,7 @@ export default new Vuex.Store<Store>({
     changeStatus (state, status) {
       state.status = status
     },
-    pickCourse(state, course) {
+    pickCourse (state, course) {
       state.course = course
     },
     log (state, payload) {
