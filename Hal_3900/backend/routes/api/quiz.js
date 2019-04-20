@@ -35,6 +35,10 @@ router.get('/:id', async (req, res) => {
 
 // add a new question
 router.post('/add', async (req, res) => {
+    // admins only
+    if(!req.session.admin)
+        res.status(401).json({'response': 'You are not authorized to make this request.'});
+
     // very basic error checking
     if(!req.body.question && !req.body.answer)
         res.status(400).json({'response': 'Missing body parameters: question, answer'});
