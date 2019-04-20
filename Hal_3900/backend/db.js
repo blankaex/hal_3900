@@ -16,6 +16,7 @@ function asyncReadDir(path) {
 }
 
 function calcScore(tags, candidate) {
+	logger.info(`score, ${candidate.text}`);
 	return candidate.tags.reduce(
 			(acc, tag) => acc + (tags.includes(tag["name"]) ? tag.salience : 0),
 			0
@@ -208,15 +209,18 @@ module.exports = class DB {
 		const collection = this.dbConn.collection('block');
 		for(var i = 0; i< tags.length;i++){
 			logger.info(`find tag ${tags[i]}`);
+		
 			logger.info(`get into searching function`);
 		
 		// find all objects where tags contains an array elem with name = tag
 		
-			const cursor = await collection.find({"tags.name": tag } );
+			const cursor = await collection.find({"tags.name":tags[i]});
 			logger.info('start to transform');
 			const results = await cursor.toArray();
+			logger.info(`${results.length}`);
 			candidates = candidates.concat(results);
 		};
+		logger.info(`candidates: ${candidates.length}`);
 		// candidates = candidates.concat(await this.findAllFromCollection('block'));
 		// candidates = candidates.concat(await this.findAllFromCollection('forum'));
 		//calculate scores for each candidate
@@ -232,6 +236,7 @@ module.exports = class DB {
 		
 		// filter out duplicates
 		const response = candidates.filter((value, index, self)=>self.indexOf(value) === index);
+		logger.info(`candidates filtered ${response.length}`)
 		return response.slice(0,4); // output top 3 results
 	};
 
