@@ -76,22 +76,30 @@ module.exports = class DB {
 
 		// const courseCode = 'COMP1531';
         // await this.runTaskQueue({courseCode});
-
 		let knownCollections = await this.dbConn.listCollections().toArray();
 		knownCollections = knownCollections.map(x=>x.name);
 		if (knownCollections.indexOf("forum") !== -1) {
 			logger.info(`Detected collections, skipping init step`);
 			return;
 		}
+		const block = '../data/block.json';
+		const forum = '../data/forum.json';
+		const blockItem = require(block);
+		const forumItem = require(forum);
+		this.addToCollection(forumItem.forum, 'forum');
+		//this.addToCollection(items.grouped, 'grouped');
+		this.addToCollection(blockItem.block, 'block');
 
-		if (fs.existsSync('../data/db_backup.json')){
-			logger.info(`Restoring data from backup`);
-			this.restore();
-			return;
-		}
 
-		logger.info('Starting scraper to initialize data. This might take a while');
-		this.runTaskQueue(require("./pagesToScrape.json"))
+		//
+		// if (fs.existsSync('../data/db_backup.json')){
+		// 	logger.info(`Restoring data from backup`);
+		// 	this.restore();
+		// 	return;
+		// }
+		//
+		// logger.info('Starting scraper to initialize data. This might take a while');
+		// this.runTaskQueue(require("./pagesToScrape.json"))
 
 		// this.backup(); // careful with synchronisation
 
@@ -186,16 +194,15 @@ module.exports = class DB {
 		
 		// reduce to single array of unique
 		let tagSet = new Set(grouped);
-		block.map(b=>tagSet.add(b))
-		forum.map(f=>tagSet.add(f))
+		block.map(b=>tagSet.add(b));
+		forum.map(f=>tagSet.add(f));
 		return Array.from(tagSet);
 	};
 	
 	async getDataPoints(tags) {
-		let candidates = await this.findAllFromCollection('grouped');
-		candidates = candidates.concat(await this.findAllFromCollection('block'));
-		candidates = candidates.concat(await this.findAllFromCollection('forum'));
-
+		let candidates = await this.findAllFromCollection('block');
+		// candidates = candidates.concat(await this.findAllFromCollection('block'));
+		// candidates = candidates.concat(await this.findAllFromCollection('forum'));
 		//calculate scores for each candidate
 		candidates = candidates.map((candidate)=>{
 				return {

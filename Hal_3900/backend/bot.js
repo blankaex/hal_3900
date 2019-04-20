@@ -1,7 +1,7 @@
 const DB = require('./db');
 const dialogflow = require('dialogflow');
 const uuid = require('uuid');
-const DFconfig = require('./DFServiceAccount.json');
+const DFconfig = require('./data_tfidf_cal/DFServiceAccount_wordbag.json');
 const logger = require('log4js').getLogger('Bot');
 logger.level = 'info';
 
