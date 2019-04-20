@@ -38,6 +38,7 @@ module.exports = class DB {
 		const client = await MongoClient.connect(this.dbUrl,mongoConfig);
 		logger.info("Connected to database successfully");
 		this.dbConn = client.db(this.dbName);
+		//logger.info(`connect to:${dbConn}`)
 	}
 	
 	async dump(objects, collection='documents') {
@@ -140,9 +141,12 @@ module.exports = class DB {
 	}
 	
 	async findByCollectionAndTag(tag, collectionName) {
+		logger.info(`get into searching function`);
 		const collection = this.dbConn.collection(collectionName);
 		// find all objects where tags contains an array elem with name = tag
-		const cursor = await collection.find({ tags: { $elemMatch: { "name": tag } } } );
+		logger.info(`connect to db`);
+		const cursor = await collection.find({"tags.name": tag } );
+		logger.info('start to transform');
 		const results = await cursor.toArray();
 		cursor.close();
 		return results;
@@ -200,7 +204,19 @@ module.exports = class DB {
 	};
 	
 	async getDataPoints(tags) {
-		let candidates = await this.findAllFromCollection('block');
+		let candidates = [];
+		const collection = this.dbConn.collection('block');
+		for(var i = 0; i< tags.length;i++){
+			logger.info(`find tag ${tags[i]}`);
+			logger.info(`get into searching function`);
+		
+		// find all objects where tags contains an array elem with name = tag
+		
+			const cursor = await collection.find({"tags.name": tag } );
+			logger.info('start to transform');
+			const results = await cursor.toArray();
+			candidates = candidates.concat(results);
+		};
 		// candidates = candidates.concat(await this.findAllFromCollection('block'));
 		// candidates = candidates.concat(await this.findAllFromCollection('forum'));
 		//calculate scores for each candidate
