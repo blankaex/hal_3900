@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const DB = require('../../db');
 const db = new DB();
+const analyzer = require('../../data_extraction/analyze');
 
 // get all questions
 router.get('/', async (req, res) => {
@@ -46,18 +47,23 @@ router.post('/add', async (req, res) => {
     else if(!req.body.answer)
         res.status(400).json({'response': 'Missing body parameters: answer'});
 
+    // create object
+    const uniqueId = uuid.v4();
+    const quizItem = {
+        id: uniqueId,
+        question: req.body.question,
+        answer: req.body.answer
+    };
+
+    // Classify content with tags
+
+    const itemWithTags = analyzer.process_quiz_item(quizItem);
+
     // add to db
     if (!db.connected)
         await db.connect()
 
-    const uniqueId = uuid.v4();
-    db.addToCollection([
-        {
-            id: uniqueId,
-            question: req.body.question,
-            answer: req.body.answer
-        }
-    ], 'quiz');
+    db.addToCollection([itemWithTags], 'quiz');
 
     res.status(200).json({'response': `Question ${uniqueId} added.`});
 });

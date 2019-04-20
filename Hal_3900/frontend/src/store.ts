@@ -1,13 +1,91 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import { AppState, BotResponse, Store, Theme } from '@/components/types'
 import moment from 'moment'
-import { Theme } from '@/components/types'
 import uuid from 'uuid/v4'
+import Vue from 'vue'
+import Vuex, { Commit } from 'vuex'
 
 Vue.use(Vuex)
 
-export default new Vuex.Store({
+function messageHandler (commit: Commit, res: MessageEvent) {
+  const resObj:BotResponse = JSON.parse(res.data)
+  commit('changeStatus', AppState.READY)
+  if (!resObj) {
+    commit('log', `[ERROR] Recieved Empty Response`)
+    return
+  } else if (!resObj.data) {
+    commit('log', `[ERROR] Recieved Empty Data field in response`)
+    return
+  }
+
+  commit('log', `identified intent: ${resObj.data.intent}`)
+  commit('storeMessage', {
+    type: 'simple',
+    from: 'bot',
+    body: resObj.data.response
+  })
+
+  if (resObj.data.options && resObj.data.options.length > 0) {
+    commit('log', `got options: `)
+    resObj.data.options.map((o, i) => commit('log', `${i}. ${o.text} (${o._score})`))
+    commit('storeMessage', {
+      type: 'options',
+      from: 'bot',
+      body: resObj.data.options
+    })
+  }
+}
+
+function errorHandler (commit: Commit, res: Event) {
+  commit('log', `[ERROR] Websocket is having a right fit, see console for more info`)
+  console.dir(res)
+}
+
+/*
+ * This is how we do lazy loading, until the first request is sent
+ * the websocket is not connected.
+ * Will reconnect if the socket has died.
+ */
+function socketReady (state: Store, commit: Commit):Promise<{}> {
+  let ready = new Promise(resolve => resolve())
+  const sock = state.socket
+  if (sock === null || sock.readyState === sock.CLOSED || sock.readyState === sock.CLOSING) {
+    if (sock && (sock.readyState === sock.CLOSED || sock.readyState === sock.CLOSING)) {
+      commit('log', '[ERROR] Socket is closed? Reconnecting...')
+    }
+    state.socket = new WebSocket(`ws://${state.host}/talk`)
+    ready = new Promise(resolve => {
+      state.socket!.onopen = resolve
+      state.socket!.onmessage = (res:MessageEvent) => messageHandler(commit, res)
+      state.socket!.onerror = (res:Event) => errorHandler(commit, res)
+    })
+  } else if (sock.readyState === sock.CONNECTING) {
+    commit('log', '[ERROR] Socket is still connecting, dropping message :(')
+  }
+  return ready
+}
+
+function msg (course: string|null, payload: string):string {
+  return JSON.stringify({
+    type: 'message',
+    course,
+    error: false,
+    text: payload
+  })
+}
+
+function training (course: string|null, payload: string):string {
+  return JSON.stringify({
+    type: 'training',
+    error: false,
+    course,
+    choice: payload
+  })
+}
+
+export default new Vuex.Store<Store>({
   state: {
+    user: localStorage.getItem('user'),
+    course: localStorage.getItem('course'),
     messages: [
       {
         id: '0',
@@ -16,7 +94,32 @@ export default new Vuex.Store({
         body: 'Hello, welcome back!'
       }
     ],
+    courses: [
+      {
+        code: 'COMP1521',
+        name: 'Intro to OS'
+      },
+      {
+        code: 'COMP1511',
+        name: 'Introduction to programming'
+      },
+      {
+        code: 'COMP3131',
+        name: 'Compiler Theory and Design'
+      },
+      {
+        code: 'COMP1000',
+        name: 'How not to cry'
+      },
+      {
+        code: 'COMP0000',
+        name: 'Refactoring with Marie Kondo'
+      }
+    ],
+    host: process.env.PROD ? 'backend.hal-3900.com' : 'localhost:9447',
+    socket: null,
     activeMessage: '0',
+    status: AppState.READY,
     log: [
       {
         id: '0',
@@ -40,8 +143,8 @@ export default new Vuex.Store({
       {
         secondary: '#fd746c',
         primary: '#457fca',
-        secondaryGradient: ['#ff9068', '#fd746c'],
-        primaryGradient: ['#5691c8', '#457fca']
+        primaryGradient: ['#5691c8', '#457fca'],
+        secondaryGradient: ['#ff9068', '#fd746c']
       },
       {
         primary: '#f15f79',
@@ -52,39 +155,32 @@ export default new Vuex.Store({
     ]
   },
   mutations: {
-    sendMessage (state, payload) {
-      const generatedUuid = uuid()
-      state.messages.push({
-        id: generatedUuid,
-        type: 'simple',
-        from: 'user',
-        body: payload
-      })
-      state.activeMessage = generatedUuid
+    login (state, user) {
+      state.user = user
     },
-    recvMessage (state, payload) {
-      const generatedUuid = uuid()
-      state.messages.push({
-        id: generatedUuid,
-        from: 'bot',
-        type: 'simple',
-        body: payload
-      })
-      state.activeMessage = generatedUuid
+    logout (state) {
+      state.user = null
+      state.course = null
     },
-    recvOptions (state, payload) {
+    storeMessage (state, payload) {
       const generatedUuid = uuid()
       state.messages.push({
         id: generatedUuid,
-        from: 'bot',
-        type: 'options',
-        body: payload
+        type: payload.type,
+        from: payload.from,
+        body: payload.body
       })
       state.activeMessage = generatedUuid
     },
     changeTheme (state, payload) {
       const theme = state.themes.filter((x:Theme) => x.primary === payload)[0]
       state.theme = theme
+    },
+    changeStatus (state, status) {
+      state.status = status
+    },
+    pickCourse(state, course) {
+      state.course = course
     },
     log (state, payload) {
       state.log.push({
@@ -95,6 +191,21 @@ export default new Vuex.Store({
     }
   },
   actions: {
-
+    sendMessage ({ commit, state }, payload) {
+      commit('changeStatus', AppState.PENDING)
+      socketReady(state, commit)
+        .then(() => state.socket!.send(msg(state.course, payload)))
+      commit('storeMessage', {
+        type: 'simple',
+        from: 'user',
+        body: payload
+      })
+      commit('log', `sent: ${payload}`)
+    },
+    sendTraining ({ state, commit }, payload) {
+      socketReady(state, commit)
+        .then(() => state.socket!.send(training(state.course, payload)))
+      commit('log', `sent training data: ${payload}`)
+    }
   }
 })

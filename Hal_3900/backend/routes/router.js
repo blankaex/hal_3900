@@ -16,4 +16,8 @@ module.exports = function(app)
     // Quiz API endpoint
     const quiz = require('./api/quiz');
     app.use('/api/quiz', quiz)
+
+    // Admin API endpoint
+    const admin = require('./api/admin');
+    app.use('/api/admin', admin)
 }

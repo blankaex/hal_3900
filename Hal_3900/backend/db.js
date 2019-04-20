@@ -1,6 +1,7 @@
 const MongoClient = require('mongodb').MongoClient;
 const fs = require('fs');
 const logger = require('log4js').getLogger('Database');
+const dataExtraction = require('./data_extraction/data_extraction.js');
 logger.level = 'info';
 
 // Helper function to make fs.readdir
@@ -40,8 +41,8 @@ module.exports = class DB {
 	}
 	
 	async dump(objects, collection='documents') {
-		const collection = this.dbConn.collection(collection);
-		const res = await collection.insertMany(objects);
+		const collectionRef = this.dbConn.collection(collection);
+		const res = await collectionRef.insertMany(objects);
 		logger.info(`Inserted ${res.insertedCount} objects into collection ${collection}`);
 	}
 	
@@ -50,6 +51,7 @@ module.exports = class DB {
 		const collectionRef = this.dbConn.collection(collection);
 		const res = await collectionRef.insertMany(objects);
 		logger.info(`Inserted ${res.insertedCount} objects into collection ${collection}`);
+		return res;
 	}
 	
 	async search(obj, collection='documents') {
@@ -58,31 +60,41 @@ module.exports = class DB {
 		results = await collectionRef.find(obj).toArray();
 		return results;
 	}
+
+	// pagesToScrape must be a js object formatted as per spec in wiki
+	async runTaskQueue (pagesToScrape) {
+		if (!this.connected)
+			await this.connect();
+
+		 await dataExtraction.getDataToDb(pagesToScrape, this);
+	}
 	
 	async initData () {
+		//TODO remove before merge master
+	    // this.backupCourse('COMP1521');
+		// this.backupCourse('COMP1531');
+
+		// const courseCode = 'COMP1531';
+        // await this.runTaskQueue({courseCode});
+
 		let knownCollections = await this.dbConn.listCollections().toArray();
 		knownCollections = knownCollections.map(x=>x.name);
 		if (knownCollections.indexOf("forum") !== -1) {
 			logger.info(`Detected collections, skipping init step`);
 			return;
 		}
-		
-		const forumDir = "data/data_forum";
-		const dataDir = "data/data_page";
-	
-		logger.info(`Reading forum posts from ${forumDir}`);
-		let items = await asyncReadDir(forumDir);
-		for (const item of items) {
-			await this.addToCollection(require(`./${forumDir}/${item}`).posts, 'forum');
+
+		if (fs.existsSync('../data/db_backup.json')){
+			logger.info(`Restoring data from backup`);
+			this.restore();
+			return;
 		}
 
-		logger.info(`Reading blocked and grouped posts from ${dataDir}`);
-		items = await asyncReadDir(dataDir);
-		for (const item of items) {
-			const dataObject = require(`./${dataDir}/${item}`);
-			await this.addToCollection(dataObject.grouped, 'grouped');
-			await this.addToCollection(dataObject.block, 'block');
-		}
+		logger.info('Starting scraper to initialize data. This might take a while');
+		this.runTaskQueue(require("./pagesToScrape.json"))
+
+		// this.backup(); // careful with synchronisation
+
 	};
 	
 	async findAllFromCollection(collectionName) {
@@ -93,6 +105,17 @@ module.exports = class DB {
 		cursor.close();
 		return results;
 	};
+
+	// pass in a group object, returns array of items from the group
+	async findItemsByGroup(group){
+		const itemIds = group.items.map(id => ObjectId(id));
+		const collection = this.dbConn.collection('block');
+		let results = [];
+		const cursor = await collection.find({_id: {$in: itemIds}});
+		results = await cursor.toArray();
+		cursor.close();
+		return results;
+	}
 	
 	async findForumQuestionsByTopic(tag) {
 		const collection = this.dbConn.collection('forum');
@@ -131,6 +154,23 @@ module.exports = class DB {
 		const block = await this.findByCollectionAndTag(tag, this.dbConn, 'block');
 		const forum = await this.findByCollectionAndTag(tag, this.dbConn, 'forum');
 		
+		return {grouped, forum, block};
+	};
+
+	async findByCourseCode(courseCode, collectionName) {
+		const collection = this.dbConn.collection(collectionName);
+		// find all objects where tags contains an array elem with name = tag
+		const cursor = await collection.find({ courseCode: courseCode });
+		const results = await cursor.toArray();
+		cursor.close();
+		return results;
+	};
+
+	async findAllByCourseCode(courseCode) {
+		const grouped = await this.findByCourseCode(courseCode, 'grouped');
+		const block = await this.findByCourseCode(courseCode, 'block');
+		const forum = await this.findByCourseCode(courseCode, 'forum');
+
 		return {grouped, forum, block};
 	};
 	
@@ -183,5 +223,47 @@ module.exports = class DB {
 			}
 		}
 	};
+
+	// backup whole db to this file
+	async backup() {
+
+		const filename = '../data/db_backup.json';
+		const forum = await this.findAllFromCollection('forum');
+		const grouped = await this.findAllFromCollection('grouped');
+		const block = await this.findAllFromCollection('block');
+
+		fs.writeFileSync(filename, JSON.stringify({forum, grouped, block}));
+	}
+
+	// backup single course to this file
+	async backupCourse(courseCode) {
+		const dirname = '../data/backups/';
+		const filename = `${dirname}${courseCode}.json`;
+		try {
+			fs.mkdirSync(dirname, {recursive: true});
+		} catch (err){
+			console.log(err);
+		}
+		const data = await this.findAllByCourseCode(courseCode);
+		fs.writeFileSync(filename, JSON.stringify(data));
+	}
+
+	async restore() {
+		const filename = '../data/db_backup_old_1.json';
+		const items = require(filename);
+		this.addToCollection(items.forum, 'forum');
+		this.addToCollection(items.grouped, 'grouped');
+		this.addToCollection(items.block, 'block');
+
+	}
+
+	async restoreCourse(courseCode){
+		const dirname = '../data/backups/';
+		const filename = `${dirname}${courseCode}.json`;
+		const items = require(filename);
+		this.addToCollection(items.forum, 'forum');
+		this.addToCollection(items.grouped, 'grouped');
+		this.addToCollection(items.block, 'block');
+	}
 };
 

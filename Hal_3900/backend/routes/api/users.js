@@ -5,8 +5,7 @@ const db = new DB();
 
 // get all users
 router.get('/', async (req, res) => {
-    if (!db.connected)
-        await db.connect();
+
 
     const result = await db.search({}, 'users');
 
