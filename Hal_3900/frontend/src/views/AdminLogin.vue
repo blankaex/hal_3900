@@ -32,30 +32,66 @@ export default class Login extends Vue {
       return
     }
     this.error = ''
-  }
-  login () {
-    if (!this.username) {
-      this.error = 'username must not be empty'
+    if (!this.username || !this.password) {
+      this.error = 'username/password must not be empty'
       return
     }
 
     const host = this.$store.state.host
-    const payload = { body: { zid: this.username } }
-    const options = { credentials: true }
-    fetch(`http://${host}/api/users/set`, {
+    const options:RequestInit = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       credentials: 'include',
       body: JSON.stringify({
-        zid: this.username
+        username: this.username,
+        password: this.password
       })
-    }).then(r => r.json())
-      .then(r => {
-        this.$store.commit('login', this.username)
-        localStorage.setItem('user', this.username)
-        this.$router.push({ name: 'course' })
+    }
+    fetch(`http://${host}/api/admin/register`, options)
+      .then((r:Response) => {
+        if (r.status !== 200) throw Error('Non 200 response')
+        this.$store.commit('login', {
+          name: this.username,
+          admin: true
+        })
+        this.$router.push({ name: 'admin' })
+      })
+      .catch(() => {
+        this.error = 'Username Taken'
+      })
+  }
+  login () {
+    if (!this.username || !this.password) {
+      this.error = 'username/password must not be empty'
+      return
+    }
+    this.error = ''
+
+    const host = this.$store.state.host
+    const options:RequestInit = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+      body: JSON.stringify({
+        username: this.username,
+        password: this.password
+      })
+    }
+    fetch(`http://${host}/api/admin/login`, options)
+      .then((r:Response) => {
+        if (r.status !== 200) throw Error('Non 200 response')
+        this.$store.commit('login', {
+          name: this.username,
+          admin: true
+        })
+        this.$router.push({ name: 'admin' })
+      })
+      .catch(() => {
+        this.error = 'Username/Password Incorrect'
       })
   }
 }

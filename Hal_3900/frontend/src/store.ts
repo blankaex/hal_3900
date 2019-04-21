@@ -82,9 +82,15 @@ function training (course: string|null, payload: string):string {
   })
 }
 
+function getUserFromStorage ():{name: string|null, admin: boolean|null} {
+  const user = localStorage.getItem('user')
+  if (user === null) return { name: null, admin: null }
+  return JSON.parse(user)
+}
+
 export default new Vuex.Store<Store>({
   state: {
-    user: localStorage.getItem('user'),
+    user: getUserFromStorage(),
     course: localStorage.getItem('course'),
     messages: [
       {
@@ -162,11 +168,14 @@ export default new Vuex.Store<Store>({
   },
   mutations: {
     login (state, user) {
+      localStorage.setItem('user', JSON.stringify(user))
       state.user = user
     },
     logout (state) {
-      state.user = null
+      state.user = { name: null, admin: null }
       state.course = null
+      localStorage.removeItem('user')
+      localStorage.removeItem('course')
     },
     storeMessage (state, payload) {
       const generatedUuid = uuid()
@@ -187,6 +196,7 @@ export default new Vuex.Store<Store>({
     },
     pickCourse (state, course) {
       state.course = course
+      localStorage.setItem('course', course)
     },
     log (state, payload) {
       state.log.push({
