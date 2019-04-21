@@ -1,4 +1,3 @@
-const fs = require('fs');
 const language = require('@google-cloud/language');
 const dataType = require('./getDataType.js');
 
@@ -8,12 +7,28 @@ const client = new language.LanguageServiceClient();
 // returns analysis as object
 const analyze = async (text) => {
     // Prepares a document, representing the provided text
+    const bareText = stripTextForTags(text);
+
     const document = {
-        content: text,
+        content: bareText,
         type: 'PLAIN_TEXT',
     };
     // Detects entities in the document
     return await client.analyzeEntities({document});
+};
+
+const stripTextForTags = (text) => {
+    let newText = text.replace(/[\W_]+/g, ' ');              // strip ALL non-alphanumeric, replace with space
+    newText = newText.replace(/\s+/g, ' ');                     // remove excess whitespace
+    newText = newText.toLowerCase().trim();                     // tolower() and trim start/end whitespace
+    return newText;
+}
+
+// code suggestion from https://codingwithspike.wordpress.com/2018/03/10/making-settimeout-an-async-await-function/
+const wait = async (ms) => {
+    return new Promise(resolve => {
+        setTimeout(resolve, ms);
+    });
 };
 
 // feed me text to get analysis of
@@ -55,4 +70,4 @@ const process_grouped_item = async (group) => {
     return dataType.getGrouped(group.intent, group.courseCode, group.tags, items); // not altering group tags at this stage
 };
 
-module.exports = {getNewTags, process_quiz_item, process_forum_item, process_block_item, process_grouped_item};
+module.exports = {process_quiz_item, process_forum_item, process_block_item, process_grouped_item};
