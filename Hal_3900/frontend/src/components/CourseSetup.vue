@@ -63,25 +63,21 @@ export default class CourseSetup extends Vue {
   addAssignment () {
     this.assignment.push({ name: '', address: '' })
     this.$forceUpdate()
-    console.log(this.assignment)
   }
 
   removeAssignment (index: number) {
     this.assignment.splice(index, 1)
     this.$forceUpdate()
-    console.log(this.assignment)
   }
 
   addContent () {
     this.content.push({ name: '', address: '' })
     this.$forceUpdate()
-    console.log(this.content)
   }
 
   removeContent (index: number) {
     this.content.splice(index, 1)
     this.$forceUpdate()
-    console.log(this.content)
   }
 
   sendSetup () {
@@ -98,7 +94,7 @@ export default class CourseSetup extends Vue {
     const content = this.content
 
     const pagesToScrape = { courseCode, forum, outline, assignment, content }
-    console.log(pagesToScrape)
+    // console.log(pagesToScrape)
 
     // get URL for backend API
     let host = 'backend.hal-3900.com'

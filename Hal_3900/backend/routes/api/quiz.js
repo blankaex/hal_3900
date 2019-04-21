@@ -35,6 +35,9 @@ router.get('/:id', async (req, res) => {
 
 // add a new question
 router.post('/add', async (req, res) => {
+
+    // TODO update to format of quiz question input
+
     // admins only
     if(!req.session.admin)
         res.status(401).json({'response': 'You are not authorized to make this request.'});
