@@ -36,12 +36,12 @@ router.get('/:id', async (req, res) => {
 // add a new question
 router.post('/add', async (req, res) => {
 
-    // TODO update to format of quiz question input
 
     // admins only
     if(!req.session.admin)
         res.status(401).json({'response': 'You are not authorized to make this request.'});
 
+    //TODO change error cehecking fit format
     // very basic error checking
     if(!req.body.question && !req.body.answer)
         res.status(400).json({'response': 'Missing body parameters: question, answer'});
@@ -50,25 +50,30 @@ router.post('/add', async (req, res) => {
     else if(!req.body.answer)
         res.status(400).json({'response': 'Missing body parameters: answer'});
 
-    // create object
-    const uniqueId = uuid.v4();
-    const quizItem = {
-        id: uniqueId,
-        question: req.body.question,
-        answer: req.body.answer
-    };
 
+    const courseCode = req.body.courseCode;
+    const newQuestions = req.body.questions;
+    // create object
+    const questionMap = newQuestions.map(q => {
+        const id = uuid.v4();
+        const question = req.body.question;
+        const answer = req.body.answer;
+        const tags = []; // TODO make this a call to analysis
+        return { id, courseCode, tags, question, answer };
+    });
+
+    // TODO update to format of quiz question input
     // Classify content with tags
     // NOTE you will need to have NLP service account set up to use this: same process as DF service account.
-    const itemWithTags = analyzer.process_quiz_item(quizItem);
+    // const itemWithTags = analyzer.process_quiz_item(quizItem);
 
     // add to db
     if (!db.connected)
         await db.connect();
 
-    db.addToCollection([itemWithTags], 'quiz');
+    db.addToCollection([questionMap], 'quiz');
 
-    res.status(200).json({'response': `Question ${uniqueId} added.`});
+    res.status(200).json({'response': `${questionMap.length} questions added.`});
 });
 
 module.exports = router;
