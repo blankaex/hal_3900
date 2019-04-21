@@ -10,9 +10,9 @@
         <input type='text' v-model.trim='forum' placeholder='Forum URL'/><br>
         <input type='text' v-model.trim='outline' placeholder='Course Outline'/><br>
 <!--        <input v-for='item in assignment' v-model='item.name' placeholder='name'/>-->
-        <div :key='assignmentKey' class='expandingFields'>
+        <div class='expandingFields'>
           <h3>assignments</h3>
-          <div class='listItem' v-for='(item, index) in assignment'>
+          <div class='listItem' v-for='(item, index) in assignment' :key="index">
             <input v-model.trim='item.name' placeholder='name'/>
             <input v-model.trim='item.address' placeholder='URL'/>
             <button type='button' v-on:click='removeAssignment(index)'>-</button>
@@ -21,7 +21,7 @@
         </div>
         <div class='expandingFields'>
           <h3>content pages</h3>
-          <div class='listItem' v-for='(item, index) in content'>
+          <div class='listItem' v-for='(item, index) in content' :key="index">
             <input v-model.trim='item.name' placeholder='name'/>
             <input v-model.trim='item.address' placeholder='URL'/>
             <button type='button' v-on:click='removeContent(index)'>-</button>
@@ -29,7 +29,7 @@
           <button type='button' v-on:click='addContent()'>+</button>
         </div>
 <!--        <input v-for='item in content' v-model.trim='item.name' @change.once='addContent()'/>-->
-        <button type='submit' v-on:click.prevent='sendSetup()'>GO</button>
+        <button type='submit' v-on:click='sendSetup()'>GO</button>
      </form>
     </div>
 </template>
@@ -59,30 +59,28 @@ export default class CourseSetup extends Vue {
       address: ''
     }
   ]
-  assignmentKey: number = 0
-  contentKey: number = 0
 
   addAssignment () {
     this.assignment.push({ name: '', address: '' })
-    this.assignmentKey++
+    this.$forceUpdate()
     console.log(this.assignment)
   }
 
   removeAssignment (index: number) {
     this.assignment.splice(index, 1)
-    this.assignmentKey--
+    this.$forceUpdate()
     console.log(this.assignment)
   }
 
   addContent () {
     this.content.push({ name: '', address: '' })
-    this.contentKey++
+    this.$forceUpdate()
     console.log(this.content)
   }
 
   removeContent (index: number) {
     this.content.splice(index, 1)
-    this.contentKey--
+    this.$forceUpdate()
     console.log(this.content)
   }
 
@@ -115,6 +113,7 @@ export default class CourseSetup extends Vue {
           // TODO if backend response ok, show confirmation page
           this.submitted = true
         }
+        this.$forceUpdate()
       })
   }
 }

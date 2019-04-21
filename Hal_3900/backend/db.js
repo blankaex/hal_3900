@@ -61,11 +61,22 @@ module.exports = class DB {
 		return results;
 	}
 
-	async runTaskQueue () {
-		 await dataExtraction.getDataToDb(require("./pagesToScrape.json"), this);
+	// pagesToScrape must be a js object formatted as per spec in wiki
+	async runTaskQueue (pagesToScrape) {
+		if (!this.connected)
+			await this.connect();
+
+		 await dataExtraction.getDataToDb(pagesToScrape, this);
 	}
 	
 	async initData () {
+		//TODO remove before merge master
+	    // this.backupCourse('COMP1521');
+		// this.backupCourse('COMP1531');
+
+		// const courseCode = 'COMP1531';
+        // await this.runTaskQueue({courseCode});
+
 		let knownCollections = await this.dbConn.listCollections().toArray();
 		knownCollections = knownCollections.map(x=>x.name);
 		if (knownCollections.indexOf("forum") !== -1) {
@@ -80,7 +91,10 @@ module.exports = class DB {
 		}
 
 		logger.info('Starting scraper to initialize data. This might take a while');
-		this.runTaskQueue();
+		this.runTaskQueue(require("./pagesToScrape.json"))
+
+		// this.backup(); // careful with synchronisation
+
 	};
 	
 	async findAllFromCollection(collectionName) {
@@ -91,6 +105,17 @@ module.exports = class DB {
 		cursor.close();
 		return results;
 	};
+
+	// pass in a group object, returns array of items from the group
+	async findItemsByGroup(group){
+		const itemIds = group.items.map(id => ObjectId(id));
+		const collection = this.dbConn.collection('block');
+		let results = [];
+		const cursor = await collection.find({_id: {$in: itemIds}});
+		results = await cursor.toArray();
+		cursor.close();
+		return results;
+	}
 	
 	async findForumQuestionsByTopic(tag) {
 		const collection = this.dbConn.collection('forum');
@@ -131,6 +156,23 @@ module.exports = class DB {
 		
 		return {grouped, forum, block};
 	};
+
+	async findByCourseCode(courseCode, collectionName) {
+		const collection = this.dbConn.collection(collectionName);
+		// find all objects where tags contains an array elem with name = tag
+		const cursor = await collection.find({ courseCode: courseCode });
+		const results = await cursor.toArray();
+		cursor.close();
+		return results;
+	};
+
+	async findAllByCourseCode(courseCode) {
+		const grouped = await this.findByCourseCode(courseCode, 'grouped');
+		const block = await this.findByCourseCode(courseCode, 'block');
+		const forum = await this.findByCourseCode(courseCode, 'forum');
+
+		return {grouped, forum, block};
+	};
 	
 	async getUniqueTagsFromCollection(collectionName) {
 		const collection = this.dbConn.collection(collectionName);
@@ -149,16 +191,22 @@ module.exports = class DB {
 		return Array.from(tagSet);
 	};
 	
-	async getDataPoints(tags) {
+	async getDataPoints(tags, intent) {
 		let candidates = await this.findAllFromCollection('grouped');
 		candidates = candidates.concat(await this.findAllFromCollection('block'));
 		candidates = candidates.concat(await this.findAllFromCollection('forum'));
 
-		//calculate scores for each candidate
+		// kill all non intent matches items 
+		logger.error(candidates);
+		logger.error(candidates.map(x=>x.intent));
+		logger.error(intent);
+		candidates = candidates.filter(c=>c.intent === intent)
+
+		// calculate scores for each candidate
 		candidates = candidates.map((candidate)=>{
 				return {
 						...candidate,
-						_score: calcScore(tags, candidate)
+						_score: calcScore(tags, candidate),
 				}
 		});
 		
@@ -182,8 +230,9 @@ module.exports = class DB {
 		}
 	};
 
+	// backup whole db to this file
 	async backup() {
-		// backup db to this file
+
 		const filename = '../data/db_backup.json';
 		const forum = await this.findAllFromCollection('forum');
 		const grouped = await this.findAllFromCollection('grouped');
@@ -192,16 +241,35 @@ module.exports = class DB {
 		fs.writeFileSync(filename, JSON.stringify({forum, grouped, block}));
 	}
 
-	async restore() {
-		const filename = '../data/db_backup.json';
+	// backup single course to this file
+	async backupCourse(courseCode) {
+		const dirname = '../data/backups/';
+		const filename = `${dirname}${courseCode}.json`;
+		try {
+			fs.mkdirSync(dirname, {recursive: true});
+		} catch (err){
+			console.log(err);
+		}
+		const data = await this.findAllByCourseCode(courseCode);
+		fs.writeFileSync(filename, JSON.stringify(data));
+	}
 
+	async restore() {
+		const filename = '../data/db_backup_old_1.json';
 		const items = require(filename);
 		this.addToCollection(items.forum, 'forum');
 		this.addToCollection(items.grouped, 'grouped');
 		this.addToCollection(items.block, 'block');
 
+	}
 
-
+	async restoreCourse(courseCode){
+		const dirname = '../data/backups/';
+		const filename = `${dirname}${courseCode}.json`;
+		const items = require(filename);
+		this.addToCollection(items.forum, 'forum');
+		this.addToCollection(items.grouped, 'grouped');
+		this.addToCollection(items.block, 'block');
 	}
 };
 

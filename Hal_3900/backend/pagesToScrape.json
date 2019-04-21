@@ -14,6 +14,8 @@
     {"name": "notes_d", "address": "https://www.cse.unsw.edu.au/~cs1521/18s2/notes/D/notes.html"},
     {"name": "notes_e", "address": "https://www.cse.unsw.edu.au/~cs1521/18s2/notes/E/notes.html"},
     {"name": "notes_f", "address": "https://www.cse.unsw.edu.au/~cs1521/18s2/notes/F/notes.html"},
-    {"name": "notes_g", "address": "https://www.cse.unsw.edu.au/~cs1521/18s2/notes/G/notes.html"}
+    {"name": "notes_g", "address": "https://www.cse.unsw.edu.au/~cs1521/18s2/notes/G/notes.html"},
+    {"name": "SPIM_instruction_set", "address": "https://cgi.cse.unsw.edu.au/~cs1521/18s2/docs/spim.php"},
+    {"name": "SPIM_install", "address": "https://cgi.cse.unsw.edu.au/~cs1521/18s2/docs/install-spim.php"}
   ]
 }
