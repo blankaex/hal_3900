@@ -92,4 +92,11 @@ export default class OptionsMessage extends Vue {
   height: 48px
   border-radius: 50%
   margin: 0.5rem
+
+.halMsg .text::before
+  content: "Hal"
+  margin-top: -1.4rem
+  position: absolute
+  font-size: 0.8rem
+  color: #BBB
 </style>
