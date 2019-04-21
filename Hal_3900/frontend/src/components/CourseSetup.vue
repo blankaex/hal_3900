@@ -94,23 +94,22 @@ export default class CourseSetup extends Vue {
     const content = this.content
 
     const pagesToScrape = { courseCode, forum, outline, assignment, content }
-    // console.log(pagesToScrape)
-
-    // get URL for backend API
-    let host = 'backend.hal-3900.com'
-    if (window.location.host !== 'hal-3900.com') {
-      host = 'localhost:9447'
-    }
-    // post setup info to backend
-    this.$http.post(`http://${host}/api/admin/setup`, { pagesToScrape })
-      .then(res => {
-        console.log(res)
-        if (res.ok) {
-          // TODO if backend response ok, show confirmation page
-          this.submitted = true
-        }
-        this.$forceUpdate()
-      })
+    const host = this.$store.state.host
+    fetch(`http://${host}/api/admin/setup`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+      body: JSON.stringify({ pagesToScrape })
+    }).then(res => {
+      console.log(res)
+      if (res.ok) {
+        // TODO if backend response ok, show confirmation page
+        this.submitted = true
+      }
+      this.$forceUpdate()
+    })
   }
 }
 </script>
