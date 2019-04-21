@@ -193,9 +193,6 @@ module.exports = class DB {
 		candidates = candidates.concat(await this.findAllFromCollection('forum'));
 
 		// kill all non intent matches items 
-		logger.error(candidates);
-		logger.error(candidates.map(x=>x.intent));
-		logger.error(intent);
 		candidates = candidates.filter(c=>c.intent === intent)
 
 		// calculate scores for each candidate
