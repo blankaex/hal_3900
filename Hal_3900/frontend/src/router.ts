@@ -27,7 +27,7 @@ const router = new Router({
       path: '/adminLogin',
       name: 'adminLogin',
       component: AdminLogin
-    },    
+    },
     {
       path: '/course',
       name: 'course',
