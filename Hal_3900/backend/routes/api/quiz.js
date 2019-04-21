@@ -35,6 +35,10 @@ router.get('/:id', async (req, res) => {
 
 // add a new question
 router.post('/add', async (req, res) => {
+    // admins only
+    if(!req.session.admin)
+        res.status(401).json({'response': 'You are not authorized to make this request.'});
+
     // very basic error checking
     if(!req.body.question && !req.body.answer)
         res.status(400).json({'response': 'Missing body parameters: question, answer'});
@@ -52,12 +56,12 @@ router.post('/add', async (req, res) => {
     };
 
     // Classify content with tags
-
+    // NOTE you will need to have NLP service account set up to use this: same process as DF service account.
     const itemWithTags = analyzer.process_quiz_item(quizItem);
 
     // add to db
     if (!db.connected)
-        await db.connect()
+        await db.connect();
 
     db.addToCollection([itemWithTags], 'quiz');
 
