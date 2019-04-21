@@ -35,6 +35,7 @@ export default class QuizSetup extends Vue {
       answer: ''
     }
   ]
+
   addQuestion () {
     this.questions.push({ question: '', answer: '' })
     this.$forceUpdate()

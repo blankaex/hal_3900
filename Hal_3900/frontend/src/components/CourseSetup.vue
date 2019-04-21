@@ -7,6 +7,7 @@
       <p>Enter the urls of pages on webcms3 below. Data will be taken from these pages and added to the chat database. Please allow time for the setup to complete: you can check up on the status here.</p>
       <form>
         <input type='text' v-model.trim='courseCode' placeholder='Course Code'/><br>
+        <input type='text' v-model.trim='courseName' placeholder='Course Name'/><br>
         <input type='text' v-model.trim='forum' placeholder='Forum URL'/><br>
         <input type='text' v-model.trim='outline' placeholder='Course Outline'/><br>
 <!--        <input v-for='item in assignment' v-model='item.name' placeholder='name'/>-->
@@ -45,6 +46,7 @@ interface Link {
 export default class CourseSetup extends Vue {
   submitted: boolean = false
   courseCode: string =''
+  courseName: string =''
   forum: string =''
   outline: string =''
   assignment: Link[] = [
@@ -81,6 +83,7 @@ export default class CourseSetup extends Vue {
   }
 
   sendSetup () {
+    // TODO add new courses to store
     // wrap form input as JS object matching pagesToScrape structure
     const courseCode = this.courseCode
     const forum = this.forum
