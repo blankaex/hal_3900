@@ -17,6 +17,9 @@
 import { Component, Prop, Vue } from 'vue-property-decorator'
 
 interface Question {
+  id: string,
+  courseCode: string,
+  tags: string[],
   question: string,
   answer: string
 }
@@ -27,10 +30,24 @@ export default class QuizView extends Vue {
 
   mounted () {
     // get questions from API call
-    const question = "Test Question"
-    const answer = "Test Answer"
+    // const question = "Test Question"
+    // const answer = "Test Answer"
     // set in questions here.
-    this.questions.push({ question, answer })
+    const host = this.$store.state.host
+    fetch(`http://${host}/api/quiz/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+      body: JSON.stringify({
+        courseCode: this.courseCode
+      })
+    }).then(r => r.json())
+      .then(r => {
+        this.questions = r
+      })
+    // this.questions.push({ question, answer })
   }
 }
 </script>

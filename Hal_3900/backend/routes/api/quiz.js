@@ -6,7 +6,7 @@ const db = new DB();
 const analyzer = require('../../data_extraction/analyze');
 
 // get all questions
-router.get('/', async (req, res) => {
+router.post('/', async (req, res) => {
     if (!db.connected)
         await db.connect()
 
@@ -17,7 +17,7 @@ router.get('/', async (req, res) => {
     } else {
         result = await db.search({}, 'quiz');
     };
-
+    console.log(result);
 	if (result.length > 0)
 		res.status(200).json(result);
     else
