@@ -10,7 +10,13 @@ router.get('/', async (req, res) => {
     if (!db.connected)
         await db.connect()
 
-    const result = await db.search({}, 'quiz');
+    let result;
+
+    if (req.body.courseCode){
+        result = await db.search({courseCode: req.body.courseCode}, 'quiz');
+    } else {
+        result = await db.search({}, 'quiz');
+    };
 
 	if (result.length > 0)
 		res.status(200).json(result);
@@ -36,8 +42,9 @@ router.get('/:id', async (req, res) => {
 // add a new question
 router.post('/add', async (req, res) => {
     // admins only
-    if(!req.session.admin)
-        res.status(401).json({'response': 'You are not authorized to make this request.'});
+    // TODO add in this check when admin login done
+    // if(!req.session.admin)
+    //     res.status(401).json({'response': 'You are not authorized to make this request.'});
 
     // very basic error checking
     if(!req.body.questions && !req.body.courseCode)
@@ -49,7 +56,7 @@ router.post('/add', async (req, res) => {
 
     const courseCode = req.body.courseCode;
     const newQuestions = req.body.questions;
-    // create object
+    // create objects
     const questionMap = newQuestions.map(q => {
         const id = uuid.v4();
         const question = q.question;
@@ -63,11 +70,14 @@ router.post('/add', async (req, res) => {
     // NOTE you will need to have NLP service account set up to use this: same process as DF service account.
     // const itemWithTags = analyzer.process_quiz_item(quizItem);
 
+    console.log(questionMap);
+
     // add to db
     if (!db.connected)
         await db.connect();
 
-    db.addToCollection([questionMap], 'quiz');
+    db.addToCollection(questionMap, 'quiz');
+    // res.status(200).json({'response': `OK!!`});
 
     res.status(200).json({'response': `${questionMap.length} questions added.`});
 });
