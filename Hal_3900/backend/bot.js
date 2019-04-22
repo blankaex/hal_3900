@@ -39,10 +39,14 @@ module.exports = class Bot {
 		// process the user's request and return an instance of DetectIntentResponse
 		const responses = await this.DF.sessionClient.detectIntent(request);
 		const result = responses[0].queryResult;
+		// console.log(result.intent.displayName); // INTENT found through result.intent.displayName
+
+		// TODO handle intent = quiz question
 		try {
+			const intent = result.intent.displayName;
 			let searchTags = responses[0].queryResult.parameters.fields.content.listValue.values;
 			searchTags = searchTags.map(x=>x.stringValue);
-			let options = await this.db.getDataPoints(searchTags);
+			let options = await this.db.getDataPoints(searchTags, intent);
 
 			options = options.map(x => {return{...x,question: msg}});
 
