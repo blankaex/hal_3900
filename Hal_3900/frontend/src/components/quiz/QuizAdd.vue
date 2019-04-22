@@ -16,7 +16,7 @@
 </template>
 
 <script lang='ts'>
-  import {Prop, Vue} from 'vue-property-decorator'
+import { Prop, Vue } from 'vue-property-decorator'
 
 interface Question {
   question: string,
@@ -24,7 +24,7 @@ interface Question {
 }
 
 export default class QuizAdd extends Vue {
-  @Prop() courseCode!: string
+  @Prop() courseCode: any
 
   questions: Question[] = [
     {

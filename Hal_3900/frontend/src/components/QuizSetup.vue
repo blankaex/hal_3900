@@ -1,9 +1,10 @@
 <template>
   <div class="quizSetup">
     <h2>Select Course</h2>
-    <v-select v-model='courseCode' :options='$store.state.courses' label='code' :reduce='course => course.code' />
-    <QuizAdd v-if="isAdding" :courseCode="courseCode"></QuizAdd>
-    <QuizView v-else :courseCode="courseCode"></QuizView>
+    <v-select v-if='!isAdding' v-model='courseCode' :options='$store.state.courses' label='code' :reduce='course => course.code' />
+<!--    TODO Make the lower part render once course selected.-->
+    <QuizView v-if="courseCode" :courseCode="courseCode"></QuizView>
+<!--    <QuizAdd v-if="isAdding && this.courseCode" :courseCode="this.courseCode"></QuizAdd>-->
   </div>
 </template>
 
@@ -24,7 +25,7 @@ import QuizView from './quiz/QuizView.vue';
 
 export default class QuizSetup extends Vue {
   courseCode: string=''
-  isAdding: boolean=true
+  isAdding: boolean=false
 }
 </script>
 
