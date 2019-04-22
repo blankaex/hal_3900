@@ -51,13 +51,42 @@
                             <li class="fragment fade-up"><b>Friday:</b> Sprint Retrospective
                         </ul>
                     </section>
+                    <section>
+                        <h3>Technologies</h3>
+                        <ul>
+                            <li class="fragment fade-up"><code>Vue.js</code>
+                            <li class="fragment fade-up"><code>Node.js</code>
+                            <li class="fragment fade-up"><code>cheerio</code>
+                            <li class="fragment fade-up"><code>MongoDB</code>
+                        </ul>
+                    </section>
                 </section>
 
                 <!-- Ellen -->
 				<section>
                     <section>
-                        <h2>Data Collection & Processing</h2>
+                        <h2>Data Extraction & Processing</h2>
                         <h3>Ellen Oates</h3>
+                    </section>
+                    <section>
+                        <h3>Purpose</h3>
+                        <ul>
+                            <li class="fragment fade-up">Chat bot requires an initial data set to be useful
+                            <li class="fragment fade-up">WebCMS is difficult to process using pre-built tools
+                            <li class="fragment fade-up">Don't want to make the user provide a data set
+                            <li class="fragment fade-up">Automatically extracts data given some key pieces of information
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>Process</h3>
+                        <ol>
+                            <li class="fragment fade-up">User inputs basic information via frontend interface
+                            <li class="fragment fade-up">Input is sent to the server and starts the scraper module
+                            <li class="fragment fade-up">Scrapes web data and recursively follows links to forum posts
+                            <li class="fragment fade-up">Parses data using cheerio by filtering different structures
+                            <li class="fragment fade-up">Analyses the data for keywords using tf-idf algorithm
+                            <li class="fragment fade-up">Data is stored with keywords in the database
+                        </ol>
                     </section>
                 </section>
 
@@ -66,13 +95,6 @@
                     <section>
                         <h2>Backend</h2>
                         <h3>Hayden Le</h3>
-                    </section>
-                    <section>
-                        <h3>Technologies</h3>
-                        <ul>
-                            <li class="fragment fade-up"><code>Node.js</code>
-                            <li class="fragment fade-up"><code>MongoDB</code>
-                        </ul>
                     </section>
                     <section>
                         <h3>Web Socket</h3>
@@ -116,9 +138,14 @@
                 <!-- Yi -->
 				<section>
                     <section>
-                        <h2>Machine Learning</h2>
+                        <h2>Natural Language Processing</h2>
                         <h3>Wang Yi</h3>
                     </section>
+                </section>
+
+                <!-- Everyone -->
+				<section>
+                    <h2>Q&A</h2>
                 </section>
 			</div>
 		</div>
