@@ -21,6 +21,9 @@
 			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
 			document.getElementsByTagName( 'head' )[0].appendChild( link );
 		</script>
+
+        <!-- LaTeX support -->
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
 	</head>
 	<body>
 		<div class="reveal">
@@ -56,8 +59,9 @@
                         <ul>
                             <li class="fragment fade-up"><code>Vue.js</code>
                             <li class="fragment fade-up"><code>Node.js</code>
-                            <li class="fragment fade-up"><code>cheerio</code>
                             <li class="fragment fade-up"><code>MongoDB</code>
+                            <li class="fragment fade-up"><code>Dialogflow</code>
+                            <li class="fragment fade-up"><code>cheerio</code>
                         </ul>
                     </section>
                 </section>
@@ -128,6 +132,7 @@
                         <h3>Zain Afzal</h3>
                     </section>
                     <section>
+                        <h3>I like javascript</h3>
                         <ul>
                             <li class="fragment fade-up">Looks pretty
                             <li class="fragment fade-up"><code>Vue.js</code> because it's cool
@@ -140,6 +145,41 @@
                     <section>
                         <h2>Natural Language Processing</h2>
                         <h3>Wang Yi</h3>
+                    </section>
+                    <section>
+                        <h3>Query Processing</h3>
+                        <ul>
+                            <li class="fragment fade-up">Uses Dialogflow to process user queries
+                            <li class="fragment fade-up"><b>Relevant Queries:</b> Keywords and intents sent to backend
+                            <li class="fragment fade-up"><b>Other Queries:</b> Generate default responses
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>Intents</h3>
+                        <ul>
+                            <li class="fragment fade-up"><b>Course:</b> Questions relevant to the course
+                            <li class="fragment fade-up"><b>Quiz:</b> Queries regarding quizzes
+                            <li class="fragment fade-up"><b>Default:</b> Dialogflow default intents
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>Word Bag Model</h3>
+                        <ul>
+                            <li class="fragment fade-up">Extract keywords and calculate salience using tf-idf
+                            <ul>
+                                <li class="fragment fade-up">\(tfidf_{i,j} = tf_{i,j} \times idf_{i}\)
+                                <li class="fragment fade-up">\(tf_{i,j} = \frac{n_{i,j}}{\sum_{k}^{} n_{k,j}}\)
+                                    <li class="fragment fade-up">\(idf_{i} = lg \frac{|D|}{|\{j: t_{i} \in d_{j}\}|}\)
+                            </ul>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>Data Flow</h3>
+                        <img src="img/diagram.jpg" class="stretch">
+                    </section>
+                    <section>
+                        <h3>Example</h3>
+                        <img src="img/example.jpg" class="stretch">
                     </section>
                 </section>
 
