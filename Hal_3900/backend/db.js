@@ -62,6 +62,11 @@ module.exports = class DB {
 		return results;
 	}
 
+	async delete(obj, collection='documents') {
+		const collectionRef = this.dbConn.collection(collection);
+        await collectionRef.deleteOne(obj)
+	}
+
 	// pagesToScrape must be a js object formatted as per spec in wiki
 	async runTaskQueue (pagesToScrape) {
 		if (!this.connected)

@@ -19,10 +19,11 @@ router.post('/', async (req, res) => {
         result = await db.search({}, 'quiz');
     }
 
-	if (result.length > 0)
-		res.status(200).json(result);
-    else
+	if (result.length > 0){
+        res.status(200).json(result);
+    } else {
         res.status(400).json({'response': 'No questions found.'});
+    }
 });
 
 // get a specific question
@@ -34,11 +35,27 @@ router.get('/:id', async (req, res) => {
     const query = { id: { $eq: req.params.id } };
     const result = await db.search(query, 'quiz');
 
-	if (result.length > 0)
-		res.status(200).json(result[0]);
-    else
+	if (result.length > 0) {
+        res.status(200).json(result[0]);
+    } else {
         res.status(400).json({'response': `Question ${req.params.id} not found.`});
+    }
 });
+
+router.post('/delete/:id', async (req, res) => {
+    if (!db.connected)
+        await db.connect();
+
+    const query = { id: { $eq: req.params.id } };
+    const result = await db.search(query, 'quiz');
+
+    if (result.length > 0){
+        db.delete(query, 'quiz');
+        res.status(200).json(result[0]);
+    } else {
+        res.status(400).json({'response': `Question ${req.params.id} not found.`});
+    }
+})
 
 // add a new question
 router.post('/add', async (req, res) => {

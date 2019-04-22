@@ -5,7 +5,7 @@
       <tr v-for='(question, index) in questions' :key='question.id'>
         <td>{{question.question}}</td>
         <td>{{question.answer}}</td>
-<!--        <td><button type='button' @click='remove(index)'>Delete</button></td>-->
+        <td><button type='button' @click='remove(question.id)'>Delete</button></td>
       </tr>
     </table>
     <div v-else>There are no quiz questions yet for this course</div>
@@ -32,7 +32,19 @@ export default class QuizView extends Vue {
     // switch down in prev view
     this.$emit('clicked', 'true')
   }
-
+  remove (id) {
+    const host = this.$store.state.host
+    fetch(`http://${host}/api/quiz/delete/${id}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+    }).then(r => r.json())
+      .then(r => {
+        console.log(r)
+      })
+  }
   mounted () {
     // get questions from API call
     const host = this.$store.state.host
@@ -50,8 +62,7 @@ export default class QuizView extends Vue {
         this.questions = r
       })
   }
-  watch () {
-  }
+
 }
 </script>
 
