@@ -9,7 +9,7 @@
       </tr>
     </table>
     <div v-else>There are no quiz questions yet for this course</div>
-    <button type="button"> Add Questions </button>
+    <button type="button" @click="goToAdd()"> Add Questions </button>
   </div>
 </template>
 
@@ -28,11 +28,13 @@ export default class QuizView extends Vue {
   @Prop() courseCode: any
   questions: Question[] = []
 
+  goToAdd () {
+    // switch down in prev view
+    this.$emit('clicked', 'true')
+  }
+
   mounted () {
     // get questions from API call
-    // const question = "Test Question"
-    // const answer = "Test Answer"
-    // set in questions here.
     const host = this.$store.state.host
     fetch(`http://${host}/api/quiz/`, {
       method: 'POST',
@@ -47,7 +49,8 @@ export default class QuizView extends Vue {
       .then(r => {
         this.questions = r
       })
-    // this.questions.push({ question, answer })
+  }
+  watch () {
   }
 }
 </script>

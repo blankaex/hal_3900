@@ -79,7 +79,7 @@ module.exports = class DB {
 			return;
 		}
 
-		const filename = '../data/db_backup.json';
+		const filename = '../data/db_backup_tags_with_google_cloud_nlp.json';
 		if (fs.existsSync(filename)){
 			logger.info(`Restoring data from backup`);
 			this.restore(filename);

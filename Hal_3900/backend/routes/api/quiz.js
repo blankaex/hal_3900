@@ -10,14 +10,15 @@ router.post('/', async (req, res) => {
     if (!db.connected)
         await db.connect()
 
-    let result;
+    console.log(req.body);
 
+    let result;
     if (req.body.courseCode){
         result = await db.search({courseCode: req.body.courseCode}, 'quiz');
     } else {
         result = await db.search({}, 'quiz');
-    };
-    console.log(result);
+    }
+
 	if (result.length > 0)
 		res.status(200).json(result);
     else
@@ -47,12 +48,16 @@ router.post('/add', async (req, res) => {
     //     res.status(401).json({'response': 'You are not authorized to make this request.'});
 
     // very basic error checking
-    if(!req.body.questions && !req.body.courseCode)
+    if(!req.body.questions && !req.body.courseCode) {
         res.status(400).json({'response': 'Missing body parameters: questions, courseCode'});
-    else if(!req.body.questions || req.body.questions.length === 0)
+        return;
+    } else if(!req.body.questions || req.body.questions.length === 0) {
         res.status(400).json({'response': 'Missing body parameters: questions'});
-    if(!req.body.courseCode)
+        return;
+    } else if(!req.body.courseCode){
         res.status(400).json({'response': 'Missing body parameters: courseCode'});
+        return;
+    }
 
     const courseCode = req.body.courseCode;
     const newQuestions = req.body.questions;
@@ -65,12 +70,9 @@ router.post('/add', async (req, res) => {
         return { id, courseCode, tags, question, answer };
     });
 
-    // TODO update to format of quiz question input
-    // Classify content with tags
+    // TODO Classify content with tags
     // NOTE you will need to have NLP service account set up to use this: same process as DF service account.
     // const itemWithTags = analyzer.process_quiz_item(quizItem);
-
-    console.log(questionMap);
 
     // add to db
     if (!db.connected)

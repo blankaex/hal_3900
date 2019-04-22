@@ -1,19 +1,23 @@
 <template>
   <div class="quizSetup">
     <h2>Select Course</h2>
-    <v-select v-if='!isAdding' v-model='courseCode' :options='$store.state.courses' label='code' :reduce='course => course.code' />
-<!--    TODO Make the lower part render once course selected.-->
-    <QuizView v-if="courseCode" :courseCode="courseCode"></QuizView>
-<!--    <QuizAdd v-if="isAdding && this.courseCode" :courseCode="this.courseCode"></QuizAdd>-->
+    <v-select v-model='courseCode' :options='$store.state.courses' label='code' :reduce='course => course.code' />
+    <div v-if="!isAdding">
+      <QuizView v-if="courseCode" :courseCode="courseCode" @clicked='toggleView()'></QuizView>
+    </div>
+    <div v-if="isAdding && courseCode">
+      <h2>Add new questions for {{ courseCode }}</h2>
+      <QuizAdd v-if="courseCode" :courseCode="courseCode" @clicked='toggleView()'></QuizAdd>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator'
+import { Vue, Component, Prop } from 'vue-property-decorator'
 import vSelect from 'vue-select'
 import 'vue-select/src/scss/vue-select.scss'
 import QuizAdd from './quiz/QuizAdd.vue'
-import QuizView from './quiz/QuizView.vue';
+import QuizView from './quiz/QuizView.vue'
 
 @Component({
   components: {
@@ -24,8 +28,12 @@ import QuizView from './quiz/QuizView.vue';
 })
 
 export default class QuizSetup extends Vue {
-  courseCode: string=''
   isAdding: boolean=false
+  courseCode: string=''
+
+  toggleView () {
+    this.isAdding = !this.isAdding
+  }
 }
 </script>
 
