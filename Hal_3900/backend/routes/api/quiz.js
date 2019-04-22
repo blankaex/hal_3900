@@ -35,29 +35,25 @@ router.get('/:id', async (req, res) => {
 
 // add a new question
 router.post('/add', async (req, res) => {
-
-
     // admins only
     if(!req.session.admin)
         res.status(401).json({'response': 'You are not authorized to make this request.'});
 
-    //TODO change error cehecking fit format
     // very basic error checking
-    if(!req.body.question && !req.body.answer)
-        res.status(400).json({'response': 'Missing body parameters: question, answer'});
-    else if(!req.body.question)
-        res.status(400).json({'response': 'Missing body parameters: question'});
-    else if(!req.body.answer)
-        res.status(400).json({'response': 'Missing body parameters: answer'});
-
+    if(!req.body.questions && !req.body.courseCode)
+        res.status(400).json({'response': 'Missing body parameters: questions, courseCode'});
+    else if(!req.body.questions || req.body.questions.length === 0)
+        res.status(400).json({'response': 'Missing body parameters: questions'});
+    if(!req.body.courseCode)
+        res.status(400).json({'response': 'Missing body parameters: courseCode'});
 
     const courseCode = req.body.courseCode;
     const newQuestions = req.body.questions;
     // create object
     const questionMap = newQuestions.map(q => {
         const id = uuid.v4();
-        const question = req.body.question;
-        const answer = req.body.answer;
+        const question = q.question;
+        const answer = q.answer;
         const tags = []; // TODO make this a call to analysis
         return { id, courseCode, tags, question, answer };
     });
