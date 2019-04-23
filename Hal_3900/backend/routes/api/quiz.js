@@ -10,7 +10,7 @@ router.post('/', async (req, res) => {
     if (!db.connected)
         await db.connect()
 
-    console.log(req.body);
+    // console.log(req.body);
 
     let result;
     if (req.body.courseCode){

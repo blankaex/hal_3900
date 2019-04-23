@@ -28,7 +28,7 @@ function messageHandler (commit: Commit, res: MessageEvent) {
     // TODO handle quizzing stuff
     commit('log', `got quiz questions: `)
     console.log(resObj.data.options)
-    commit('log', resObj.data.options)
+    // commit('log', resObj.data.options)
     resObj.data.options.map((o, i) => commit('log', `${i}. ${o.question}`))
     // TODO message "starting quiz on _____, hit enter when ready"
     commit('storeQuiz', {

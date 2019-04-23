@@ -191,6 +191,22 @@ module.exports = class DB {
 		forum.map(f=>tagSet.add(f));
 		return Array.from(tagSet);
 	};
+
+	async getQuizQuestions(tags, intent, courseCode) {
+		// TODO need to add courseCode param in: unused rn
+		const candidates = await this.findAllFromCollection('quiz');
+		// console.log(candidates);
+		// TODO filter by tags
+
+		// if (candidates.length > 0){
+		// 	// choose 1 at random
+		// 	// or choose a list if we know how many
+		//
+		// }
+
+		return candidates;
+
+	}
 	
 	async getDataPoints(tags, intent) {
 		let candidates = await this.findAllFromCollection('grouped');

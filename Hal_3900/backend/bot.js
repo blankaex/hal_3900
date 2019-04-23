@@ -44,18 +44,25 @@ module.exports = class Bot {
 		// TODO handle intent = quiz question
 		try {
 			const intent = result.intent.displayName;
-			let searchTags = responses[0].queryResult.parameters.fields.content.listValue.values;
-			searchTags = searchTags.map(x=>x.stringValue);
-			let options = await this.db.getDataPoints(searchTags, intent);
-
-			options = options.map(x => {return{...x,question: msg}});
+			let options;
+			if (intent === 'quiz'){
+				options = await this.db.getQuizQuestions();
+				console.log(options);
+			} else {
+				let searchTags = responses[0].queryResult.parameters.fields.content.listValue.values;
+				searchTags = searchTags.map(x=>x.stringValue);
+				options = await this.db.getDataPoints(searchTags, intent);
+				// console.log(options);
+				options = options.map(x => {return{...x,question: msg}});
+			}
 
 			return {
 				response: result.fulfillmentText,
 				options,
 				intent: result.intent ? result.intent.displayName : '[UNKNOWN]'
 			};
-		} catch {
+		} catch (err) {
+			console.log(err);
 			return {
 				response: result.fulfillmentText,
 				options: null,
