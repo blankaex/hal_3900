@@ -1,3 +1,4 @@
+const {ObjectId} = require('mongodb');
 const MongoClient = require('mongodb').MongoClient;
 const fs = require('fs');
 const logger = require('log4js').getLogger('Database');
@@ -63,6 +64,11 @@ module.exports = class DB {
 		return results;
 	}
 
+	async delete(obj, collection='documents') {
+		const collectionRef = this.dbConn.collection(collection);
+        await collectionRef.deleteOne(obj)
+	}
+
 	// pagesToScrape must be a js object formatted as per spec in wiki
 	async runTaskQueue (pagesToScrape) {
 		if (!this.connected)
@@ -72,12 +78,6 @@ module.exports = class DB {
 	}
 	
 	async initData () {
-		//TODO remove before merge master
-	    // this.backupCourse('COMP1521');
-		// this.backupCourse('COMP1531');
-
-		// const courseCode = 'COMP1531';
-        // await this.runTaskQueue({courseCode});
 		let knownCollections = await this.dbConn.listCollections().toArray();
 		knownCollections = knownCollections.map(x=>x.name);
 		if (knownCollections.indexOf("forum") !== -1) {
@@ -92,8 +92,14 @@ module.exports = class DB {
 		//this.addToCollection(items.grouped, 'grouped');
 		this.addToCollection(blockItem.block, 'block');
 
+		const filename = '../data/db_backup_tags_with_google_cloud_nlp.json';
+		if (fs.existsSync(filename)){
+			logger.info(`Restoring data from backup`);
+			this.restore(filename);
+			return;
+		}
 
-		//
+    	//
 		// if (fs.existsSync('../data/db_backup.json')){
 		// 	logger.info(`Restoring data from backup`);
 		// 	this.restore();
@@ -203,6 +209,22 @@ module.exports = class DB {
 		forum.map(f=>tagSet.add(f));
 		return Array.from(tagSet);
 	};
+
+	async getQuizQuestions(tags, intent, courseCode) {
+		// TODO need to add courseCode param in: unused rn
+		const candidates = await this.findAllFromCollection('quiz');
+		// console.log(candidates);
+		// TODO filter by tags
+
+		// if (candidates.length > 0){
+		// 	// choose 1 at random
+		// 	// or choose a list if we know how many
+		//
+		// }
+
+		return candidates;
+
+	}
 	
 	async getDataPoints(tags) {
 		let candidates = [];
@@ -224,10 +246,11 @@ module.exports = class DB {
 		// candidates = candidates.concat(await this.findAllFromCollection('block'));
 		// candidates = candidates.concat(await this.findAllFromCollection('forum'));
 		//calculate scores for each candidate
+
 		candidates = candidates.map((candidate)=>{
 				return {
 						...candidate,
-						_score: calcScore(tags, candidate)
+						_score: calcScore(tags, candidate),
 				}
 		});
 		
@@ -255,7 +278,7 @@ module.exports = class DB {
 	// backup whole db to this file
 	async backup() {
 
-		const filename = '../data/db_backup.json';
+		const filename = '../data/db_backup_tags_with_google_cloud_nlp.json';
 		const forum = await this.findAllFromCollection('forum');
 		const grouped = await this.findAllFromCollection('grouped');
 		const block = await this.findAllFromCollection('block');
@@ -276,9 +299,8 @@ module.exports = class DB {
 		fs.writeFileSync(filename, JSON.stringify(data));
 	}
 
-	async restore() {
-		const filename = '../data/db_backup_old_1.json';
-		const items = require(filename);
+	async restore(backup_file) {
+		const items = require(backup_file);
 		this.addToCollection(items.forum, 'forum');
 		this.addToCollection(items.grouped, 'grouped');
 		this.addToCollection(items.block, 'block');

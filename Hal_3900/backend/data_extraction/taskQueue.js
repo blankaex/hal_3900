@@ -2,8 +2,8 @@ const fs = require('fs');
 const analyze = require('./analyze.js');
 const dataType = require('./getDataType.js');
 
-const data_forum_folder = "../data/data_forum/";
-const data_page_folder = "../data/data_page/";
+const data_forum_folder = "../data/COMP1521/data_forum/";
+const data_page_folder = "../data/COMP1521/data_page/";
 
 // Initialize the queues (3 types)
 
@@ -46,11 +46,13 @@ const handle_block = async (item, db) => {
 
 const handle_group = async (group, db) => {
     const res = await analyze.process_grouped_item(group);
+
     try {
-        const inserted = db.addToCollection(res.items, 'block');
-        console.log(inserted);
-        const newGroup = dataType.getGrouped(res.intent, res.courseCode, res.tags, inserted.insertedIds);
+        const inserted = await db.addToCollection(res.items, 'block');
+        const items = Object.values(inserted.insertedIds);
+        const newGroup = dataType.getGrouped(res.intent, res.courseCode, res.tags, items);
         db.addToCollection([newGroup], 'grouped');
+
     } catch (err) {
         console.error(err);
     }
@@ -82,7 +84,7 @@ const run_stack = async (stack, millisecWaitTime, db, type) => {
 
 // Runs analysis on all forum objects found in the forum type directory
 const runAnalysis = async (db) => {
-    const capPerMinute = 500; // the capped rate of queries per minute for our QUOTA is 600, keep well under this and adjust later
+    const capPerMinute = 600; // the capped rate of queries per minute for our QUOTA is 600
     let millisecWaitTime = 60000 / capPerMinute; // calc millisecond wait time between requests
 
     const stacks = init_page_stacks();

@@ -52,7 +52,7 @@ router.post('/set', async (req, res) => {
         req.session.user = req.body.zid;
     }
 
-    res.status(200).json({'user': req.session.user});
+    res.status(200).json({'user': 'Logged in as ' + req.session.user + '.'});
 });
 
 module.exports = router;

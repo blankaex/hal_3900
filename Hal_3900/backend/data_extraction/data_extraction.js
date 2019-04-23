@@ -19,6 +19,9 @@ const getDataToDb = async (input, db) => {
         console.error(err);
     }
 
+    // save pagesToScrape for laters :)
+    fs.writeFileSync(`../data/${input.courseCode}`, JSON.stringify(input));
+
     await scraper.scrapeSpecified(input, data_forum_folder, data_page_folder);
 
     // consider running intent grouping to make the new tagging method easier - discuss with Yi
@@ -36,6 +39,7 @@ const getDataToDb = async (input, db) => {
 
 
     await test_new.runAnalysis(db, data_forum_folder, data_page_folder);
+
 };
 
 module.exports = {getDataToDb};

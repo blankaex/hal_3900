@@ -6,16 +6,24 @@ const db = new DB();
 const analyzer = require('../../data_extraction/analyze');
 
 // get all questions
-router.get('/', async (req, res) => {
+router.post('/', async (req, res) => {
     if (!db.connected)
         await db.connect()
 
-    const result = await db.search({}, 'quiz');
+    // console.log(req.body);
 
-	if (result.length > 0)
-		res.status(200).json(result);
-    else
+    let result;
+    if (req.body.courseCode){
+        result = await db.search({courseCode: req.body.courseCode}, 'quiz');
+    } else {
+        result = await db.search({}, 'quiz');
+    }
+
+	if (result.length > 0){
+        res.status(200).json(result);
+    } else {
         res.status(400).json({'response': 'No questions found.'});
+    }
 });
 
 // get a specific question
@@ -27,41 +35,70 @@ router.get('/:id', async (req, res) => {
     const query = { id: { $eq: req.params.id } };
     const result = await db.search(query, 'quiz');
 
-	if (result.length > 0)
-		res.status(200).json(result[0]);
-    else
+	if (result.length > 0) {
+        res.status(200).json(result[0]);
+    } else {
         res.status(400).json({'response': `Question ${req.params.id} not found.`});
+    }
 });
+
+router.post('/delete/:id', async (req, res) => {
+    if (!db.connected)
+        await db.connect();
+
+    const query = { id: { $eq: req.params.id } };
+    const result = await db.search(query, 'quiz');
+
+    if (result.length > 0){
+        db.delete(query, 'quiz');
+        res.status(200).json(result[0]);
+    } else {
+        res.status(400).json({'response': `Question ${req.params.id} not found.`});
+    }
+})
 
 // add a new question
 router.post('/add', async (req, res) => {
+    // admins only
+    // TODO add in this check when admin login done
+    // if(!req.session.admin)
+    //     res.status(401).json({'response': 'You are not authorized to make this request.'});
+
     // very basic error checking
-    if(!req.body.question && !req.body.answer)
-        res.status(400).json({'response': 'Missing body parameters: question, answer'});
-    else if(!req.body.question)
-        res.status(400).json({'response': 'Missing body parameters: question'});
-    else if(!req.body.answer)
-        res.status(400).json({'response': 'Missing body parameters: answer'});
+    if(!req.body.questions && !req.body.courseCode) {
+        res.status(400).json({'response': 'Missing body parameters: questions, courseCode'});
+        return;
+    } else if(!req.body.questions || req.body.questions.length === 0) {
+        res.status(400).json({'response': 'Missing body parameters: questions'});
+        return;
+    } else if(!req.body.courseCode){
+        res.status(400).json({'response': 'Missing body parameters: courseCode'});
+        return;
+    }
 
-    // create object
-    const uniqueId = uuid.v4();
-    const quizItem = {
-        id: uniqueId,
-        question: req.body.question,
-        answer: req.body.answer
-    };
+    const courseCode = req.body.courseCode;
+    const newQuestions = req.body.questions;
+    // create objects
+    const questionMap = newQuestions.map(q => {
+        const id = uuid.v4();
+        const question = q.question;
+        const answer = q.answer;
+        const tags = []; // TODO make this a call to analysis
+        return { id, courseCode, tags, question, answer };
+    });
 
-    // Classify content with tags
-
-    const itemWithTags = analyzer.process_quiz_item(quizItem);
+    // TODO Classify content with tags
+    // NOTE you will need to have NLP service account set up to use this: same process as DF service account.
+    // const itemWithTags = analyzer.process_quiz_item(quizItem);
 
     // add to db
     if (!db.connected)
-        await db.connect()
+        await db.connect();
 
-    db.addToCollection([itemWithTags], 'quiz');
+    db.addToCollection(questionMap, 'quiz');
+    // res.status(200).json({'response': `OK!!`});
 
-    res.status(200).json({'response': `Question ${uniqueId} added.`});
+    res.status(200).json({'response': `${questionMap.length} questions added.`});
 });
 
 module.exports = router;

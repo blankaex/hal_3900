@@ -39,18 +39,30 @@ module.exports = class Bot {
 		// process the user's request and return an instance of DetectIntentResponse
 		const responses = await this.DF.sessionClient.detectIntent(request);
 		const result = responses[0].queryResult;
-		logger.info(`${JSON.stringify(result.parameters.fields.word_bag.listValue.values)}`);
+
+		// console.log(result.intent.displayName); // INTENT found through result.intent.displayName
+
 		try {
-			let searchTags = responses[0].queryResult.parameters.fields.word_bag.listValue.values;
-			searchTags = searchTags.map(x=>x.stringValue);
-			let options = await this.db.getDataPoints(searchTags);
-			options = options.map(x => {return{...x,question: msg}});
+			const intent = result.intent.displayName;
+			let options;
+			console.log(intent);
+			if (intent === 'quiz'){
+				options = await this.db.getQuizQuestions();
+			} else {
+				logger.info(`${JSON.stringify(result.parameters.fields.word_bag.listValue.values)}`);
+				let searchTags = responses[0].queryResult.parameters.fields.word_bag.listValue.values;
+				searchTags = searchTags.map(x=>x.stringValue);
+				options = await this.db.getDataPoints(searchTags);
+				options = options.map(x => {return{...x,question: msg}});
+			}
+
 			return {
 				response: result.fulfillmentText,
 				options,
 				intent: result.intent ? result.intent.displayName : '[UNKNOWN]'
 			};
-		} catch {
+		} catch (err) {
+			console.log(err);
 			return {
 				response: result.fulfillmentText,
 				options: null,
