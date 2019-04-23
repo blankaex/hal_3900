@@ -27,12 +27,15 @@ function messageHandler (commit: Commit, res: MessageEvent) {
   if (resObj.data.intent === 'quiz') {
     // TODO handle quizzing stuff
     commit('log', `got quiz questions: `)
-    console.log(resObj.data.options)
-    commit('log', resObj.data.options)
     resObj.data.options.map((o, i) => commit('log', `${i}. ${o.question}`))
     // TODO message "starting quiz on _____, hit enter when ready"
     commit('storeQuiz', {
       questions: resObj.data.options
+    })
+    commit('storeMessage', {
+      type: 'quiz',
+      from: 'bot',
+      body: resObj.data.options[0]
     })
   } else if (resObj.data.options && resObj.data.options.length > 0) {
     commit('log', `got options: `)
@@ -193,7 +196,7 @@ export default new Vuex.Store<Store>({
     changeStatus (state, status) {
       state.status = status
     },
-    pickCourse(state, course) {
+    pickCourse (state, course) {
       state.course = course
     },
     log (state, payload) {

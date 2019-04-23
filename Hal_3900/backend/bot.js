@@ -45,6 +45,7 @@ module.exports = class Bot {
 		try {
 			const intent = result.intent.displayName;
 			let options;
+			console.log(intent);
 			if (intent === 'quiz'){
 				options = await this.db.getQuizQuestions();
 				console.log(options);
