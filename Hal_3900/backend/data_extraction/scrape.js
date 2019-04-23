@@ -105,11 +105,11 @@ const scrapeForum = async (forumRoot, courseCode, dest) => {
     await Promise.all(res);
 };
 
-const scrapeList = async (list, intent, courseCode, dest) => {
+const scrapeList = async (list, courseCode, dest) => {
     const res = list.map(async (page) => {
         console.log("scraping " + page.address);
         const html = await getPage(page);
-        const data = await process.parseData(html, intent, courseCode);
+        const data = await process.parseData(html, courseCode);
         // WRITE JSON OBJECTS TO FILE
         fs.writeFileSync(dest + page.name.replace(/\s+/g, '-') + ".json", JSON.stringify(data));
     });
@@ -118,19 +118,15 @@ const scrapeList = async (list, intent, courseCode, dest) => {
 };
 
 const scrapeSpecified = async (pages, data_forum_folder, data_page_folder) => {
-
     // SCRAPE FROM LISTED INTENTS
-    const outlineRes = await scrapeList(pages.outline, "outline", pages.courseCode, data_page_folder)
-    await wait(2000);
-    const assignmentRes = await scrapeList(pages.assignment, "assignment", pages.courseCode, data_page_folder);
-    await wait(2000);
-    const contentRes = await scrapeList(pages.content, "content", pages.courseCode, data_page_folder);
-    await wait(2000);
+    const listToScrape = pages.outline.concat(pages.assignment).concat(pages.content);
+    const listRes = await scrapeList(listToScrape, pages.courseCode, data_page_folder)
 
     // SCRAPE FORUM STARTING AT ROOT PAGE
     const forumRes = scrapeForum(pages.forum, pages.courseCode, data_forum_folder);
 
-    await Promise.all([outlineRes, assignmentRes, contentRes, forumRes]);
+    // WAIT UNTIL ALL COMPLETED BEFORE RETURNING
+    await Promise.all([listRes, forumRes]);
 };
 
 module.exports = {scrapeSpecified};

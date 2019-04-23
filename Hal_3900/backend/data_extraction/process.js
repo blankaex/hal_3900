@@ -19,11 +19,11 @@ const stripTextForTags = (text) => {
     return newText;
 };
 
-const parseData = (html, intent, courseCode) => {
+const parseData = (html, courseCode) => {
     let $ = cheerio.load(html);
 
     // GET ALL TABLES DATA
-    const grouped = [];
+    const data = [];
     $("table").each((index, element) => {
         const items = [];
         const tags = [];
@@ -43,11 +43,11 @@ const parseData = (html, intent, courseCode) => {
             const text = td.join(', ');
             // construct js object
             if (text){
-                items.push(dataType.getBlock(intent, courseCode, [], text));
+                items.push(dataType.getBlock(courseCode, [], text));
             }
         });
         if (items.length > 0){
-            grouped.push(dataType.getGrouped(intent, courseCode, tags, items));
+            data.push(dataType.getGrouped(courseCode, tags, items));
         }
     });
 
@@ -66,14 +66,13 @@ const parseData = (html, intent, courseCode) => {
             // paragraph with stripped whitespace. could break them up further if needed
             const text = stripText($(e).text());
             if (text) {
-                items.push(dataType.getBlock(intent, courseCode, [], text));
+                items.push(dataType.getBlock(courseCode, [], text));
             }
         });
-        grouped.push(dataType.getGrouped(intent, courseCode, tags, items));
+        data.push(dataType.getGrouped(courseCode, tags, items));
     });
 
     // GET ALL PARAGRAPHS DATA
-    const block = [];
     $("p").map((index, element) => {
         const tags = [];
         tags.push(dataType.getTag("paragraph"));
@@ -84,18 +83,14 @@ const parseData = (html, intent, courseCode) => {
             tags.push(dataType.getTag(name));
         }
 
-        let text;
-        // TODO if element contains table row, treat this as above and string the <small> tag
-            // paragraph with stripped whitespace. could break them up further if needed
-        text = stripText($(element).text());
+        const text = stripText($(element).text());
 
         if (text){ // text is not falsy value or "",
-            block.push(dataType.getBlock(intent, courseCode, tags, text));
+            data.push(dataType.getBlock(courseCode, tags, text));
         }
     });
 
-    return {grouped, block};
-
+    return { data };
 };
 
 // feed me the html for the root forum page
@@ -159,7 +154,7 @@ const extractMessage = (messageItem) => {
     return childResults;
 };
 
-const getForumPostObject = (apiResponseObject, tags, intent, courseCode) => {
+const getForumPostObject = (apiResponseObject, tags, courseCode) => {
 
     try {
         const question = stripText(apiResponseObject.result.messages[0].body);
@@ -172,7 +167,7 @@ const getForumPostObject = (apiResponseObject, tags, intent, courseCode) => {
                 }
             });
         });
-        return dataType.getForumObject(intent, courseCode, tags, question, answers);
+        return dataType.getForumObject(courseCode, tags, question, answers);
     } catch (err){
         console.log("Item not available")
     }

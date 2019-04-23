@@ -1,5 +1,5 @@
 const scraper = require('./scrape.js');
-const task_queue = require('./taskQueue.js');
+const analysis = require('./tfidf.js');
 const test_new = require('./testRunAnalysis.js');
 const fs = require('fs');
 /**
@@ -37,6 +37,19 @@ const getDataToDb = async (input, db) => {
     // block output contains array of outputs
     // insert the whole block into MongoDB
 
+
+    //TODO input formats:
+
+    // const cor = ['document is a file about c',
+//                 'document word_ruby, de',
+//                 'document ruby node'];
+//
+// const forum = ['this is a post',
+//                 'a question'];
+
+    const data = analysis.buildModel(corpusPre,corpusForum,courseCode)
+
+    // then just dump the data into DB!!!
 
     await test_new.runAnalysis(db, data_forum_folder, data_page_folder);
 
