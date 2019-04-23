@@ -1,7 +1,3 @@
-// const tfidf = require('tf-idf');
-//
-
-
 const natural = require('natural');
 const TfIdf = natural.TfIdf;
 const tfidf = new TfIdf();
@@ -10,16 +6,14 @@ const tokenizer = new natural.RegexpTokenizer({pattern: /([A-Za-z0-9]+)/});
 
 
 
-const cor = ['document is a file about c',
-                'document word_ruby, de',
-                'document ruby node'];
+// const cor = ['document is a file about c',
+//                 'document word_ruby, de',
+//                 'document ruby node'];
+//
+// const forum = ['this is a post',
+//                 'a question'];
 
-const forum = ['this is a post',
-                'a question'];
-//console.log(tfidf.listTerms(0 /*document index*/));
-//     .forEach(function(item) {
-//     console.log(item.term + ': ' + item.tfidf);
-// });
+
 
 const buildModel = async (corpusPre,corpusForum,courseCode) => {
     var corpus=[];
@@ -52,4 +46,4 @@ const buildModel = async (corpusPre,corpusForum,courseCode) => {
 
 };
 
-console.log(buildModel(cor,forum));
+export{buildModel};
