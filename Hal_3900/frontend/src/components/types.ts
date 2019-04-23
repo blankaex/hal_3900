@@ -44,6 +44,7 @@ export interface Course {
 }
 
 export interface Store {
+  quiz: any;
     user: string|null,
     course: string|null,
     courses: Course[],

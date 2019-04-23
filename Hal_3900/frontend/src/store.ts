@@ -24,7 +24,20 @@ function messageHandler (commit: Commit, res: MessageEvent) {
     body: resObj.data.response
   })
 
-  if (resObj.data.options && resObj.data.options.length > 0) {
+  if (resObj.data.intent === 'quiz') {
+    // TODO handle quizzing stuff
+    commit('log', `got quiz questions: `)
+    resObj.data.options.map((o, i) => commit('log', `${i}. ${o.question}`))
+    // TODO message "starting quiz on _____, hit enter when ready"
+    commit('storeQuiz', {
+      questions: resObj.data.options
+    })
+    commit('storeMessage', {
+      type: 'quiz',
+      from: 'bot',
+      body: resObj.data.options[0]
+    })
+  } else if (resObj.data.options && resObj.data.options.length > 0) {
     commit('log', `got options: `)
     resObj.data.options.map((o, i) => commit('log', `${i}. ${o.text} (${o._score})`))
     commit('storeMessage', {
@@ -94,6 +107,7 @@ export default new Vuex.Store<Store>({
         body: 'Hello, welcome back!'
       }
     ],
+    quiz: [],
     courses: [
       {
         code: 'COMP1521',
@@ -172,6 +186,9 @@ export default new Vuex.Store<Store>({
       })
       state.activeMessage = generatedUuid
     },
+    storeQuiz (state, payload) {
+      state.quiz.push(payload.questions)
+    },
     changeTheme (state, payload) {
       const theme = state.themes.filter((x:Theme) => x.primary === payload)[0]
       state.theme = theme
@@ -179,7 +196,7 @@ export default new Vuex.Store<Store>({
     changeStatus (state, status) {
       state.status = status
     },
-    pickCourse(state, course) {
+    pickCourse (state, course) {
       state.course = course
     },
     log (state, payload) {
