@@ -1,10 +1,15 @@
 <template>
   <div class="quizMsg">
     <img src="../../assets/hal.png">
-    <div v-if="message.body.question && message.body.answer" class="text"
+    <div v-if="message.body.question" class="text"
          :style="{'background': getGradient(message.from)}">{{message.body.question}}</div>
 <!--    TODO: "see answer" button reveals answer below-->
+    <div v-if="!showingAnswer">
+      <button type="button" @click="showAnswer()">Show Answer</button>
+    </div>
 <!--    TODO: "next question" button loads next quiz Q if exists,  end of quiz message if last one-->
+    <div v-if="showingAnswer && message.body.answer" class="text"
+         :style="{'background': getGradient(message.from)}">{{message.body.answer}}</div>
   </div>
 </template>
 
@@ -15,7 +20,11 @@ import { BotResponse, Theme } from './../types'
 @Component
 export default class QuizMessage extends Vue {
   @Prop() message:any
+  showingAnswer: boolean=false
 
+  showAnswer () {
+    this.showingAnswer = true
+  }
   getGradient () {
     const theme:Theme = this.$store.state.theme
     const sg = theme.secondaryGradient
