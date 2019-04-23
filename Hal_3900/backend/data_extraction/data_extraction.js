@@ -22,6 +22,18 @@ const getDataToDb = async (input, db) => {
     await scraper.scrapeSpecified(input, data_forum_folder, data_page_folder);
 
     // consider running intent grouping to make the new tagging method easier - discuss with Yi
+    // TODO rework the forum structure as per Bag-of-words wiki page
+    // TODO output all tags and save them as a file for the data folder, to use for DF setup
+    // Call Yi's function with inputs
+    // CorpusPre = array of all texts: block = single text, group => put once as all items with \n between, and once as single line
+    // CorpusForum = array of just questions of the forum (not answers)
+    // courseCode goes into the database object
+    // output should be block object from bag-of-words model on Wiki
+    // In DB there will be no
+
+    // block output contains array of outputs
+    // insert the whole block into MongoDB
+
 
     await test_new.runAnalysis(db, data_forum_folder, data_page_folder);
 };
