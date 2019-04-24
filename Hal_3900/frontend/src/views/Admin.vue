@@ -1,6 +1,6 @@
 <template>
     <div class="admin">
-       <QuizSetup/>
+       <CourseSetup/>
     </div>
 </template>
 

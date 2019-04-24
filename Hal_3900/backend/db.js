@@ -69,42 +69,25 @@ module.exports = class DB {
 	async initData () {
 
 		// await this.runDataExtraction(require("./pagesToScrape.json"));
-        this.backup(); // careful with synchronisation
+        // this.backup(); // careful with synchronisation
 
-        console.log("DONE!");
+        // console.log("DONE!");
 
-		// let knownCollections = await this.dbConn.listCollections().toArray();
-		// knownCollections = knownCollections.map(x=>x.name);
-		// if (knownCollections.indexOf("forum") !== -1) {
-		// 	logger.info(`Detected collections, skipping init step`);
-		// 	return;
-		// }
-		// const block = '../data/tf-idf-block.json';
-		// const forum = '../data/tf-idf-forum.json';
-		// const blockItem = require(block);
-		// const forumItem = require(forum);
-		// this.addToCollection(forumItem.forum, 'forum');
-		// //this.addToCollection(items.grouped, 'grouped');
-		// this.addToCollection(blockItem.block, 'block');
-		//
-		// const filename = '../data/db_backup_tags_with_google_cloud_nlp.json';
-		// if (fs.existsSync(filename)){
-		// 	logger.info(`Restoring data from backup`);
-		// 	this.restore(filename);
-		// 	return;
-		// }
+		let knownCollections = await this.dbConn.listCollections().toArray();
+		knownCollections = knownCollections.map(x=>x.name);
+		if (knownCollections.indexOf("forum") !== -1) {
+			logger.info(`Detected collections, skipping init step`);
+			return;
+		}
 
-    	//
-		// if (fs.existsSync('../data/db_backup.json')){
-		// 	logger.info(`Restoring data from backup`);
-		// 	this.restore();
-		// 	return;
-		// }
-		//
-		// logger.info('Starting scraper to initialize data. This might take a while');
-		// this.runTaskQueue(require("./pagesToScrape.json"))
+		const filename = '../data/db_backup.json';
+		if (fs.existsSync(filename)){
+			logger.info(`Restoring data from backup`);
+			this.restore(filename);
+			return;
+		}
 
-		// this.backup(); // careful with synchronisation
+		console.log("No data loaded in the DB and no backup file. Add some course data");
 
 	};
 	
