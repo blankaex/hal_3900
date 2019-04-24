@@ -3,8 +3,6 @@ const TfIdf = natural.TfIdf;
 const tfidf = new TfIdf();
 const tokenizer = new natural.RegexpTokenizer({pattern: /([A-Za-z0-9]+)/});
 const dataType = require('./getDataType.js');
-//tokenizer = new natural.WordPunctTokenizer();
-
 
 // INPUT FORMATS
 // const cor = ['document is a file about c',
@@ -13,8 +11,6 @@ const dataType = require('./getDataType.js');
 //
 // const forum = ['this is a post',
 //                 'a question'];
-
-
 
 const buildModel = (corpusPre,corpusForum,courseCode) => {
     let corpus = [];
@@ -41,11 +37,11 @@ const buildModel = (corpusPre,corpusForum,courseCode) => {
         });
 
         // wrap as block object
-        const entry = dataType.getBlock(courseCode, "course", type, tags, corpusFull[i]);
+        const entry = dataType.getBlock("course", courseCode, type, tags, corpusFull[i]);
 
         block.push(entry);
     }
-    return {"block" : block};
+    return { block };
 
 };
 

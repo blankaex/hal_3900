@@ -114,6 +114,7 @@ const scrapeForum = async (forumRoot, dest) => {
     // console.log(forumData.length);
 
     fs.writeFileSync(`${dest}forumData.json`, JSON.stringify({forumData}))
+    return forumData;
 };
 
 const scrapeList = async (list, dest) => {
@@ -134,19 +135,20 @@ const scrapeList = async (list, dest) => {
     // console.log(pageData.length);
 
     fs.writeFileSync(`${dest}pageData.json`, JSON.stringify({ pageData }));
-    // return allRes;
+    return pageData;
 };
 
 const scrapeSpecified = async (pages, data_folder) => {
     // SCRAPE FROM LISTED INTENTS
     const listToScrape = pages.outline.concat(pages.assignment).concat(pages.content);
-    const listRes = await scrapeList(listToScrape, data_folder)
+    const pageData = await scrapeList(listToScrape, data_folder)
 
     // SCRAPE FORUM STARTING AT ROOT PAGE
-    const forumRes = await scrapeForum(pages.forum, data_folder);
+    const forumData = await scrapeForum(pages.forum, data_folder);
 
     // WAIT UNTIL ALL COMPLETED BEFORE RETURNING
-    await Promise.all([listRes, forumRes]);
+    // await Promise.all([pageData, forumData]);
+    return { pageData, forumData };
 };
 
 module.exports = {scrapeSpecified};

@@ -18,8 +18,6 @@ const getBlock = (intent, courseCode, type, tags, text) => {
 // takes grouped data object, returns array of block data
 // one block with all text, then one block for each grouped item
 const getGrouped = (items) => {
-    // console.log(items);
-
     let jointText;
     try {
         jointText = items.join("\n");
