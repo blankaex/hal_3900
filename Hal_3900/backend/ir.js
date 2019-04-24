@@ -26,6 +26,18 @@ function performIR(tags, candidates) {
     return response.slice(0,4); // output top 3 results
 }
 
+//call when one of the output of getDataPoint() has a question type
+//example:
+//       var result == await getDataPoint(searchTags);
+//       var finalResponse = [];
+//       var post;
+//       result.map( x=> {
+//                        if (x["type"] === "question") {
+//                                post = dbConn.collection("forum").find({"question": x["text"]});
+//                                finalResponse.push(pick_ansewer(post));
+//                        }else{ finalResponse.push(x["text"])})
+//       training(dbConn,result,finalResponse[bestIndex],bestIndex,searchTags);
+
 function pick_answer(post) {
     const scope = post.answers.reduce((acc, answer) => acc + answer["theta"], 0);
     //console.log(scope);
