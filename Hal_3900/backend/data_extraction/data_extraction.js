@@ -33,12 +33,11 @@ const getDataToDb = async (input, db) => {
 
     const data = await analysis.buildModel(corpusPre, corpusForum, input.courseCode);
 
+    // console.log(data.block);
     // insert data into Mongo
-    await db.addToCollection([data], 'block');
+    await db.addToCollection(data.block, 'block');
 
-    // add courseCode to forum data
-    const forumData = { "data": scrapedData.forumData, "courseCode": input.courseCode};
-    await db.addToCollection([forumData], 'forum');
+    await db.addToCollection(scrapedData.forumData, 'forum');
 
 };
 
