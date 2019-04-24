@@ -27,6 +27,7 @@
     "express-ws": "^4.0.0",
     "fs": "0.0.1-security",
     "log4js": "^4.1.0",
+    "natural": "^0.6.3",
     "pump": "^3.0.0",
     "through2": "^3.0.1",
     "uuid": "^3.3.2",

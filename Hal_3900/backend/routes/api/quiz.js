@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const DB = require('../../db');
 const db = new DB();
-const analyzer = require('../../data_extraction/analyze');
+// const analyzer = require('../../data_extraction/analyze');
 
 // get all questions
 router.post('/', async (req, res) => {

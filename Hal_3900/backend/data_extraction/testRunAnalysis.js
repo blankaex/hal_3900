@@ -14,7 +14,7 @@ const init_page_stacks = (data_forum_folder, data_page_folder) => {
     fs.readdirSync(data_page_folder).forEach(i => {
         const file = require("../" + data_page_folder + i);
         groupList = groupList.concat(file.grouped);
-        blockList = blockList.concat(file.block);
+        blockList = blockList.concat(file.tf);
     });
 
     return {forumList, groupList, blockList};
@@ -23,7 +23,7 @@ const init_page_stacks = (data_forum_folder, data_page_folder) => {
 const handle_group = async (group, db) => {
     // const res = await analyze.process_grouped_item(group);
     try {
-        const inserted = await db.addToCollection(group.items, 'block');
+        const inserted = await db.addToCollection(group.items, 'tf-idf-block.json');
         const items = Object.values(inserted.insertedIds);
         const newGroup = dataType.getGrouped(group.intent, group.courseCode, group.tags, items);
         db.addToCollection([newGroup], 'grouped');
@@ -39,7 +39,7 @@ const run_stack = async (stack, db, type) => {
 
     switch (type){
         case "forum": await db.addToCollection(stack, 'forum'); break;
-        case "block": await db.addToCollection(stack, 'block'); break;
+        case "tf-idf-block.json": await db.addToCollection(stack, 'tf-idf-block.json'); break;
         case "group":
             stack.forEach(item => handle_group(item, db));
             break;
@@ -58,7 +58,7 @@ const runAnalysis = async (db, data_forum_folder, data_page_folder) => {
 
     await run_stack(stacks.forumList, db, "forum");
     await run_stack(stacks.groupList, db, "group");
-    await run_stack(stacks.blockList, db, "block");
+    await run_stack(stacks.blockList, db, "tf-idf-block.json");
 
 
 };

@@ -16,7 +16,7 @@ const dataType = require('./getDataType.js');
 
 
 
-const buildModel = async (corpusPre,corpusForum,courseCode) => {
+const buildModel = (corpusPre,corpusForum,courseCode) => {
     let corpus = [];
     let corpusFull = corpusPre.concat(corpusForum);
     corpusPre.map(x => x.replace(/[^\w\s]|_/g, "")).map(x => corpus.push(tokenizer.tokenize(x)));
@@ -27,26 +27,25 @@ const buildModel = async (corpusPre,corpusForum,courseCode) => {
     //console.log(corpusFull);
     let block = [];
     for (let i = 0; i < corpus.length; i++){
-        let entry = {};
-        entry.intent = "course";
-        entry.courseCode = courseCode;
-        if (i < corpusPre.length ){
-            entry.type = "answer";
-        } else {
-            entry.type = "question";
-        }
-        entry.tags = [];
-        //console.log(tfidf.listTerms(i));
-        tfidf.listTerms(i).forEach(function (item){
-            const tag = dataType.getTag(item.term, item.tfidf);
-            entry.tags.push(tag);
+
+        // get type
+        let type;
+        if (i < corpusPre.length ) type = "answer";
+        else type = "question";
+
+        // get tags
+        const tags = tfidf.listTerms(i).map(function (item){
+            const name = item.term;
+            const salience = item.tfidf;
+            return dataType.getTag(name, salience); // sets theta = salience
         });
-        entry.text = corpusFull[i];
-        //console.log(corpusFull[i]);
+
+        // wrap as block object
+        const entry = dataType.getBlock(courseCode, "course", type, tags, corpusFull[i]);
+
         block.push(entry);
     }
     return {"block" : block};
-
 
 };
 

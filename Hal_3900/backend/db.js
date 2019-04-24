@@ -78,26 +78,30 @@ module.exports = class DB {
 	}
 	
 	async initData () {
-		let knownCollections = await this.dbConn.listCollections().toArray();
-		knownCollections = knownCollections.map(x=>x.name);
-		if (knownCollections.indexOf("forum") !== -1) {
-			logger.info(`Detected collections, skipping init step`);
-			return;
-		}
-		const block = '../data/block.json';
-		const forum = '../data/forum.json';
-		const blockItem = require(block);
-		const forumItem = require(forum);
-		this.addToCollection(forumItem.forum, 'forum');
-		//this.addToCollection(items.grouped, 'grouped');
-		this.addToCollection(blockItem.block, 'block');
 
-		const filename = '../data/db_backup_tags_with_google_cloud_nlp.json';
-		if (fs.existsSync(filename)){
-			logger.info(`Restoring data from backup`);
-			this.restore(filename);
-			return;
-		}
+		await this.runTaskQueue(require("./pagesToScrape.json"));
+        console.log("DONE!");
+
+		// let knownCollections = await this.dbConn.listCollections().toArray();
+		// knownCollections = knownCollections.map(x=>x.name);
+		// if (knownCollections.indexOf("forum") !== -1) {
+		// 	logger.info(`Detected collections, skipping init step`);
+		// 	return;
+		// }
+		// const block = '../data/tf-idf-block.json';
+		// const forum = '../data/tf-idf-forum.json';
+		// const blockItem = require(block);
+		// const forumItem = require(forum);
+		// this.addToCollection(forumItem.forum, 'forum');
+		// //this.addToCollection(items.grouped, 'grouped');
+		// this.addToCollection(blockItem.block, 'block');
+		//
+		// const filename = '../data/db_backup_tags_with_google_cloud_nlp.json';
+		// if (fs.existsSync(filename)){
+		// 	logger.info(`Restoring data from backup`);
+		// 	this.restore(filename);
+		// 	return;
+		// }
 
     	//
 		// if (fs.existsSync('../data/db_backup.json')){
@@ -125,7 +129,7 @@ module.exports = class DB {
 	// pass in a group object, returns array of items from the group
 	async findItemsByGroup(group){
 		const itemIds = group.items.map(id => ObjectId(id));
-		const collection = this.dbConn.collection('block');
+		const collection = this.dbConn.collection('tf-idf-block.json');
 		let results = [];
 		const cursor = await collection.find({_id: {$in: itemIds}});
 		results = await cursor.toArray();
@@ -170,7 +174,7 @@ module.exports = class DB {
 	
 	async findAllByTag(tag) {
 		const grouped = await this.findByCollectionAndTag(tag, this.dbConn, 'grouped');
-		const block = await this.findByCollectionAndTag(tag, this.dbConn, 'block');
+		const block = await this.findByCollectionAndTag(tag, this.dbConn, 'tf-idf-block.json');
 		const forum = await this.findByCollectionAndTag(tag, this.dbConn, 'forum');
 		
 		return {grouped, forum, block};
@@ -187,7 +191,7 @@ module.exports = class DB {
 
 	async findAllByCourseCode(courseCode) {
 		const grouped = await this.findByCourseCode(courseCode, 'grouped');
-		const block = await this.findByCourseCode(courseCode, 'block');
+		const block = await this.findByCourseCode(courseCode, 'tf-idf-block.json');
 		const forum = await this.findByCourseCode(courseCode, 'forum');
 
 		return {grouped, forum, block};
@@ -200,7 +204,7 @@ module.exports = class DB {
 	
 	async getAllUniqueTags() {
 		const grouped = await this.getUniqueTagsFromCollection(this.dbConn, 'grouped');
-		const block = await this.getUniqueTagsFromCollection(this.dbConn, 'block');
+		const block = await this.getUniqueTagsFromCollection(this.dbConn, 'tf-idf-block.json');
 		const forum = await this.getUniqueTagsFromCollection(this.dbConn, 'forum');
 		
 		// reduce to single array of unique
@@ -228,7 +232,7 @@ module.exports = class DB {
 	
 	async getDataPoints(tags) {
 		let candidates = [];
-		const collection = this.dbConn.collection('block');
+		const collection = this.dbConn.collection('tf-idf-block.json');
 		for(var i = 0; i< tags.length;i++){
 			logger.info(`find tag ${tags[i]}`);
 		
@@ -264,7 +268,7 @@ module.exports = class DB {
 	};
 
 	async train(bestResponse, ct, tags) {
-		if(ct == "block"){
+		if(ct == "tf-idf-block.json"){
 			for(var i =0; i< tags.length;i++){
 				this.dbConn.ct.update({"text" :  bestResponse,"tags.name": tags[i]}, {$set:{"tags.theta" : "tags.theta"+"tags.sailence"}});
 			}
@@ -281,7 +285,7 @@ module.exports = class DB {
 		const filename = '../data/db_backup_tags_with_google_cloud_nlp.json';
 		const forum = await this.findAllFromCollection('forum');
 		const grouped = await this.findAllFromCollection('grouped');
-		const block = await this.findAllFromCollection('block');
+		const block = await this.findAllFromCollection('tf-idf-block.json');
 
 		fs.writeFileSync(filename, JSON.stringify({forum, grouped, block}));
 	}
@@ -303,7 +307,7 @@ module.exports = class DB {
 		const items = require(backup_file);
 		this.addToCollection(items.forum, 'forum');
 		this.addToCollection(items.grouped, 'grouped');
-		this.addToCollection(items.block, 'block');
+		this.addToCollection(items.tf, 'tf-idf-block.json');
 
 	}
 
@@ -313,7 +317,7 @@ module.exports = class DB {
 		const items = require(filename);
 		this.addToCollection(items.forum, 'forum');
 		this.addToCollection(items.grouped, 'grouped');
-		this.addToCollection(items.block, 'block');
+		this.addToCollection(items.tf, 'tf-idf-block.json');
 	}
 };
 

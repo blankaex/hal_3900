@@ -11,22 +11,28 @@ const getAnswer = (text) => {
     return {text, theta, count}
 };
 
-const getBlock = (courseCode, tags, text) => {
-    return {courseCode, tags, text};
+const getBlock = (intent, courseCode, type, tags, text) => {
+    return {intent, courseCode, type, tags, text};
 };
 
 // takes grouped data object, returns array of block data
 // one block with all text, then one block for each grouped item
-const getGrouped = (courseCode, tags, items) => {
-    let result = items;
-    const allStrings = items.map(i => i.text);
-    const text = allStrings.join("\n");
-    result.push(getBlock(courseCode, tags, text));
-    return result;
+const getGrouped = (items) => {
+    // console.log(items);
+
+    let jointText;
+    try {
+        jointText = items.join("\n");
+    } catch (err) {
+
+    }
+
+    if (jointText) return items.concat(jointText);
+    else return items;
 };
 
-const getForumObject = (courseCode, tags, question, answers) => {
-    return {courseCode, tags, question, answers};
+const getForumObject = (question, answers) => {
+    return {question, answers};
 };
 
 const getQuizObject = (id, question, answer, tags=[]) => {

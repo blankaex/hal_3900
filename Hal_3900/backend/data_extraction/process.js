@@ -12,86 +12,82 @@ const stripText = (text) => {
     return newText;
 };
 
-const stripTextForTags = (text) => {
-    let newText = text.replace(/[\W_]+/g, ' ');              // strip ALL non-alphanumeric, replace with space
-    newText = newText.replace(/\s+/g, ' ');                     // remove excess whitespace
-    newText = newText.toLowerCase().trim();                     // tolower() and trim start/end whitespace
-    return newText;
+const parseData = (html) => {
+
+    const tableData = getTableData(html);
+    const listData = getListData(html);
+    const paragraphData = getParagraphData(html);
+
+    // get out all the blocks together in array
+    const data = tableData.concat(listData).concat(paragraphData);
+
+    return data;
 };
 
-const parseData = (html, courseCode) => {
+// HELPER FUNCTIONS FOR PARSING DATA PAGES
+
+const getTableData = (html) => {
+    // load cheerio library
     let $ = cheerio.load(html);
 
-    // GET ALL TABLES DATA
-    const data = [];
+    const tableData = [];
     $("table").each((index, element) => {
-        const items = [];
-        const tags = [];
-        tags.push(dataType.getTag("table"));
-        const prev = $(element).prev();
-        if (prev.is("h1") ||  prev.is("h2") || prev.is("h3")
-            || prev.is("h4") || prev.is("h5") || prev.is("h6")){
-            const name = stripTextForTags(prev.text());
-            tags.push(dataType.getTag(name));
-        }
-        $(element).find("tr").map((i, e) => {
+        let items = $(element).find("tr").map((i, e) => {
             // get the tablerow text, strip whitespace to singles
             const td = [];
             $(e).find("td").map((i, e) => {
                 td.push(stripText($(e).text()));
             });
-            const text = td.join(', ');
-            // construct js object
-            if (text){
-                items.push(dataType.getBlock(courseCode, [], text));
-            }
+            return td.join(', ');
         });
-        if (items.length > 0){
-            data.push(dataType.getGrouped(courseCode, tags, items));
+
+        items = items.filter(i => i !== "" && i !== null);
+
+        if (items.length > 0) {
+            Array.prototype.push.apply(tableData, dataType.getGrouped(items));
         }
     });
 
-    // GET ALL LIST DATA
+    return tableData;
+};
+
+const getListData = (html) => {
+    // load cheerio library
+    let $ = cheerio.load(html);
+
+    let listData = [];
     $("ul").map((index, element) => {
         let items = [];
-        const tags = [];
-        tags.push(dataType.getTag("list"));
-        const prev = $(element).prev();
-        if (prev.is("h1") ||  prev.is("h2") || prev.is("h3")
-            || prev.is("h4") || prev.is("h5") || prev.is("h6")){
-            const name = stripTextForTags(prev.text());
-            tags.push(dataType.getTag(name));
-        }
         $(element).find("li").each((i, e) => {
             // paragraph with stripped whitespace. could break them up further if needed
             const text = stripText($(e).text());
             if (text) {
-                items.push(dataType.getBlock(courseCode, [], text));
+                items.push(text);
             }
         });
-        data.push(dataType.getGrouped(courseCode, tags, items));
-    });
-
-    // GET ALL PARAGRAPHS DATA
-    $("p").map((index, element) => {
-        const tags = [];
-        tags.push(dataType.getTag("paragraph"));
-        const prev = $(element).prev();
-        if (prev.is("h1") ||  prev.is("h2") || prev.is("h3")
-            || prev.is("h4") || prev.is("h5") || prev.is("h6")){
-            const name = stripTextForTags(prev.text());
-            tags.push(dataType.getTag(name));
-        }
-
-        const text = stripText($(element).text());
-
-        if (text){ // text is not falsy value or "",
-            data.push(dataType.getBlock(courseCode, tags, text));
+        if (items.length > 0){
+            Array.prototype.push.apply(listData, dataType.getGrouped(items));
         }
     });
-
-    return { data };
+    return listData;
 };
+
+const getParagraphData = (html) => {
+    // load cheerio library
+    let $ = cheerio.load(html);
+
+    const paragraphData = [];
+    $("p").map((index, element) => {
+        const text = stripText($(element).text());
+        if (text){ // text is not falsy value or "",
+            paragraphData.push(text);
+        }
+    });
+    return paragraphData;
+};
+
+
+// FUNCTIONS FOR PARSING FORUM PAGES
 
 // feed me the html for the root forum page
 // returns array where each item to be {topic name, url}
@@ -139,6 +135,8 @@ const getForumPages = (html, topicPageId) => {
     return {tags, topicPageId, addressList};
 };
 
+// FUNCTIONS FOR GETTING FINAL DATA FROM FORUM
+
 const extractMessage = (messageItem) => {
     const text = stripText(messageItem.body);
     const childResults = [];
@@ -148,13 +146,13 @@ const extractMessage = (messageItem) => {
 
     // also add the results from all children of this message (recurse)
     messageItem.children.forEach(child => {
-        childResults.push(extractMessage(child));
+        Array.prototype.push.apply(childResults, extractMessage(child));
     });
 
     return childResults;
 };
 
-const getForumPostObject = (apiResponseObject, tags, courseCode) => {
+const getForumPostObject = (apiResponseObject) => {
 
     try {
         const question = stripText(apiResponseObject.result.messages[0].body);
@@ -162,14 +160,15 @@ const getForumPostObject = (apiResponseObject, tags, courseCode) => {
         apiResponseObject.result.messages[0].children.forEach(child => {
             const results = extractMessage(child);
             results.forEach(result => {
-                if (result != null){
-                    answers.push(result);
+                if
+                (result != null){
+                    Array.prototype.push.apply(answers.push(result));
                 }
             });
         });
-        return dataType.getForumObject(courseCode, tags, question, answers);
+        return dataType.getForumObject(question, answers);
     } catch (err){
-        console.log("Item not available")
+        // console.log("Item not available")
     }
 };
 

@@ -10,19 +10,17 @@ const fs = require('fs');
 
 const getDataToDb = async (input, db) => {
     // set up course directory
-    const data_forum_folder = `../data/${input.courseCode}/data_forum/`;
-    const data_page_folder = `../data/${input.courseCode}/data_page/`;
+    const data_folder = `../data/${input.courseCode}/`;
     try {
-        fs.mkdirSync(data_forum_folder, {recursive: true});
-        fs.mkdirSync(data_page_folder, {recursive: true});
+        fs.mkdirSync(data_folder, {recursive: true});
     } catch (err){
         console.error(err);
     }
 
     // save pagesToScrape for laters :)
-    fs.writeFileSync(`../data/${input.courseCode}`, JSON.stringify(input));
+    fs.writeFileSync(`${data_folder}pagesToScrape.json`, JSON.stringify(input));
 
-    await scraper.scrapeSpecified(input, data_forum_folder, data_page_folder);
+    await scraper.scrapeSpecified(input, data_folder);
 
     // consider running intent grouping to make the new tagging method easier - discuss with Yi
     // TODO rework the forum structure as per Bag-of-words wiki page
@@ -47,11 +45,11 @@ const getDataToDb = async (input, db) => {
 // const forum = ['this is a post',
 //                 'a question'];
 
-    const data = analysis.buildModel(corpusPre,corpusForum,courseCode)
+    // const data = analysis.buildModel(corpusPre,corpusForum,input.courseCode)
 
     // then just dump the data into DB!!!
 
-    await test_new.runAnalysis(db, data_forum_folder, data_page_folder);
+    // await test_new.runAnalysis(db, data_forum_folder, data_page_folder);
 
 };
 
