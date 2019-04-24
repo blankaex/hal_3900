@@ -7,6 +7,7 @@
       <p>Enter the urls of pages on webcms3 below. Data will be taken from these pages and added to the chat database. Please allow time for the setup to complete: you can check up on the status here.</p>
       <form>
         <input type='text' v-model.trim='courseCode' placeholder='Course Code'/><br>
+        <input type='text' v-model.trim='courseName' placeholder='Course Name'/><br>
         <input type='text' v-model.trim='forum' placeholder='Forum URL'/><br>
         <input type='text' v-model.trim='outline' placeholder='Course Outline'/><br>
 <!--        <input v-for='item in assignment' v-model='item.name' placeholder='name'/>-->
@@ -45,6 +46,7 @@ interface Link {
 export default class CourseSetup extends Vue {
   submitted: boolean = false
   courseCode: string =''
+  courseName: string =''
   forum: string =''
   outline: string =''
   assignment: Link[] = [
@@ -63,28 +65,25 @@ export default class CourseSetup extends Vue {
   addAssignment () {
     this.assignment.push({ name: '', address: '' })
     this.$forceUpdate()
-    console.log(this.assignment)
   }
 
   removeAssignment (index: number) {
     this.assignment.splice(index, 1)
     this.$forceUpdate()
-    console.log(this.assignment)
   }
 
   addContent () {
     this.content.push({ name: '', address: '' })
     this.$forceUpdate()
-    console.log(this.content)
   }
 
   removeContent (index: number) {
     this.content.splice(index, 1)
     this.$forceUpdate()
-    console.log(this.content)
   }
 
   sendSetup () {
+    // TODO add new courses to store
     // wrap form input as JS object matching pagesToScrape structure
     const courseCode = this.courseCode
     const forum = this.forum
@@ -98,23 +97,22 @@ export default class CourseSetup extends Vue {
     const content = this.content
 
     const pagesToScrape = { courseCode, forum, outline, assignment, content }
-    console.log(pagesToScrape)
-
-    // get URL for backend API
-    let host = 'backend.hal-3900.com'
-    if (window.location.host !== 'hal-3900.com') {
-      host = 'localhost:9447'
-    }
-    // post setup info to backend
-    this.$http.post(`http://${host}/api/admin/setup`, { pagesToScrape })
-      .then(res => {
-        console.log(res)
-        if (res.ok) {
-          // TODO if backend response ok, show confirmation page
-          this.submitted = true
-        }
-        this.$forceUpdate()
-      })
+    const host = this.$store.state.host
+    fetch(`http://${host}/api/admin/setup`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+      body: JSON.stringify({ pagesToScrape })
+    }).then(res => {
+      console.log(res)
+      if (res.ok) {
+        // TODO if backend response ok, show confirmation page
+        this.submitted = true
+      }
+      this.$forceUpdate()
+    })
   }
 }
 </script>
