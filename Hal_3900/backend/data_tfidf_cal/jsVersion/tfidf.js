@@ -13,8 +13,6 @@ const tokenizer = new natural.RegexpTokenizer({pattern: /([A-Za-z0-9]+)/});
 // const forum = ['this is a post',
 //                 'a question'];
 
-
-
 const buildModel = async (corpusPre,corpusForum,courseCode) => {
     var corpus=[];
     var corpusFull = corpusPre.concat(corpusForum);
@@ -25,6 +23,7 @@ const buildModel = async (corpusPre,corpusForum,courseCode) => {
     //const corpusFull = corpusPre + corpusForum;
     //console.log(corpusFull);
     var block = [];
+    var tagList = new Set();
     for(var i =0; i<corpus.length; i++){
 
         var entry = {};
@@ -34,6 +33,7 @@ const buildModel = async (corpusPre,corpusForum,courseCode) => {
         entry.tags = [];
         //console.log(tfidf.listTerms(i));
         tfidf.listTerms(i).forEach(function (item){
+            tagList.add(item.term);
             var tag = {};
             tag.name = item.term; tag.sailence = item.tfidf;tag.theta = item.tfidf;
             entry.tags.push(tag);});
@@ -41,9 +41,7 @@ const buildModel = async (corpusPre,corpusForum,courseCode) => {
         //console.log(corpusFull[i]);
         block.push(entry);
     }
-    return {"block" : block};
-
-
+    return [{"block" : block},Array.from(tagList)];
 };
 
 export{buildModel};
