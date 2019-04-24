@@ -22,6 +22,7 @@ const buildModel = (corpusPre,corpusForum,courseCode) => {
     //const corpusFull = corpusPre + corpusForum;
     //console.log(corpusFull);
     let block = [];
+    let tagList = new Set();
     for (let i = 0; i < corpus.length; i++){
 
         // get type
@@ -31,6 +32,7 @@ const buildModel = (corpusPre,corpusForum,courseCode) => {
 
         // get tags
         const tags = tfidf.listTerms(i).map(function (item){
+            tagList.add(item.term);
             const name = item.term;
             const salience = item.tfidf;
             return dataType.getTag(name, salience); // sets theta = salience
@@ -41,7 +43,7 @@ const buildModel = (corpusPre,corpusForum,courseCode) => {
 
         block.push(entry);
     }
-    return { block };
+    return { block, "tagList": Array.from(tagList.values()) };
 
 };
 

@@ -33,6 +33,9 @@ const getDataToDb = async (input, db) => {
 
     const data = await analysis.buildModel(corpusPre, corpusForum, input.courseCode);
 
+    // save tagList
+    fs.writeFileSync(`${data_folder}tagList.json`, JSON.stringify({ "tagList":data.tagList }));
+
     // console.log(data.block);
     // insert data into Mongo
     await db.addToCollection(data.block, 'block');
