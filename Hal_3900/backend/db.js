@@ -62,6 +62,11 @@ module.exports = class DB {
 		return results;
 	}
 
+	async delete(obj, collection='documents') {
+		const collectionRef = this.dbConn.collection(collection);
+        await collectionRef.deleteOne(obj)
+	}
+
 	// pagesToScrape must be a js object formatted as per spec in wiki
 	async runTaskQueue (pagesToScrape) {
 		if (!this.connected)
@@ -79,7 +84,7 @@ module.exports = class DB {
 			return;
 		}
 
-		const filename = '../data/db_backup.json';
+		const filename = '../data/db_backup_tags_with_google_cloud_nlp.json';
 		if (fs.existsSync(filename)){
 			logger.info(`Restoring data from backup`);
 			this.restore(filename);
@@ -186,6 +191,22 @@ module.exports = class DB {
 		forum.map(f=>tagSet.add(f));
 		return Array.from(tagSet);
 	};
+
+	async getQuizQuestions(tags, intent, courseCode) {
+		// TODO need to add courseCode param in: unused rn
+		const candidates = await this.findAllFromCollection('quiz');
+		// console.log(candidates);
+		// TODO filter by tags
+
+		// if (candidates.length > 0){
+		// 	// choose 1 at random
+		// 	// or choose a list if we know how many
+		//
+		// }
+
+		return candidates;
+
+	}
 	
 	async getDataPoints(tags, intent) {
 		let candidates = await this.findAllFromCollection('grouped');

@@ -1,16 +1,19 @@
 <template>
     <div class="admin">
        <CourseSetup/>
+       <QuizSetup/>
     </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import CourseSetup from '@/components/CourseSetup.vue'
+import QuizSetup from '@/components/QuizSetup.vue'
 
 @Component({
   components: {
-    CourseSetup
+    CourseSetup,
+    QuizSetup
   }
 })
 export default class Admin extends Vue {}
