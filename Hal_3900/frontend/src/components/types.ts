@@ -48,7 +48,7 @@ export interface Store {
         name: string|null,
         admin: boolean|null
     },
-    quiz: any;
+    quiz: any,
     course: string|null,
     courses: Course[],
     messages: Message[],
