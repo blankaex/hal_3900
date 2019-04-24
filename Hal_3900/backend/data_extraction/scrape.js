@@ -106,9 +106,12 @@ const scrapeForum = async (forumRoot, dest) => {
     // get array of arrays
     const allRes = await Promise.all(res);
 
+    // console.log(allRes.length);
     // flatten arrays
-    const forumData = [];
-    allRes.forEach(array => forumData.concat(array));
+    let forumData = [];
+    allRes.forEach(array => forumData = forumData.concat(array));
+
+    // console.log(forumData.length);
 
     fs.writeFileSync(`${dest}forumData.json`, JSON.stringify({forumData}))
 };
@@ -127,6 +130,8 @@ const scrapeList = async (list, dest) => {
     // flatten arrays
     let pageData = [];
     allRes.forEach(array => pageData = pageData.concat(array));
+
+    // console.log(pageData.length);
 
     fs.writeFileSync(`${dest}pageData.json`, JSON.stringify({ pageData }));
     // return allRes;
