@@ -100,7 +100,7 @@ module.exports = class Bot {
 				intent: result.intent ? result.intent.displayName : '[UNKNOWN]'
 			};
 		} catch (err) {
-			console.log(err);
+			logger.error(err);
 			return {
 				response: result.fulfillmentText,
 				options: null,

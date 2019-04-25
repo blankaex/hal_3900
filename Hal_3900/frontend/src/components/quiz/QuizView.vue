@@ -2,7 +2,7 @@
   <div v-if="courseCode" class='questionsList'>
     <h2>{{courseCode}}</h2>
     <table v-if="questions.length>0">
-      <tr v-for='(question, index) in questions' :key='question.id'>
+      <tr v-for='question in questions' :key='question.id'>
         <td>{{question.question}}</td>
         <td>{{question.answer}}</td>
         <td><button type='button' @click='remove(question.id)'>Delete</button></td>
@@ -32,14 +32,14 @@ export default class QuizView extends Vue {
     // switch down in prev view
     this.$emit('clicked', 'true')
   }
-  remove (id) {
+  remove (id:string) {
     const host = this.$store.state.host
     fetch(`http://${host}/api/quiz/delete/${id}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      credentials: 'include',
+      credentials: 'include'
     }).then(r => r.json())
       .then(r => {
         console.log(r)
@@ -62,8 +62,8 @@ export default class QuizView extends Vue {
         this.questions = r
       })
   }
-
 }
+
 </script>
 
 <style scoped>
