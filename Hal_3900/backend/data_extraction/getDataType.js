@@ -33,8 +33,8 @@ const getForumObject = (question, answers) => {
     return {question, answers};
 };
 
-const getQuizObject = (id, question, answer, tags=[]) => {
-    return {id, question, answer, tags};
+const getQuizObject = (courseCode, question, answer, tags=[]) => {
+    return {courseCode, question, answer, tags};
 };
 
 module.exports = {getTag, getAnswer, getBlock, getGrouped, getForumObject, getQuizObject};

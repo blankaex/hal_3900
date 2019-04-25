@@ -66,6 +66,8 @@ module.exports = class DB {
 	}
 	
 	async initData () {
+		this.backupQuiz();
+
 		let knownCollections = await this.dbConn.listCollections().toArray();
 		knownCollections = knownCollections.map(x=>x.name);
 		if (knownCollections.indexOf("forum") !== -1) {
@@ -236,6 +238,18 @@ module.exports = class DB {
 		}
 		const data = await this.findAllByCourseCode(courseCode);
 		fs.writeFileSync(filename, JSON.stringify(data));
+	}
+
+	async backupQuiz() {
+		const dirname = '../data/backups/';
+		const filename = `${dirname}quiz_backup.json`;
+		try {
+			fs.mkdirSync(dirname, {recursive: true});
+		} catch (err){
+			console.log(err);
+		}
+		const questions = await this.findAllFromCollection('quiz');
+		fs.writeFileSync(filename, JSON.stringify({ questions }));
 	}
 
 	async restore(backup_file) {

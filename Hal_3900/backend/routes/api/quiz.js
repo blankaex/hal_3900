@@ -81,24 +81,20 @@ router.post('/add', async (req, res) => {
     const newQuestions = req.body.questions;
     // create objects
     const questionMap = newQuestions.map(q => {
-        const id = uuid.v4();
         const question = q.question;
         const answer = q.answer;
-        const tags = []; // TODO make this a call to analysis
-        return { id, courseCode, tags, question, answer };
+        return { courseCode, question, answer };
     });
 
-    // TODO Classify content with tags -> test this works!!
     // NOTE you will need to have NLP service account set up to use this: same process as DF service account.
-    const taggedItems = data_extraction.getQuizTags(questionMap, courseCode);
-    console.log(taggedItems);
+    const taggedItems = await data_extraction.getQuizTags(questionMap, courseCode);
 
     // add to db
     if (!db.connected)
         await db.connect();
+    db.addToCollection(taggedItems, 'quiz');
 
-    db.addToCollection(questionMap, 'quiz');
-    // res.status(200).json({'response': `OK!!`});
+    db.backupQuiz();
 
     res.status(200).json({'response': `${questionMap.length} questions added.`});
 });
