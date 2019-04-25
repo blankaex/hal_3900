@@ -1,3 +1,4 @@
+const {ObjectId} = require('mongodb');
 const MongoClient = require('mongodb').MongoClient;
 const fs = require('fs');
 const logger = require('log4js').getLogger('Database');
@@ -44,6 +45,11 @@ module.exports = class DB {
 		return results;
 	}
 
+	async delete(obj, collection='documents') {
+		const collectionRef = this.dbConn.collection(collection);
+        await collectionRef.deleteOne(obj)
+	}
+
 	// pagesToScrape must be a js object formatted as per spec in wiki
 	async runTaskQueue (pagesToScrape) {
 		if (!this.connected)
@@ -53,36 +59,23 @@ module.exports = class DB {
 	}
 	
 	async initData () {
-		//TODO remove before merge master
-	    // this.backupCourse('COMP1521');
-		// this.backupCourse('COMP1531');
-
-		// const courseCode = 'COMP1531';
-        // await this.runTaskQueue({courseCode});
+		// this.backup();
 		let knownCollections = await this.dbConn.listCollections().toArray();
 		knownCollections = knownCollections.map(x=>x.name);
 		if (knownCollections.indexOf("forum") !== -1) {
 			logger.info(`Detected collections, skipping init step`);
 			return;
 		}
-		const block = '../data/block.json';
-		const forum = '../data/forum.json';
-		const blockItem = require(block);
-		const forumItem = require(forum);
-		this.addToCollection(forumItem.forum, 'forum');
-		//this.addToCollection(items.grouped, 'grouped');
-		this.addToCollection(blockItem.block, 'block');
 
+		const filename = '../data/db_backup_tags_with_google_cloud_nlp.json';
+		if (fs.existsSync(filename)){
+			logger.info(`Restoring data from backup`);
+			this.restore(filename);
+			return;
+		}
 
-		//
-		// if (fs.existsSync('../data/db_backup.json')){
-		// 	logger.info(`Restoring data from backup`);
-		// 	this.restore();
-		// 	return;
-		// }
-		//
-		// logger.info('Starting scraper to initialize data. This might take a while');
-		// this.runTaskQueue(require("./pagesToScrape.json"))
+		logger.info('Starting scraper to initialize data. This might take a while');
+		this.runTaskQueue(require("./pagesToScrape.json"))
 
 		// this.backup(); // careful with synchronisation
 
@@ -185,10 +178,86 @@ module.exports = class DB {
 		return Array.from(tagSet);
 	};
 
+	async getQuizQuestions(tags, intent, courseCode) {
+		// TODO need to add courseCode param in: unused rn
+		const candidates = await this.findAllFromCollection('quiz');
+		// console.log(candidates);
+		// TODO filter by tags
+
+		// if (candidates.length > 0){
+		// 	// choose 1 at random
+		// 	// or choose a list if we know how many
+		//
+		// }
+
+		return candidates;
+
+	}
+	
+	async getDataPoints(tags, intent) {
+		let candidates = await this.findAllFromCollection('grouped');
+		candidates = candidates.concat(await this.findAllFromCollection('block'));
+		candidates = candidates.concat(await this.findAllFromCollection('forum'));
+
+		// kill all non intent matches items
+		// logger.error(candidates);
+		// logger.error(candidates.map(x=>x.intent));
+		// logger.error(intent);
+		candidates = candidates.filter(c=>c.intent === intent)
+
+		// calculate scores for each candidate
+		candidates = candidates.map((candidate)=>{
+				return {
+						...candidate,
+						_score: calcScore(tags, candidate),
+				}
+		});
+		
+		// sort by score
+		candidates = candidates.sort((a,b)=> b._score - a._score);
+		
+		// filter out duplicates
+		const response = candidates.filter((value, index, self)=>self.indexOf(value) === index);
+
+		// Format group and forum responses for item.
+		const tempResult = response.slice(0,4); // output top 3 results
+
+		const resultMap = tempResult.map(async (item) => {
+			if (item.items) { // if item is grouped it contains this field
+				// If candidate grouped, fetch items, construct text
+				const itemsList = await this.findItemsByGroup(item);
+				const textList = itemsList.map(i => i.text);
+				const text = textList.join("\n");
+				const newProp = {text};
+				return {...item, ...newProp};
+			} else if (item.answers){ // if item is forum question it contains this field.
+				// JUST SELECT THE 1st ANSWER FOR NOW
+				const text = item.answers[0].text;
+				const newProp = {text};
+				return {...item, ...newProp};
+			} else {
+				return item;
+			}
+		});
+		return await Promise.all(resultMap);
+	};
+
+	async train(bestResponse, ct, tags) {
+		if(ct == "block"){
+			for(var i =0; i< tags.length;i++){
+				this.dbConn.ct.update({"text" :  bestResponse,"tags.name": tags[i]}, {$set:{"tags.theta" : "tags.theta"+"tags.sailence"}});
+			}
+		} else if(ct == "forum"){
+			for(var i =0; i< tags.length;i++){
+				this.dbConn.ct.update({"answers": bestResponse,"tags.name":tags[i]},{$set:{"tags.theta" : "tags.theta"+"tags.sailence"}});
+			}
+		}
+	};
+
 	// backup whole db to this file
 	async backup() {
 
-		const filename = '../data/db_backup.json';
+		const filename = '../data/db_backup_tags_with_google_cloud_nlp.json';
 		const forum = await this.findAllFromCollection('forum');
 		const grouped = await this.findAllFromCollection('grouped');
 		const block = await this.findAllFromCollection('block');
@@ -209,9 +278,8 @@ module.exports = class DB {
 		fs.writeFileSync(filename, JSON.stringify(data));
 	}
 
-	async restore() {
-		const filename = '../data/db_backup_old_1.json';
-		const items = require(filename);
+	async restore(backup_file) {
+		const items = require(backup_file);
 		this.addToCollection(items.forum, 'forum');
 		this.addToCollection(items.grouped, 'grouped');
 		this.addToCollection(items.block, 'block');
