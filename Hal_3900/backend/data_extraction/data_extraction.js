@@ -1,33 +1,60 @@
 const scraper = require('./scrape.js');
-const task_queue = require('./taskQueue.js');
-const test_new = require('./testRunAnalysis.js');
+const analysis = require('./tfidf.js');
+const dataType = require('./getDataType.js');
 const fs = require('fs');
+
 /**
- * Steps from start to finish:
- *  1. give 'pages to scrape' object to scraper.scrapeSpecified() -> JSON will be stores in data folders
- *  2. run analysis through task queue. This limits the rate of Google Cloud NLP API calls to stay under QUOTA.
+ * This function is the base of our data extraction unit.
+ *  * 1. Set up folders in filesystem to store data
+ *  * 2. Save the user's input data, will allow flexibility later with adding more data
+ *  * 3. Scrape data from the listed pages
+ *  * 4. Process data to give keyword tags for our database and dialogflow
+ *  * 5. Add the processed data to the database
  */
 
 const getDataToDb = async (input, db) => {
-    // set up course directory
-    const data_forum_folder = `../data/${input.courseCode}/data_forum/`;
-    const data_page_folder = `../data/${input.courseCode}/data_page/`;
+
+    // // set up course directory
+    const data_folder = `../data/${input.courseCode}/`;
     try {
-        fs.mkdirSync(data_forum_folder, {recursive: true});
-        fs.mkdirSync(data_page_folder, {recursive: true});
+        fs.mkdirSync(data_folder, {recursive: true});
     } catch (err){
         console.error(err);
     }
 
-    // save pagesToScrape for laters :)
-    fs.writeFileSync(`../data/${input.courseCode}`, JSON.stringify(input));
+    // save pagesToScrape for later
+    fs.writeFileSync(`${data_folder}pagesToScrape.json`, JSON.stringify(input));
 
-    await scraper.scrapeSpecified(input, data_forum_folder, data_page_folder);
+    // scrape listed pages and forum for data
+    const scrapedData = await scraper.scrapeSpecified(input, data_folder);
 
-    // consider running intent grouping to make the new tagging method easier - discuss with Yi
-    // await task_queue.runAnalysis(db);  --> if running through NLP analysis
-    await test_new.runAnalysis(db, data_forum_folder, data_page_folder); // --> if putting from json straight to db
+    // process data with tf-idf algorithm
+    const corpusPre = scrapedData.pageData;
+    const corpusForum = scrapedData.forumData.map(item => item.question);
+
+    const data = await analysis.buildModel(corpusPre, corpusForum, input.courseCode);
+
+    // save tagList
+    fs.writeFileSync(`${data_folder}tagList.json`, JSON.stringify({ "tagList":data.tagList }));
+
+    // insert data into Mongo
+    await db.addToCollection(data.block, 'block');
+
+    await db.addToCollection(scrapedData.forumData, 'forum');
+
 };
 
-module.exports = {getDataToDb};
+const getQuizTags = async (quizArray, courseCode) => {
+    // TODO test this function for tagging quiz questions.
+    // process data with tf-idf algorithm
+    const corpusPre = quizArray.map(i => i.question);
+    const corpusForum = [];
+
+    const data = await analysis.buildModel(corpusPre, corpusForum, courseCode);
+
+    const blockArray = data.block;
+    return quizArray.map((element, index) => dataType.getQuizObject(courseCode, element.question, element.answer, blockArray[index].tags));
+};
+
+module.exports = {getDataToDb, getQuizTags};
 

@@ -11,20 +11,30 @@ const getAnswer = (text) => {
     return {text, theta, count}
 };
 
-const getBlock = (intent, courseCode, tags, text) => {
-    return {intent, courseCode, tags, text};
+const getBlock = (intent, courseCode, type, tags, text) => {
+    return {intent, courseCode, type, tags, text};
 };
 
-const getGrouped = (intent, courseCode, tags, items) => {
-    return {intent, courseCode, tags, items};
+// takes grouped data object, returns array of block data
+// one block with all text, then one block for each grouped item
+const getGrouped = (items) => {
+    let jointText;
+    try {
+        jointText = items.join("\n");
+    } catch (err) {
+
+    }
+
+    if (jointText) return items.concat(jointText);
+    else return items;
 };
 
-const getForumObject = (intent, courseCode, tags, question, answers) => {
-    return {intent, courseCode, tags, question, answers};
+const getForumObject = (question, answers) => {
+    return {question, answers};
 };
 
-const getQuizObject = (id, question, answer, tags=[]) => {
-    return {id, question, answer, tags};
+const getQuizObject = (courseCode, question, answer, tags=[]) => {
+    return {courseCode, question, answer, tags};
 };
 
 module.exports = {getTag, getAnswer, getBlock, getGrouped, getForumObject, getQuizObject};

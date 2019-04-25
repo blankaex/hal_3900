@@ -2,10 +2,10 @@
   <div v-if="courseCode" class='questionsList'>
     <h2>{{courseCode}}</h2>
     <table v-if="questions.length>0">
-      <tr v-for='question in questions' :key='question.id'>
+      <tr v-for='(question) in questions' :key='question._id'>
         <td>{{question.question}}</td>
         <td>{{question.answer}}</td>
-        <td><button type='button' @click='remove(question.id)'>Delete</button></td>
+        <td><button type='button' @click='remove(question._id)'>Delete</button></td>
       </tr>
     </table>
     <div v-else>There are no quiz questions yet for this course</div>
@@ -17,7 +17,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator'
 
 interface Question {
-  id: string,
+  _id: string,
   courseCode: string,
   tags: string[],
   question: string,

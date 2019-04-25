@@ -3,7 +3,8 @@ const express = require('express');
 const router = express.Router();
 const DB = require('../../db');
 const db = new DB();
-const analyzer = require('../../data_extraction/analyze');
+const data_extraction = require('../../data_extraction/data_extraction.js');
+// const analyzer = require('../../data_extraction/analyze');
 
 // get all questions
 router.post('/', async (req, res) => {
@@ -80,23 +81,20 @@ router.post('/add', async (req, res) => {
     const newQuestions = req.body.questions;
     // create objects
     const questionMap = newQuestions.map(q => {
-        const id = uuid.v4();
         const question = q.question;
         const answer = q.answer;
-        const tags = []; // TODO make this a call to analysis
-        return { id, courseCode, tags, question, answer };
+        return { courseCode, question, answer };
     });
 
-    // TODO Classify content with tags
     // NOTE you will need to have NLP service account set up to use this: same process as DF service account.
-    // const itemWithTags = analyzer.process_quiz_item(quizItem);
+    const taggedItems = await data_extraction.getQuizTags(questionMap, courseCode);
 
     // add to db
     if (!db.connected)
         await db.connect();
+    db.addToCollection(taggedItems, 'quiz');
 
-    db.addToCollection(questionMap, 'quiz');
-    // res.status(200).json({'response': `OK!!`});
+    db.backupQuiz();
 
     res.status(200).json({'response': `${questionMap.length} questions added.`});
 });

@@ -29,8 +29,8 @@ const wait = async (ms) => {
     });
 };
 
-const scrapeForum = async (forumRoot, courseCode, dest) => {
-
+const scrapeForum = async (forumRoot, dest) => {
+    console.log("Scraping forum posts...");
     // GET FORUM HTML
     const linkInfo = {"address": forumRoot};
     let forumRootHtml;
@@ -85,7 +85,7 @@ const scrapeForum = async (forumRoot, courseCode, dest) => {
                 } else if (pageList.tags.filter(tag => tag.name === "course outline")){
                     intent = "outline";
                 }
-                return process.getForumPostObject(responseObject, pageList.tags, intent, courseCode);
+                return process.getForumPostObject(responseObject, pageList.tags, intent);
             } catch (err) {
                 console.error(err);
             }
@@ -97,40 +97,58 @@ const scrapeForum = async (forumRoot, courseCode, dest) => {
         // FILTER NULL RESULTS AND POSTS WITH 0 ANSWERS
         const posts = postsArray.filter(item => item != null && item.answers.length > 0);
 
-
         // SAVE JSON TO FILE
-        fs.writeFileSync(dest + pageList.topicPageId + ".json", JSON.stringify({posts}));
+        return posts;
+        // fs.writeFileSync(dest + pageList.topicPageId + ".json", JSON.stringify({posts}));
 
     });
-    await Promise.all(res);
+
+    // get array of arrays
+    const allRes = await Promise.all(res);
+
+    // console.log(allRes.length);
+    // flatten arrays
+    let forumData = [];
+    allRes.forEach(array => forumData = forumData.concat(array));
+
+    // console.log(forumData.length);
+
+    fs.writeFileSync(`${dest}forumData.json`, JSON.stringify({forumData}))
+    return forumData;
 };
 
-const scrapeList = async (list, intent, courseCode, dest) => {
-    const res = list.map(async (page) => {
-        console.log("scraping " + page.address);
+const scrapeList = async (list, dest) => {
+    console.log("Scraping Content Pages...");
+    const resMap = await list.map(async (page) => {
+        // console.log("scraping " + page.address);
         const html = await getPage(page);
-        const data = await process.parseData(html, intent, courseCode);
-        // WRITE JSON OBJECTS TO FILE
-        fs.writeFileSync(dest + page.name.replace(/\s+/g, '-') + ".json", JSON.stringify(data));
-    });
+        return await process.parseData(html); // returns array of text
+     });
 
-    await Promise.all(res);
+    // get array of arrays:
+    const allRes = await Promise.all(resMap);
+
+    // flatten arrays
+    let pageData = [];
+    allRes.forEach(array => pageData = pageData.concat(array));
+
+    // console.log(pageData.length);
+
+    fs.writeFileSync(`${dest}pageData.json`, JSON.stringify({ pageData }));
+    return pageData;
 };
 
-const scrapeSpecified = async (pages, data_forum_folder, data_page_folder) => {
-
+const scrapeSpecified = async (pages, data_folder) => {
     // SCRAPE FROM LISTED INTENTS
-    const outlineRes = await scrapeList(pages.outline, "outline", pages.courseCode, data_page_folder)
-    await wait(2000);
-    const assignmentRes = await scrapeList(pages.assignment, "assignment", pages.courseCode, data_page_folder);
-    await wait(2000);
-    const contentRes = await scrapeList(pages.content, "content", pages.courseCode, data_page_folder);
-    await wait(2000);
+    const listToScrape = pages.outline.concat(pages.assignment).concat(pages.content);
+    const pageData = await scrapeList(listToScrape, data_folder)
 
     // SCRAPE FORUM STARTING AT ROOT PAGE
-    const forumRes = scrapeForum(pages.forum, pages.courseCode, data_forum_folder);
+    const forumData = await scrapeForum(pages.forum, data_folder);
 
-    await Promise.all([outlineRes, assignmentRes, contentRes, forumRes]);
+    // WAIT UNTIL ALL COMPLETED BEFORE RETURNING
+    // await Promise.all([pageData, forumData]);
+    return { pageData, forumData };
 };
 
 module.exports = {scrapeSpecified};

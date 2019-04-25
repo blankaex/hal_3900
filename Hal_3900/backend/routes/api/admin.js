@@ -68,7 +68,7 @@ router.post('/setup', async (req, res) => {
     console.log(req.body.pagesToScrape);
 
     // call the course setup code in db from here
-    await db.runTaskQueue(req.body.pagesToScrape);
+    await db.runDataExtraction(req.body.pagesToScrape);
 
     res.status(200).json({'result': 'ok'});
 });
