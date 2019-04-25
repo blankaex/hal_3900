@@ -4,25 +4,6 @@ const logger = require('log4js').getLogger('Database');
 const dataExtraction = require('./data_extraction/data_extraction.js');
 logger.level = 'info';
 
-// Helper function to make fs.readdir
-// actually async
-function asyncReadDir(path) {
-	return new Promise((resolve,reject)=>{
-		fs.readdir(path,(err,items)=>{
-			if (err) reject(err);
-			resolve(items);
-		})
-	})
-}
-
-function calcScore(tags, candidate) {
-	logger.info(`score, ${candidate.text}`);
-	return candidate.tags.reduce(
-			(acc, tag) => acc + (tags.includes(tag["name"]) ? tag.salience : 0),
-			0
-	);
-}
-
 module.exports = class DB {
 	constructor () {
 		let url = 'mongodb://localhost:27017';
@@ -202,54 +183,6 @@ module.exports = class DB {
 		block.map(b=>tagSet.add(b));
 		forum.map(f=>tagSet.add(f));
 		return Array.from(tagSet);
-	};
-	
-	async getDataPoints(tags) {
-		let candidates = [];
-		const collection = this.dbConn.collection('block');
-		for(var i = 0; i< tags.length;i++){
-			logger.info(`find tag ${tags[i]}`);
-		
-			logger.info(`get into searching function`);
-		
-		// find all objects where tags contains an array elem with name = tag
-		
-			const cursor = await collection.find({"tags.name":tags[i]});
-			logger.info('start to transform');
-			const results = await cursor.toArray();
-			logger.info(`${results.length}`);
-			candidates = candidates.concat(results);
-		};
-		logger.info(`candidates: ${candidates.length}`);
-		// candidates = candidates.concat(await this.findAllFromCollection('block'));
-		// candidates = candidates.concat(await this.findAllFromCollection('forum'));
-		//calculate scores for each candidate
-		candidates = candidates.map((candidate)=>{
-				return {
-						...candidate,
-						_score: calcScore(tags, candidate)
-				}
-		});
-		
-		// sort by score
-		candidates = candidates.sort((a,b)=> b._score - a._score);
-		
-		// filter out duplicates
-		const response = candidates.filter((value, index, self)=>self.indexOf(value) === index);
-		logger.info(`candidates filtered ${response.length}`)
-		return response.slice(0,4); // output top 3 results
-	};
-
-	async train(bestResponse, ct, tags) {
-		if(ct == "block"){
-			for(var i =0; i< tags.length;i++){
-				this.dbConn.ct.update({"text" :  bestResponse,"tags.name": tags[i]}, {$set:{"tags.theta" : "tags.theta"+"tags.sailence"}});
-			}
-		} else if(ct == "forum"){
-			for(var i =0; i< tags.length;i++){
-				this.dbConn.ct.update({"answers": bestResponse,"tags.name":tags[i]},{$set:{"tags.theta" : "tags.theta"+"tags.sailence"}});
-			}
-		}
 	};
 
 	// backup whole db to this file

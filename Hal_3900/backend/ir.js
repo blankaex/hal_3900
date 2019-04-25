@@ -7,9 +7,8 @@ function calcScore(tags, candidate) {
         0
     );
 }
-// input: tags extracted by dialogflow
-//        candidates which have the tags, got by db_query.js
-function performIR(tags, candidates) {
+
+function generateOptions(tags, candidates) {
     //calculate scores for each candidate
     candidates = candidates.map((candidate)=>{
         return {
@@ -18,45 +17,53 @@ function performIR(tags, candidates) {
         }
     });
     // sort by score
-    candidates = candidates.sort((a,b)=> b._score - a._score);
+    candidates = candidates.sort((a,b) => b._score - a._score);
     
     // filter out duplicates
-    const response= candidates.filter((value, index, self)=>self.indexOf(value) === index);
+    const response = candidates.filter((value, index, self) => self.indexOf(value) === index);
     
-    return response.slice(0,4); // output top 3 results
+    return response.slice(0,4); // output top 4 results
 }
 
-//call when one of the output of getDataPoint() has a question type
-//example:
-//       var result == await getDataPoint(searchTags);
-//       var finalResponse = [];
-//       var post;
-//       result.map( x=> {
-//                        if (x["type"] === "question") {
-//                                post = dbConn.collection("forum").find({"question": x["text"]});
-//                                finalResponse.push(pick_ansewer(post));
-//                        }else{ finalResponse.push(x["text"])})
-//       training(dbConn,result,finalResponse[bestIndex],bestIndex,searchTags);
-
-function pick_answer(post) {
-    const scope = post.answers.reduce((acc, answer) => acc + answer["theta"], 0);
-    //console.log(scope);
-    var seed = Math.floor(Math.random() * scope)+1; // get random int number in [1,scpoe]
-    //console.log(seed);
-    var resp;
-
-    for (var i = 0; i < post.answers.length; i++) {
-        if (post.answers[i]["theta"] >= seed) {
-            resp = post.answers[i]["text"];
-            break;
+// input: tags extracted by dialogflow
+//        candidates which have the tags, got by db_query.js
+function performIR(tags, candidates) {
+    const options = generateOptions(tags, candidates);
+    const result = [];
+    for (const option of options) {
+        if (option["type"] === "question") {
+            post = dbConn.collection("forum").find({"question": option["text"]});
+            result.push(pickAnswer(post));
         } else {
-            seed -= post.answers[i]["theta"];
+            result.push(x["text"]);
         }
     }
+    return {
+        options: result,
+        context: {
+            rawOptions: options,
+            options: result,
+            seachTags: tags
+        }
+    };
+}
 
+function pickAnswer(post) {
+    const scope = post.answers.reduce((acc, answer) => acc + answer["theta"], 0);
+    const seed = Math.floor(Math.random() * scope)+1; // get random int number in [1,scope]
+    let resp = null;
+
+    for (const answer in post.answers) {
+        if (answer.theta >= seed) {
+            resp = answer.text;
+            break;
+        } else {
+            seed -= answer.theta;
+        }
+    }
 
     return resp;
 }
 
 
-module.exports = {performIR, pick_answer};
+module.exports = {performIR, pickAnswer};
