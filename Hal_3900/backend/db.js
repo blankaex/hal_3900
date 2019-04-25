@@ -1,22 +1,11 @@
-const {ObjectId} = require('mongodb');
 const MongoClient = require('mongodb').MongoClient;
 const fs = require('fs');
 const logger = require('log4js').getLogger('Database');
 const dataExtraction = require('./data_extraction/data_extraction.js');
 logger.level = 'info';
 
-// Helper function to make fs.readdir
-// actually async
-function asyncReadDir(path) {
-	return new Promise((resolve,reject)=>{
-		fs.readdir(path,(err,items)=>{
-			if (err) reject(err);
-			resolve(items);
-		})
-	})
-}
-
 function calcScore(tags, candidate) {
+	logger.info(`score, ${candidate.text}`);
 	return candidate.tags.reduce(
 			(acc, tag) => acc + (tags.includes(tag["name"]) ? tag.salience : 0),
 			0
@@ -39,6 +28,7 @@ module.exports = class DB {
 		const client = await MongoClient.connect(this.dbUrl,mongoConfig);
 		logger.info("Connected to database successfully");
 		this.dbConn = client.db(this.dbName);
+		//logger.info(`connect to:${dbConn}`)
 	}
 	
 	async dump(objects, collection='documents') {
@@ -68,7 +58,7 @@ module.exports = class DB {
 	}
 
 	// pagesToScrape must be a js object formatted as per spec in wiki
-	async runTaskQueue (pagesToScrape) {
+	async runDataExtraction (pagesToScrape) {
 		if (!this.connected)
 			await this.connect();
 
@@ -76,7 +66,8 @@ module.exports = class DB {
 	}
 	
 	async initData () {
-		// this.backup();
+		this.backupQuiz();
+
 		let knownCollections = await this.dbConn.listCollections().toArray();
 		knownCollections = knownCollections.map(x=>x.name);
 		if (knownCollections.indexOf("forum") !== -1) {
@@ -84,18 +75,14 @@ module.exports = class DB {
 			return;
 		}
 
-		const filename = '../data/db_backup_tags_with_google_cloud_nlp.json';
+		const filename = '../data/db_backup.json';
 		if (fs.existsSync(filename)){
 			logger.info(`Restoring data from backup`);
 			this.restore(filename);
 			return;
 		}
 
-		logger.info('Starting scraper to initialize data. This might take a while');
-		this.runTaskQueue(require("./pagesToScrape.json"))
-
-		// this.backup(); // careful with synchronisation
-
+		console.log("No data loaded in the DB and no backup file. Add some course data");
 	};
 	
 	async findAllFromCollection(collectionName) {
@@ -107,17 +94,6 @@ module.exports = class DB {
 		return results;
 	};
 
-	// pass in a group object, returns array of items from the group
-	async findItemsByGroup(group){
-		const itemIds = group.items.map(id => ObjectId(id));
-		const collection = this.dbConn.collection('block');
-		let results = [];
-		const cursor = await collection.find({_id: {$in: itemIds}});
-		results = await cursor.toArray();
-		cursor.close();
-		return results;
-	}
-	
 	async findForumQuestionsByTopic(tag) {
 		const collection = this.dbConn.collection('forum');
 		const cursor = await collection.find({
@@ -133,31 +109,17 @@ module.exports = class DB {
 	}
 	
 	async findByCollectionAndTag(tag, collectionName) {
+		logger.info(`get into searching function`);
 		const collection = this.dbConn.collection(collectionName);
 		// find all objects where tags contains an array elem with name = tag
-		const cursor = await collection.find({ tags: { $elemMatch: { "name": tag } } } );
+		logger.info(`connect to db`);
+		const cursor = await collection.find({"tags.name": tag } );
+		logger.info('start to transform');
 		const results = await cursor.toArray();
 		cursor.close();
 		return results;
 	};
 	
-	async findByCollectionAndAllTags(tagsArray, collectionName) {
-		const collection = this.dbConn.collection(collectionName);
-		// find all objects where tags contains an array elem with name = tag
-		const cursor = await collection.find({ "tags.name" : { $all: tagsArray } } );
-		const results = await cursor.toArray();
-		cursor.close();
-		return results;
-	};
-	
-	async findAllByTag(tag) {
-		const grouped = await this.findByCollectionAndTag(tag, this.dbConn, 'grouped');
-		const block = await this.findByCollectionAndTag(tag, this.dbConn, 'block');
-		const forum = await this.findByCollectionAndTag(tag, this.dbConn, 'forum');
-		
-		return {grouped, forum, block};
-	};
-
 	async findByCourseCode(courseCode, collectionName) {
 		const collection = this.dbConn.collection(collectionName);
 		// find all objects where tags contains an array elem with name = tag
@@ -168,11 +130,10 @@ module.exports = class DB {
 	};
 
 	async findAllByCourseCode(courseCode) {
-		const grouped = await this.findByCourseCode(courseCode, 'grouped');
 		const block = await this.findByCourseCode(courseCode, 'block');
 		const forum = await this.findByCourseCode(courseCode, 'forum');
 
-		return {grouped, forum, block};
+		return { block, forum };
 	};
 	
 	async getUniqueTagsFromCollection(collectionName) {
@@ -182,7 +143,7 @@ module.exports = class DB {
 	
 	async getAllUniqueTags() {
 		const grouped = await this.getUniqueTagsFromCollection(this.dbConn, 'grouped');
-		const block = await this.getUniqueTagsFromCollection(this.dbConn, 'block');
+		const block = await this.getUniqueTagsFromCollection(this.dbConn, 'tf-idf-block.json');
 		const forum = await this.getUniqueTagsFromCollection(this.dbConn, 'forum');
 		
 		// reduce to single array of unique
@@ -208,18 +169,26 @@ module.exports = class DB {
 
 	}
 	
-	async getDataPoints(tags, intent) {
-		let candidates = await this.findAllFromCollection('grouped');
-		candidates = candidates.concat(await this.findAllFromCollection('block'));
-		candidates = candidates.concat(await this.findAllFromCollection('forum'));
+	async getDataPoints(tags) {
+		let candidates = [];
+		const collection = this.dbConn.collection('block');
+		for (let i = 0; i < tags.length; i++){
+			logger.info(`find tag ${tags[i]}`);
+		
+			logger.info(`get into searching function`);
+		
+		    // find all objects where tags contains an array elem with name = tag
+		    const cursor = await collection.find({"tags.name":tags[i]});
+			logger.info('start to transform');
+			const results = await cursor.toArray();
+			logger.info(`${results.length}`);
+			candidates = candidates.concat(results);
+		}
+		logger.info(`candidates: ${candidates.length}`);
+		// candidates = candidates.concat(await this.findAllFromCollection('block'));
+		// candidates = candidates.concat(await this.findAllFromCollection('forum'));
+		//calculate scores for each candidate
 
-		// kill all non intent matches items
-		// logger.error(candidates);
-		// logger.error(candidates.map(x=>x.intent));
-		// logger.error(intent);
-		candidates = candidates.filter(c=>c.intent === intent)
-
-		// calculate scores for each candidate
 		candidates = candidates.map((candidate)=>{
 				return {
 						...candidate,
@@ -232,32 +201,12 @@ module.exports = class DB {
 		
 		// filter out duplicates
 		const response = candidates.filter((value, index, self)=>self.indexOf(value) === index);
-
-		// Format group and forum responses for item.
-		const tempResult = response.slice(0,4); // output top 3 results
-
-		const resultMap = tempResult.map(async (item) => {
-			if (item.items) { // if item is grouped it contains this field
-				// If candidate grouped, fetch items, construct text
-				const itemsList = await this.findItemsByGroup(item);
-				const textList = itemsList.map(i => i.text);
-				const text = textList.join("\n");
-				const newProp = {text};
-				return {...item, ...newProp};
-			} else if (item.answers){ // if item is forum question it contains this field.
-				// JUST SELECT THE 1st ANSWER FOR NOW
-				const text = item.answers[0].text;
-				const newProp = {text};
-				return {...item, ...newProp};
-			} else {
-				return item;
-			}
-		});
-		return await Promise.all(resultMap);
+		logger.info(`candidates filtered ${response.length}`)
+		return response.slice(0,4); // output top 3 results
 	};
 
 	async train(bestResponse, ct, tags) {
-		if(ct == "block"){
+		if (ct == "block"){
 			for(var i =0; i< tags.length;i++){
 				this.dbConn.ct.update({"text" :  bestResponse,"tags.name": tags[i]}, {$set:{"tags.theta" : "tags.theta"+"tags.sailence"}});
 			}
@@ -271,12 +220,11 @@ module.exports = class DB {
 	// backup whole db to this file
 	async backup() {
 
-		const filename = '../data/db_backup_tags_with_google_cloud_nlp.json';
-		const forum = await this.findAllFromCollection('forum');
-		const grouped = await this.findAllFromCollection('grouped');
+		const filename = '../data/db_backup.json';
 		const block = await this.findAllFromCollection('block');
+		const forum = await this.findAllFromCollection('forum');
 
-		fs.writeFileSync(filename, JSON.stringify({forum, grouped, block}));
+		fs.writeFileSync(filename, JSON.stringify({block, forum}));
 	}
 
 	// backup single course to this file
@@ -292,12 +240,22 @@ module.exports = class DB {
 		fs.writeFileSync(filename, JSON.stringify(data));
 	}
 
+	async backupQuiz() {
+		const dirname = '../data/backups/';
+		const filename = `${dirname}quiz_backup.json`;
+		try {
+			fs.mkdirSync(dirname, {recursive: true});
+		} catch (err){
+			console.log(err);
+		}
+		const questions = await this.findAllFromCollection('quiz');
+		fs.writeFileSync(filename, JSON.stringify({ questions }));
+	}
+
 	async restore(backup_file) {
 		const items = require(backup_file);
 		this.addToCollection(items.forum, 'forum');
-		this.addToCollection(items.grouped, 'grouped');
 		this.addToCollection(items.block, 'block');
-
 	}
 
 	async restoreCourse(courseCode){
@@ -305,7 +263,6 @@ module.exports = class DB {
 		const filename = `${dirname}${courseCode}.json`;
 		const items = require(filename);
 		this.addToCollection(items.forum, 'forum');
-		this.addToCollection(items.grouped, 'grouped');
 		this.addToCollection(items.block, 'block');
 	}
 };

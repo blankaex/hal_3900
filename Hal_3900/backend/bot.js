@@ -1,7 +1,7 @@
 const DB = require('./db');
 const dialogflow = require('dialogflow');
 const uuid = require('uuid');
-const DFconfig = require('./DFServiceAccount.json');
+const DFconfig = require('./DFServiceAccount_wordbag.json');
 const logger = require('log4js').getLogger('Bot');
 logger.level = 'info';
 
@@ -39,21 +39,20 @@ module.exports = class Bot {
 		// process the user's request and return an instance of DetectIntentResponse
 		const responses = await this.DF.sessionClient.detectIntent(request);
 		const result = responses[0].queryResult;
+
 		// console.log(result.intent.displayName); // INTENT found through result.intent.displayName
 
-		// TODO handle intent = quiz question
 		try {
 			const intent = result.intent.displayName;
 			let options;
 			console.log(intent);
 			if (intent === 'quiz'){
 				options = await this.db.getQuizQuestions();
-				console.log(options);
 			} else {
-				let searchTags = responses[0].queryResult.parameters.fields.content.listValue.values;
+				logger.info(`${JSON.stringify(result.parameters.fields.word_bag.listValue.values)}`);
+				let searchTags = responses[0].queryResult.parameters.fields.word_bag.listValue.values;
 				searchTags = searchTags.map(x=>x.stringValue);
-				options = await this.db.getDataPoints(searchTags, intent);
-				// console.log(options);
+				options = await this.db.getDataPoints(searchTags);
 				options = options.map(x => {return{...x,question: msg}});
 			}
 
