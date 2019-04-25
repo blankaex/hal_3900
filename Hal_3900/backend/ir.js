@@ -1,3 +1,6 @@
+const logger = require('log4js').getLogger('IR');
+logger.level = 'info';
+
 /*
  * Given a candinate and a list of search tags
  * calculates the score of the candidate
@@ -11,10 +14,10 @@ function calcScore(tags, candidate) {
 }
 
 /*
- * Given a list of search tags and a list of candinates
+ * Given a list of search tags, a intent and a list of candinates
  * returns the top 4 highest scoring data points.
  */
-function generateOptions(tags, candidates) {
+function generateOptions(tags, candidates, intent) {
     //calculate scores for each candidate
     candidates = candidates.map((candidate)=>{
         return {
@@ -35,23 +38,25 @@ function generateOptions(tags, candidates) {
 }
 
 /*
- * Given a list of search tags and a list of candinates
+ * Given a list of search tags, a intent and a list of candinates
  * returns the top 4 highest scoring data points text and a
  * context object which is used to train the database on
  * feedback.
  */
-function performIR(tags, candidates) {
-    const options = generateOptions(tags, candidates);
+async function performIR(dbConn, tags, candidates, intent) {
+    const options = generateOptions(tags, candidates, intent);
     const result = [];
     for (const option of options) {
         if (option["type"] === "question") {
-            post = dbConn.collection("forum").find({"question": option["text"]});
-            result.push(pickAnswer(post));
-        } else if (option.items) {
-            // must be a grouped answer
-            // TODO: how to handle this?
+            const search = {
+                "question": {
+                    $eq: option["text"]
+                }
+            }
+            const posts = await dbConn.search(search, collection="forum");
+            result.push(pickAnswer(posts[0]));
         } else {
-            result.push(x["text"]);
+            result.push(option["text"]);
         }
     }
     return {
@@ -70,9 +75,9 @@ function performIR(tags, candidates) {
  */
 function pickAnswer(post) {
     const scope = post.answers.reduce((acc, answer) => acc + answer["theta"], 0);
-    const seed = Math.floor(Math.random() * scope)+1; // get random int number in [1,scope]
+    let seed = Math.floor(Math.random() * scope)+1; // get random int number in [1,scope]
     let resp = null;
-
+    logger.info(seed);
     for (const answer in post.answers) {
         if (answer.theta >= seed) {
             resp = answer.text;
@@ -81,7 +86,8 @@ function pickAnswer(post) {
             seed -= answer.theta;
         }
     }
-
+    // Fallback, if no answer was found pick first
+    if (resp === null) resp = post.answers[0].text;
     return resp;
 }
 

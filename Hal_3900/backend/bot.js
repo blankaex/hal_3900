@@ -7,6 +7,10 @@ const { performIR } = require('./ir');
 const logger = require('log4js').getLogger('Bot');
 logger.level = 'info';
 
+function hasTag(c, t) {
+	return c.tags.map(x => x.name).includes(t)
+}
+
 module.exports = class Bot {
 	constructor() {
 		this.version = '0.1';
@@ -37,34 +41,29 @@ module.exports = class Bot {
 		await training(this.db, rawOptions, options, choice, searchTags);
 	}
 
+
 	async getCandidates(tags) {
-		const candidates = [];
-		
-		let collection = await this.dbConn.findAllFromCollection('grouped');
-		collection = collection.concat(await this.dbConn.findAllFromCollection('block'));
-		collection = collection.concat(await this.dbConn.findAllFromCollection('forum'));
+		let candidates = [];		
+		let collection = await this.db.findAllFromCollection('block');
 		
 		for (const tag of tags) {
-			// find all objects where tags contains an array elem with name = tag
-			const cursor = await collection.find({ "tags.name": tag });
-			const results = await cursor.toArray();
-			candidates = candidates.concat(results);
+			const matches = collection.filter(c => hasTag(c, tag));
+			candidates = candidates.concat(matches);
 		};
 
 		return candidates
 	}
 
-	async generateOptions(searchTags) {
-		const candidates = this.getCandidates(searchTags);
-		const {options, context} = await performIR(searchTags, candidates);
-		const uuid = uuid.v4();
-		context["_id"] = uuid;
+	async generateOptions(searchTags, intent) {
+		const candidates = await this.getCandidates(searchTags);
+		let { options, context } = await performIR(this.db, searchTags, candidates, intent);
+		const id = uuid.v4();
+		context["_id"] = id;
 
 		options = options.map(x => {
 			return {
-				queryId: uuid,
-				...x,
-				question: msg,
+				queryId: id,
+				text: x
 			 }
 		});
 
@@ -94,11 +93,11 @@ module.exports = class Bot {
 			if (intent === 'quiz'){
 				options = await this.db.getQuizQuestions();
 			} else {
-				logger.info(`${JSON.stringify(result.parameters.fields.word_bag.listValue.values)}`);
 				let searchTags = responses[0].queryResult.parameters.fields.word_bag.listValue.values;
 				searchTags = searchTags.map(x=>x.stringValue);
 				options = await this.generateOptions(searchTags, intent);
-				options = options.map(x => {return{...x,question: msg}});
+
+				options = options.map(x => { return { ...x, question: msg } });
 			}
 			return {
 				response: result.fulfillmentText,
