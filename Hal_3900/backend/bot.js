@@ -26,7 +26,8 @@ module.exports = class Bot {
 		this.DF.sessionPath = this.DF.sessionClient.sessionPath(DFconfig.project_id, sessionId);
 	}
 
-	async train(queryId, choice) {
+	async train(course, queryId, choice) {
+		// TODO: handle course
 		const query = {
 			'_id': {
 				$eq: queryId

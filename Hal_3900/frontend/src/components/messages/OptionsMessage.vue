@@ -3,7 +3,7 @@
     <img src="../../assets/hal.png">
     <div class="options" :style="{'background': getGradient()}">
         <div class="item" v-for="(option,i) in options" :key="option._id">
-          <div class="selectBest" @click="selectBest(option,i, message.id)"></div>{{option.text.trim()}}</div>
+          <div class="selectBest" @click="selectBest(option, i, message.id)"></div>{{option.text.trim()}}</div>
       </div>
   </div>
 </template>
@@ -19,7 +19,10 @@ export default class OptionsMessage extends Vue {
   selectBest (choice:any, choiceIndex:number, messageId: string) {
     if (this.$store.state.activeMessage !== messageId) return
 
-    this.$store.dispatch('sendTraining', choice)
+    this.$store.dispatch('sendTraining', {
+      index: choiceIndex,
+      queryId: choice.queryId
+    })
     this.$store.commit('storeMessage', {
       type: 'simple',
       from: 'bot',
