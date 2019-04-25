@@ -34,7 +34,7 @@ function generateOptions(tags, candidates, intent) {
     // filter out duplicates
     const response = candidates.filter((value, index, self) => self.indexOf(value) === index);
     
-    return response.slice(0,4); // output top 4 results
+    return response;
 }
 
 /*
@@ -45,7 +45,7 @@ function generateOptions(tags, candidates, intent) {
  */
 async function performIR(dbConn, tags, candidates, intent) {
     const options = generateOptions(tags, candidates, intent);
-    const result = [];
+    let result = [];
     for (const option of options) {
         if (option["type"] === "question") {
             const search = {
@@ -59,6 +59,7 @@ async function performIR(dbConn, tags, candidates, intent) {
             result.push(option["text"]);
         }
     }
+    result = result.filter(x => x !== null).splice(0,4);
     return {
         options: result,
         context: {
@@ -77,7 +78,6 @@ function pickAnswer(post) {
     const scope = post.answers.reduce((acc, answer) => acc + answer["theta"], 0);
     let seed = Math.floor(Math.random() * scope)+1; // get random int number in [1,scope]
     let resp = null;
-    logger.info(seed);
     for (const answer in post.answers) {
         if (answer.theta >= seed) {
             resp = answer.text;
@@ -86,8 +86,6 @@ function pickAnswer(post) {
             seed -= answer.theta;
         }
     }
-    // Fallback, if no answer was found pick first
-    if (resp === null) resp = post.answers[0].text;
     return resp;
 }
 
