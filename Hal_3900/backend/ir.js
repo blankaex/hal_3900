@@ -1,5 +1,7 @@
-// Given a candiate and a list of tags
-// calculates it's score
+/*
+ * Given a candinate and a list of search tags
+ * calculates the score of the candidate
+ */
 function calcScore(tags, candidate) {
     //final_score = matched_tags_sailence + matched_tags_theta
     return candidate.tags.reduce(
@@ -8,6 +10,10 @@ function calcScore(tags, candidate) {
     );
 }
 
+/*
+ * Given a list of search tags and a list of candinates
+ * returns the top 4 highest scoring data points.
+ */
 function generateOptions(tags, candidates) {
     //calculate scores for each candidate
     candidates = candidates.map((candidate)=>{
@@ -16,6 +22,9 @@ function generateOptions(tags, candidates) {
             _score: calcScore(tags, candidate),
         }
     });
+    // Kill all non intent matched items
+    candidates = candidates.filter(c => c.intent === intent);
+    
     // sort by score
     candidates = candidates.sort((a,b) => b._score - a._score);
     
@@ -25,8 +34,12 @@ function generateOptions(tags, candidates) {
     return response.slice(0,4); // output top 4 results
 }
 
-// input: tags extracted by dialogflow
-//        candidates which have the tags, got by db_query.js
+/*
+ * Given a list of search tags and a list of candinates
+ * returns the top 4 highest scoring data points text and a
+ * context object which is used to train the database on
+ * feedback.
+ */
 function performIR(tags, candidates) {
     const options = generateOptions(tags, candidates);
     const result = [];
@@ -34,6 +47,9 @@ function performIR(tags, candidates) {
         if (option["type"] === "question") {
             post = dbConn.collection("forum").find({"question": option["text"]});
             result.push(pickAnswer(post));
+        } else if (option.items) {
+            // must be a grouped answer
+            // TODO: how to handle this?
         } else {
             result.push(x["text"]);
         }
@@ -48,6 +64,10 @@ function performIR(tags, candidates) {
     };
 }
 
+/*
+ * Given a forum post, picks the best answer to return to the 
+ * user
+ */
 function pickAnswer(post) {
     const scope = post.answers.reduce((acc, answer) => acc + answer["theta"], 0);
     const seed = Math.floor(Math.random() * scope)+1; // get random int number in [1,scope]
@@ -64,6 +84,5 @@ function pickAnswer(post) {
 
     return resp;
 }
-
 
 module.exports = {performIR, pickAnswer};

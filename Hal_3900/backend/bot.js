@@ -32,20 +32,25 @@ module.exports = class Bot {
 			'_id': {
 				$eq: queryId
 			}
-		}		
+		}
 		const {rawOptions, options, searchTags} = await this.db.search(query, collection='query_contexts')[0];
 		await training(this.db, rawOptions, options, choice, searchTags);
 	}
 
 	async getCandidates(tags) {
 		const candidates = [];
-		const collection = this.dbConn.collection('block');
-		for(const tag of tags){
+		
+		let collection = await this.dbConn.findAllFromCollection('grouped');
+		collection = collection.concat(await this.dbConn.findAllFromCollection('block'));
+		collection = collection.concat(await this.dbConn.findAllFromCollection('forum'));
+		
+		for (const tag of tags) {
 			// find all objects where tags contains an array elem with name = tag
 			const cursor = await collection.find({ "tags.name": tag });
 			const results = await cursor.toArray();
 			candidates = candidates.concat(results);
 		};
+
 		return candidates
 	}
 
@@ -82,9 +87,7 @@ module.exports = class Bot {
 		// process the user's request and return an instance of DetectIntentResponse
 		const responses = await this.DF.sessionClient.detectIntent(request);
 		const result = responses[0].queryResult;
-
-		// console.log(result.intent.displayName); // INTENT found through result.intent.displayName
-
+		
 		try {
 			const intent = result.intent.displayName;
 			let options;

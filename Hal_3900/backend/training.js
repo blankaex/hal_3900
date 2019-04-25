@@ -1,3 +1,8 @@
+/*
+ * Returns a monogodb mutator to multiply
+ * the matching tags from a previous search
+ * thetha value by num
+ */
 function multiplyTag(num) {
     return {
         $mul:{
@@ -6,6 +11,11 @@ function multiplyTag(num) {
     }
 }
 
+/*
+ * Returns a monogodb mutator to increment
+ * the matching answers from a previous search
+ * thetha value by num
+ */
 function incrementAnswer(num) {
     return {
         $inc:{
@@ -14,16 +24,24 @@ function incrementAnswer(num) {
     }
 }
 
+/*
+ * Given a id and a tag will bump the thetha value
+ * for the tag up
+ */
 function bumpThetha(dbConn, id, tag) {
     const collection = dbConn.collection('block');
     const search = { "_id": id, "tags.name": tag };
-    collection.updateOne(search, multiplyTag(amount));
+    collection.updateOne(search, multiplyTag(1.03));
 }
 
+/*
+ * Given a id and a tag will bump down then thetha value
+ * for the tag. 
+ */
 function penaliseTag(dbConn, id, tag) {
     const collection = dbConn.collection('block');
     const search = { "_id": id, "tags.name": tag };
-    collection.updateOne(search, multiplyTag(amount))
+    collection.updateOne(search, multiplyTag(0.97));
 }
 
 /*
