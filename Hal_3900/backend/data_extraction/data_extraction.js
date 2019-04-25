@@ -1,5 +1,6 @@
 const scraper = require('./scrape.js');
 const analysis = require('./tfidf.js');
+const dataType = require('./getDataType.js');
 const fs = require('fs');
 
 /**
@@ -13,7 +14,7 @@ const fs = require('fs');
 
 const getDataToDb = async (input, db) => {
 
-    // set up course directory
+    // // set up course directory
     const data_folder = `../data/${input.courseCode}/`;
     try {
         fs.mkdirSync(data_folder, {recursive: true});
@@ -36,7 +37,6 @@ const getDataToDb = async (input, db) => {
     // save tagList
     fs.writeFileSync(`${data_folder}tagList.json`, JSON.stringify({ "tagList":data.tagList }));
 
-    // console.log(data.block);
     // insert data into Mongo
     await db.addToCollection(data.block, 'block');
 
@@ -44,5 +44,17 @@ const getDataToDb = async (input, db) => {
 
 };
 
-module.exports = {getDataToDb};
+const getQuizTags = async (quizArray, courseCode) => {
+    // TODO test this function for tagging quiz questions.
+    // process data with tf-idf algorithm
+    const corpusPre = quizArray.map(i => i.question);
+    const corpusForum = [];
+
+    const data = await analysis.buildModel(corpusPre, corpusForum, courseCode);
+
+    const blockArray = data.block;
+    return quizArray.map((element, index) => dataType.getQuizObject(element.id, element.question, element.answer, blockArray[index].tags));
+};
+
+module.exports = {getDataToDb, getQuizTags};
 

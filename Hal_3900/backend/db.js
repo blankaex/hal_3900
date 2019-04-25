@@ -1,4 +1,3 @@
-const {ObjectId} = require('mongodb');
 const MongoClient = require('mongodb').MongoClient;
 const fs = require('fs');
 const logger = require('log4js').getLogger('Database');
@@ -67,12 +66,6 @@ module.exports = class DB {
 	}
 	
 	async initData () {
-
-		// await this.runDataExtraction(require("./pagesToScrape.json"));
-        // this.backup(); // careful with synchronisation
-
-        // console.log("DONE!");
-
 		let knownCollections = await this.dbConn.listCollections().toArray();
 		knownCollections = knownCollections.map(x=>x.name);
 		if (knownCollections.indexOf("forum") !== -1) {
@@ -88,7 +81,6 @@ module.exports = class DB {
 		}
 
 		console.log("No data loaded in the DB and no backup file. Add some course data");
-
 	};
 	
 	async findAllFromCollection(collectionName) {

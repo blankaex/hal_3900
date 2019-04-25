@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const DB = require('../../db');
 const db = new DB();
+const data_extraction = require('../../data_extraction/data_extraction.js');
 // const analyzer = require('../../data_extraction/analyze');
 
 // get all questions
@@ -87,9 +88,10 @@ router.post('/add', async (req, res) => {
         return { id, courseCode, tags, question, answer };
     });
 
-    // TODO Classify content with tags
+    // TODO Classify content with tags -> test this works!!
     // NOTE you will need to have NLP service account set up to use this: same process as DF service account.
-    // const itemWithTags = analyzer.process_quiz_item(quizItem);
+    const taggedItems = data_extraction.getQuizTags(questionMap, courseCode);
+    console.log(taggedItems);
 
     // add to db
     if (!db.connected)
