@@ -95,9 +95,15 @@ function training (course: string|null, payload: string):string {
   })
 }
 
+function getUserFromStorage ():{name: string|null, admin: boolean|null} {
+  const user = localStorage.getItem('user')
+  if (user === null) return { name: null, admin: null }
+  return JSON.parse(user)
+}
+
 export default new Vuex.Store<Store>({
   state: {
-    user: localStorage.getItem('user'),
+    user: getUserFromStorage(),
     course: localStorage.getItem('course'),
     messages: [
       {
@@ -142,12 +148,18 @@ export default new Vuex.Store<Store>({
       }
     ],
     theme: {
-      primary: '#fd746c',
-      secondary: '#457fca',
-      primaryGradient: ['#ff9068', '#fd746c'],
-      secondaryGradient: ['#5691c8', '#457fca']
+      primary: '#F15F79',
+      secondary: '#B24592',
+      primaryGradient: ['#FFB75E', '#ED8F03'],
+      secondaryGradient: ['#F15F79', '#B24592']
     },
     themes: [
+      {
+        primary: '#F15F79',
+        secondary: '#B24592',
+        primaryGradient: ['#FFB75E', '#ED8F03'],
+        secondaryGradient: ['#F15F79', '#B24592']
+      },
       {
         primary: '#fd746c',
         secondary: '#457fca',
@@ -170,11 +182,14 @@ export default new Vuex.Store<Store>({
   },
   mutations: {
     login (state, user) {
+      localStorage.setItem('user', JSON.stringify(user))
       state.user = user
     },
     logout (state) {
-      state.user = null
+      state.user = { name: null, admin: null }
       state.course = null
+      localStorage.removeItem('user')
+      localStorage.removeItem('course')
     },
     storeMessage (state, payload) {
       const generatedUuid = uuid()
@@ -198,6 +213,7 @@ export default new Vuex.Store<Store>({
     },
     pickCourse (state, course) {
       state.course = course
+      localStorage.setItem('course', course)
     },
     log (state, payload) {
       state.log.push({

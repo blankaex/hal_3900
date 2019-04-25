@@ -100,6 +100,25 @@ module.exports = class DB {
 	
 
 	/*
+	 * get quiz questions
+	 */
+	async getQuizQuestions(tags, intent, courseCode) {
+		// TODO need to add courseCode param in: unused rn
+		const candidates = await this.findAllFromCollection('quiz');
+		// console.log(candidates);
+		// TODO filter by tags
+
+		// if (candidates.length > 0){
+		// 	// choose 1 at random
+		// 	// or choose a list if we know how many
+		//
+		// }
+
+		return candidates;
+
+	}
+
+	/*
 	 * Given a collection name will return a array of all 
 	 * objects under that collection
 	 */

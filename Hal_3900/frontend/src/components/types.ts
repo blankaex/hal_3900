@@ -44,8 +44,11 @@ export interface Course {
 }
 
 export interface Store {
-  quiz: any;
-    user: string|null,
+    user: {
+        name: string|null,
+        admin: boolean|null
+    },
+    quiz: any,
     course: string|null,
     courses: Course[],
     messages: Message[],

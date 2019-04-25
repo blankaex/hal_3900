@@ -3,9 +3,9 @@ import Router from 'vue-router'
 import Home from './views/Home.vue'
 import Login from './views/Login.vue'
 import Admin from './views/Admin.vue'
-import checkAuth from './middleware/auth'
+import AdminLogin from './views/AdminLogin.vue'
+import { checkLoginAuth, checkAdmin, checkCourseAuth } from './middleware/auth'
 import CourseSelect from './views/CourseSelect.vue'
-
 Vue.use(Router)
 
 const router = new Router({
@@ -15,7 +15,7 @@ const router = new Router({
       name: 'home',
       component: Home,
       meta: {
-        middleware: checkAuth
+        middleware: checkLoginAuth
       }
     },
     {
@@ -24,14 +24,25 @@ const router = new Router({
       component: Login
     },
     {
+      path: '/admin/login',
+      name: 'adminLogin',
+      component: AdminLogin
+    },
+    {
       path: '/course',
       name: 'course',
-      component: CourseSelect
+      component: CourseSelect,
+      meta: {
+        middleware: checkCourseAuth
+      }
     },
     {
       path: '/admin',
       name: 'admin',
-      component: Admin
+      component: Admin,
+      meta: {
+        middleware: checkAdmin
+      }
     },
     {
       path: '*',

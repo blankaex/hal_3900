@@ -2,7 +2,7 @@
   <div class="message">
     <HalMessage v-if="message.type === 'simple' && message.from === 'bot'" :message="message"></HalMessage>
     <UserMessage v-if="message.type === 'simple' && message.from === 'user'" :message="message"></UserMessage>
-    <OptionsMessage v-if="message.type === 'options'" :options="message.body"></OptionsMessage>
+    <OptionsMessage v-if="message.type === 'options'" :message="message"></OptionsMessage>
     <TableMessage v-if="message.type === 'table'" :table="message.body" :msg="message"></TableMessage>
     <QuizMessage v-if="message.type === 'quiz'" :message="message"></QuizMessage>
   </div>

@@ -62,13 +62,14 @@ export default class Chat extends Vue {
     if (this.draft.trim() === '') return
     this.$store.dispatch('sendMessage', this.draft)
     this.draft = ''
-    this.$nextTick(function () {
-      this.scrollEnd()
-    })
   }
 
   loading () {
     return this.$store.state.status === AppState.PENDING
+  }
+
+  updated () {
+    this.scrollEnd()
   }
 }
 </script>
