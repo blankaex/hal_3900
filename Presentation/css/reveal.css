@@ -416,7 +416,7 @@ body {
 .reveal .progress {
   position: absolute;
   display: none;
-  height: 3px;
+  height: 5px;
   width: 100%;
   bottom: 0;
   left: 0;
