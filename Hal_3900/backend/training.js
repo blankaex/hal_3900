@@ -53,8 +53,10 @@ function penaliseTag(dbConn, id, tag) {
  *     best       - The index of the best answer the user chose
  *     tags       - The original SearchTags
  */
-module.exports = async function training(dbConn, rawOptions, options, best, tags) {
-    tags.map(x => bumpThetha(dbConn, rawOptions[best]["_id"], x, 1.03));
+module.exports = async function training(dbConn, context, best) {
+    const {rawOptions, options, searchTags} = context;
+    // TODO: context contains course, use it
+    searchTags.map(x => bumpThetha(dbConn, rawOptions[best]["_id"], x, 1.03));
     [0,1,2,3].filter(i=>i != best).map(i => penaliseTag(dbConn, rawOptions[i]["_id"], x, 0.97))
     
     // If the best response was a question, increment answer relevance by 1

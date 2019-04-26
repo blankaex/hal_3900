@@ -30,21 +30,20 @@ module.exports = class Bot {
 		this.DF.sessionPath = this.DF.sessionClient.sessionPath(DFconfig.project_id, sessionId);
 	}
 
-	async train(course, queryId, choice) {
-		// TODO: handle course
+	async train(queryId, choice) {
 		const query = {
 			'_id': {
 				$eq: queryId
 			}
 		}
-		const {rawOptions, options, searchTags} = await this.db.search(query, collection='query_contexts')[0];
-		await training(this.db, rawOptions, options, choice, searchTags);
+		const context = await this.db.search(query, collection='query_contexts')[0];
+		await training(this.db, context, choice);
 	}
 
 
-	async getCandidates(tags) {
+	async getCandidates(course, tags) {
 		let candidates = [];		
-		let collection = await this.db.findAllFromCollection('block');
+		let collection = await this.db.findByCourseCode(course, 'block');
 		
 		for (const tag of tags) {
 			const matches = collection.filter(c => hasTag(c, tag));
@@ -54,9 +53,9 @@ module.exports = class Bot {
 		return candidates
 	}
 
-	async generateOptions(searchTags, intent) {
-		const candidates = await this.getCandidates(searchTags);
-		let { options, context } = await performIR(this.db, searchTags, candidates, intent);
+	async generateOptions(course, searchTags, intent) {
+		const candidates = await this.getCandidates(course, searchTags);
+		let { options, context } = await performIR(this.db, course, searchTags, candidates, intent);
 		const id = uuid.v4();
 		context["_id"] = id;
 
@@ -72,7 +71,7 @@ module.exports = class Bot {
 		return options;
 	}
 
-	async query(msg) {
+	async query(course, msg) {
 		const request = {
 			session: this.DF.sessionPath,
 			queryInput: {
@@ -86,7 +85,7 @@ module.exports = class Bot {
 		// process the user's request and return an instance of DetectIntentResponse
 		const responses = await this.DF.sessionClient.detectIntent(request);
 		const result = responses[0].queryResult;
-		
+
 		try {
 			const intent = result.intent.displayName;
 			let options;
@@ -95,7 +94,7 @@ module.exports = class Bot {
 			} else {
 				let searchTags = responses[0].queryResult.parameters.fields.word_bag.listValue.values;
 				searchTags = searchTags.map(x=>x.stringValue);
-				options = await this.generateOptions(searchTags, intent);
+				options = await this.generateOptions(course, searchTags, intent);
 
 				options = options.map(x => { return { ...x, question: msg } });
 			}

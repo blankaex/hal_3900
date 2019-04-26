@@ -2,7 +2,7 @@ const bot = require('../bot');
 const hal = new bot()
 
 function sendHalResponse(msg) {
-    return hal.query(msg.text)
+    return hal.query(msg.course, msg.text)
         .then(r=>JSON.stringify({
             type: 'message',
             error: false,

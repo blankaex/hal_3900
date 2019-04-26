@@ -43,11 +43,12 @@ function generateOptions(tags, candidates, intent) {
  * context object which is used to train the database on
  * feedback.
  */
-async function performIR(dbConn, tags, candidates, intent) {
+async function performIR(dbConn, course, tags, candidates, intent) {
     const options = generateOptions(tags, candidates, intent);
     let result = [];
     for (const option of options) {
         if (option["type"] === "question") {
+
             const search = {
                 "question": {
                     $eq: option["text"]
@@ -63,6 +64,7 @@ async function performIR(dbConn, tags, candidates, intent) {
     return {
         options: result,
         context: {
+            course,
             rawOptions: options,
             options: result,
             seachTags: tags

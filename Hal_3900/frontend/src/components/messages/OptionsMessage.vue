@@ -3,7 +3,7 @@
     <img src="../../assets/hal.png">
     <div class="options" :style="{'background': getGradient()}">
         <div :class="{'item': true, 'dead': isActive()}" v-for="(option,i) in message.body" :key="option._id">
-          <div class="selectBest" @click="selectBest(option,i)"></div>{{option.text.trim()}}</div>
+          <div class="selectBest" @click="selectBest(option,i)"></div><p>{{option.text.trim()}}</p></div>
       </div>
   </div>
 </template>
@@ -63,14 +63,18 @@ export default class OptionsMessage extends Vue {
   align-items: center
   justify-content: flex-start
   flex-direction: row
-  height: 2rem
+  min-height: 2rem
 .options .item.dead
   opacity: 0.4
 .options .item.picked
   opacity: 1
 .options .item .selectBest
+  min-width: 15px
   width: 15px
-  height: 15px
+  max-width: 15px
+  min-height: 15px
+  width: 15px
+  max-height: 15px
   border: 2px solid #EBEBEB
   border-radius: 50%
   margin-right: 1rem
