@@ -21,8 +21,11 @@ export default class Admin extends Vue {}
 
 <style scoped lang="sass">
   .admin
-    @extend %flex-row
+    @extend %flex-col
+    @extend %font-stack
     background: #FAFAFA
     width: 100vw
+    min-height: 100vh
     overflow-x: hidden
+    justify-content: flex-start
 </style>
