@@ -115,26 +115,7 @@ export default new Vuex.Store<Store>({
     ],
     quiz: [],
     courses: [
-      {
-        code: 'COMP1521',
-        name: 'Intro to OS'
-      },
-      {
-        code: 'COMP1511',
-        name: 'Introduction to programming'
-      },
-      {
-        code: 'COMP3131',
-        name: 'Compiler Theory and Design'
-      },
-      {
-        code: 'COMP1000',
-        name: 'How not to cry'
-      },
-      {
-        code: 'COMP0000',
-        name: 'Refactoring with Marie Kondo'
-      }
+
     ],
     host: process.env.PROD ? 'backend.hal-3900.com' : 'localhost:9447',
     socket: null,
@@ -239,6 +220,9 @@ export default new Vuex.Store<Store>({
       socketReady(state, commit)
         .then(() => state.socket!.send(training(state.course, payload)))
       commit('log', `sent training data: ${payload}`)
+    },
+    init ({state, commit}) {
+      
     }
   }
 })
