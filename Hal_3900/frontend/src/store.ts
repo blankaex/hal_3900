@@ -65,7 +65,7 @@ function socketReady (state: Store, commit: Commit):Promise<{}> {
     if (sock && (sock.readyState === sock.CLOSED || sock.readyState === sock.CLOSING)) {
       commit('log', '[ERROR] Socket is closed? Reconnecting...')
     }
-    state.socket = new WebSocket(`ws://${state.host}/talk`)
+    state.socket = new WebSocket(`ws://${state.host}/talk?transport=websocket`)
     ready = new Promise(resolve => {
       state.socket!.onopen = resolve
       state.socket!.onmessage = (res:MessageEvent) => messageHandler(commit, res)
