@@ -136,7 +136,7 @@ export default new Vuex.Store<Store>({
         name: 'Refactoring with Marie Kondo'
       }
     ],
-    host: process.env.PROD ? 'backend.hal-3900.com' : 'localhost:9447',
+    host: 'localhost:9447',
     socket: null,
     activeMessage: '0',
     status: AppState.READY,
