@@ -15,7 +15,7 @@ async function respond(ws, msg) {
     if (msg.type === 'message') {
         ws.send(await sendHalResponse(msg))
     } else if (msg.type == 'training') {
-        await hal.train(msg.course, msg.choice.queryId, msg.choice.index)
+        await hal.train(msg.choice.queryId, msg.choice.index)
     } else {
       ws.send(JSON.stringify({
         type: 'error',
