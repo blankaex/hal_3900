@@ -14,10 +14,11 @@ var whitelist = [
 ]
 const corsOptions = {
   origin: function (origin, callback) {
-    if (whitelist.indexOf(origin) !== -1) {
+    // origin is undefined for localhost i think, which we always allow
+    if (whitelist.indexOf(origin) !== -1 || origin === undefined) {
       callback(null, true)
     } else {
-      callback(new Error('Not allowed by CORS'))
+      callback(new Error(`<${origin}> Not allowed by CORS`))
     }
   },
   credentials: true

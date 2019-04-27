@@ -36,10 +36,10 @@ module.exports = class Bot {
 				$eq: queryId
 			}
 		}
-		const context = await this.db.search(query, collection='query_contexts')[0];
-		await training(this.db, context, choice);
+		logger.info(`search for query id ${queryId}`);
+		const all = await this.db.search(query, 'query_contexts');
+		await training(this.db, all[0], choice);
 	}
-
 
 	async getCandidates(course, tags) {
 		let candidates = [];		
@@ -65,8 +65,8 @@ module.exports = class Bot {
 				text: x
 			 }
 		});
-
-		await this.db.addToCollection([context], collection='query_contexts');
+		logger.info(`Saving Query with id ${id}`);
+		await this.db.addToCollection([context], 'query_contexts');
 		
 		return options;
 	}

@@ -8,7 +8,7 @@ logger.level = 'info';
 function calcScore(tags, candidate) {
     //final_score = matched_tags_sailence + matched_tags_theta
     return candidate.tags.reduce(
-        (acc, tag) => acc + (tags.includes(tag["name"]) ? tag.salience + tag.theta: 0),
+        (acc, tag) => acc + (tags.includes(tag["name"]) ? tag.salience + tag.theta : 0),
         0
     );
 }
@@ -19,7 +19,7 @@ function calcScore(tags, candidate) {
  */
 function generateOptions(tags, candidates, intent) {
     //calculate scores for each candidate
-    candidates = candidates.map((candidate)=>{
+    candidates = candidates.map((candidate) => {
         return {
             ...candidate,
             _score: calcScore(tags, candidate),
@@ -27,13 +27,13 @@ function generateOptions(tags, candidates, intent) {
     });
     // Kill all non intent matched items
     candidates = candidates.filter(c => c.intent === intent);
-    
+
     // sort by score
-    candidates = candidates.sort((a,b) => b._score - a._score);
-    
-    // filter out duplicates
+    candidates = candidates.sort((a, b) => b._score - a._score);
+
+    // TODO: filter out duplicates correctly
     const response = candidates.filter((value, index, self) => self.indexOf(value) === index);
-    
+
     return response;
 }
 
@@ -46,28 +46,34 @@ function generateOptions(tags, candidates, intent) {
 async function performIR(dbConn, course, tags, candidates, intent) {
     const options = generateOptions(tags, candidates, intent);
     let result = [];
+    let rawOptions = [];
     for (const option of options) {
         if (option["type"] === "question") {
-
             const search = {
                 "question": {
                     $eq: option["text"]
                 }
             }
-            const posts = await dbConn.search(search, collection="forum");
-            result.push(pickAnswer(posts[0]));
+            const posts = await dbConn.search(search, collection = "forum");
+            const a = pickAnswer(posts[0]);
+            if (a !== null) {
+                rawOptions.push(option);
+                result.push(a);
+            }
         } else {
+            rawOptions.push(option);
             result.push(option["text"]);
         }
     }
-    result = result.filter(x => x !== null).splice(0,4);
+    rawOptions = rawOptions.splice(0, 4);
+    result = result.splice(0, 4);
     return {
         options: result,
         context: {
             course,
-            rawOptions: options,
+            rawOptions,
             options: result,
-            seachTags: tags
+            searchTags: tags
         }
     };
 }
@@ -78,7 +84,7 @@ async function performIR(dbConn, course, tags, candidates, intent) {
  */
 function pickAnswer(post) {
     const scope = post.answers.reduce((acc, answer) => acc + answer["theta"], 0);
-    let seed = Math.floor(Math.random() * scope)+1; // get random int number in [1,scope]
+    let seed = Math.floor(Math.random() * scope) + 1; // get random int number in [1,scope]
     let resp = null;
     for (const answer in post.answers) {
         if (answer.theta >= seed) {
@@ -91,4 +97,4 @@ function pickAnswer(post) {
     return resp;
 }
 
-module.exports = {performIR, pickAnswer};
+module.exports = { performIR, pickAnswer };
