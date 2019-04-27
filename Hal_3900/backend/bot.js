@@ -37,7 +37,7 @@ module.exports = class Bot {
 			}
 		}
 		logger.info(`search for query id ${queryId}`);
-		const all = await this.db.search(query, collection='query_contexts');
+		const all = await this.db.search(query, 'query_contexts');
 		await training(this.db, all[0], choice);
 	}
 
@@ -66,7 +66,7 @@ module.exports = class Bot {
 			 }
 		});
 		logger.info(`Saving Query with id ${id}`);
-		await this.db.addToCollection([context], collection='query_contexts');
+		await this.db.addToCollection([context], 'query_contexts');
 		
 		return options;
 	}

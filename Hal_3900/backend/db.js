@@ -32,7 +32,8 @@ module.exports = class DB {
 	 * specified collection, if collection is not supplied it defaults to 
 	 * the documents collection
 	 */
-	async addToCollection(objects, collection='documents') {
+	async addToCollection(objects, collection) {
+		if (collection === undefined) collection = 'documents';
 		const collectionRef = this.dbConn.collection(collection);
 		const res = await collectionRef.insertMany(objects);
 		logger.info(`Inserted ${res.insertedCount} objects into collection ${collection}`);
@@ -43,7 +44,8 @@ module.exports = class DB {
 	 * Given a mongodb search object and a target collection
 	 * returns a array of matching objects
 	 */
-	async search(obj, collection='documents') {
+	async search(obj, collection) {
+		if (collection === undefined) collection = 'documents';
 		const collectionRef = this.dbConn.collection(collection);
 		let results = [];
 		results = await collectionRef.find(obj).toArray();
@@ -54,7 +56,8 @@ module.exports = class DB {
 	 * Given a mongodb search object and a target collection
 	 * deleted the first matching object
 	 */
-	async delete(obj, collection='documents') {
+	async delete(obj, collection) {
+		if (collection === undefined) collection = 'documents';
 		const collectionRef = this.dbConn.collection(collection);
         await collectionRef.deleteOne(obj)
 	}
