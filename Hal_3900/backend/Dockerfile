@@ -1,7 +1,7 @@
 FROM node:11
 
 COPY . /app/web
-WORKDIR /app/web
+WORKDIR /app/web/server
 
 RUN npm install
 
