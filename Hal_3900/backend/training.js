@@ -1,34 +1,71 @@
-const MongoClient = require('mongodb').MongoClient;
-
-//input:
-// dbConn - the db connection
-// resp   - the output of getDatapoint()
-//theAnswer - the output of pick_answer() if it be called, otherwise just set it to null
-//            use it to match the answer in forum collection
-//best     - the index of the best answer
-//tags     - searchTags
-const training =async (dbConn,resp,theAnswer,best,tags)=>{
-    try {
-//increasing
-        var typeBest = resp[best].type;
-	
-	    //var dbConn = this.dbConn;
-        tags.map(x=> {dbConn.collection('block').updateOne({"_id":resp[best]["_id"],"tags.name": x}, {$mul:{"tags.$.theta" : 1.03}});});
-
-        if(typeBest === "question"){
-            dbConn.collection('forum').updateOne({"question":resp[best]["text"],"answers.text":theAnswer},{$inc:{"answers.$.theta" : 1}})}
-
-//decreasing
-        for(var i=0; i<4;i++){
-            if(i !== best){
-
-                tags.map(x=> {dbConn.collection('block').updateOne({"_id":resp[i]["_id"],"tags.name": x}, {$mul:{"tags.$.theta" : 0.97}})});
-            }
-
+/*
+ * Returns a monogodb mutator to multiply
+ * the matching tags from a previous search
+ * thetha value by num
+ */
+function multiplyTag(num) {
+    return {
+        $mul:{
+            "tags.$.theta" : num
         }
-    } catch (err) {
-        console.dir(err);
+    }
+}
+
+/*
+ * Returns a monogodb mutator to increment
+ * the matching answers from a previous search
+ * thetha value by num
+ */
+function incrementAnswer(num) {
+    return {
+        $inc:{
+            "answers.$.theta" : num
+        }
+    }
+}
+
+/*
+ * Given a id and a tag will bump the thetha value
+ * for the tag up
+ */
+function bumpThetha(dbConn, id, tag) {
+    const collection = dbConn.collection('block');
+    const search = { "_id": id, "tags.name": tag };
+    collection.updateOne(search, multiplyTag(1.03));
+}
+
+/*
+ * Given a id and a tag will bump down then thetha value
+ * for the tag. 
+ */
+function penaliseTag(dbConn, id, tag) {
+    const collection = dbConn.collection('block');
+    const search = { "_id": id, "tags.name": tag };
+    collection.updateOne(search, multiplyTag(0.97));
+}
+
+/*
+ * Training, takes a query context and a user choice
+ * to adjust values in the database.
+ *     dbConn     - The db connection
+ *     rawOptions - Raw datapoints returned from tag search  
+ *     options    - All options presented to the user
+ *     best       - The index of the best answer the user chose
+ *     tags       - The original SearchTags
+ */
+module.exports = async function training(dbConn, context, best) {
+    const {rawOptions, options, searchTags} = context;
+    // TODO: context contains course, use it
+    searchTags.map(x => bumpThetha(dbConn, rawOptions[best]["_id"], x, 1.03));
+    [0,1,2,3].filter(i=>i != best).map(i => penaliseTag(dbConn, rawOptions[i]["_id"], x, 0.97))
+    
+    // If the best response was a question, increment answer relevance by 1
+    if (rawOptions[best].type === "question") {
+        const collection = dbConn.collection('forum');
+        const search = {
+            "question": rawOptions[best].text,
+            "answers.text": options[best]
+        };
+        collection.updateOne(search, incrementAnswer(1));
     }
 };
-
-module.exports = {training};

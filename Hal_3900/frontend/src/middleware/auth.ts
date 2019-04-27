@@ -9,12 +9,27 @@ type Context = {
   next: (to?: string | false | void | Location | ((vm: Vue) => any) | undefined) => void
 }
 
-export default function checkAuth (context: Context) {
+export function checkLoginAuth (context: Context) {
   const { router, next } = context
-  if (!store.state.user) {
+  if (!store.state.user.name) {
     return router.push({ name: 'login' })
   } else if (!store.state.course) {
     return router.push({ name: 'course' })
+  }
+  return next()
+}
+
+export function checkCourseAuth (context: Context) {
+  const { router, next } = context
+  if (!store.state.user.name) {
+    return router.push({ name: 'login' })
+  }
+  return next()
+}
+export function checkAdmin (context: Context) {
+  const { router, next } = context
+  if (!store.state.user.name || !store.state.user.admin) {
+    return router.push({ name: 'adminLogin' })
   }
   return next()
 }

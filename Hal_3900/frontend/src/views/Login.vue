@@ -51,8 +51,10 @@ export default class Login extends Vue {
       })
     }).then(r => r.json())
       .then(r => {
-        this.$store.commit('login', this.username)
-        localStorage.setItem('user', this.username)
+        this.$store.commit('login', {
+          name: this.username,
+          admin: false
+        })
         this.$router.push({ name: 'course' })
       })
   }

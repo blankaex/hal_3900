@@ -28,6 +28,12 @@ export default class HalMessage extends Vue {
   width: 100%
   margin-bottom: 0.5rem
   justify-content: flex-start
+.halMsg .text::before
+  content: "Hal"
+  margin-top: -1.4rem
+  position: absolute
+  font-size: 0.8rem
+  color: #BBB
 .halMsg img
   width: 48px
   height: 48px

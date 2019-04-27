@@ -1,14 +1,16 @@
 <template>
   <div class="halMsg">
     <img src="../../assets/hal.png">
-    <table class="table" :style="{'background': getGradient()}">
-      <th>
-        <td v-for="(item,i) in table[0]" :key="msg.id+'-table-0-'+i">{{item}}</td>
-      </th>
-      <tr v-for="(row,r) in table.splice(1)" :key="msg.id+'-table-'+r">
-        <td v-for="(item,i) in row" :key="msg.id+'-table-'+r+'-'+i">{{item}}</td>
-      </tr>
-    </table>
+    <div class="table-container" :style="{'background': getGradient()}">
+      <table class="table">
+        <tr class="header">
+          <td v-for="(item,i) in table[0]" :key="msg.id+'-table-0-'+i">{{item}}</td>
+        </tr>
+        <tr v-for="(row,r) in table.splice(1)" :key="msg.id+'-table-'+r">
+          <td v-for="(item,i) in row" :key="msg.id+'-table-'+r+'-'+i">{{item}}</td>
+        </tr>
+      </table>
+    </div>
   </div>
 </template>
 
@@ -30,7 +32,7 @@ export default class TableMessage extends Vue {
 </script>
 
 <style scoped lang="sass">
-.table
+.table-container
   padding: 0.5rem 1rem
   position: relative
   font-family: 'Raleway', sans-serif
@@ -42,6 +44,9 @@ export default class TableMessage extends Vue {
   white-space: -pre-wrap
   white-space: -o-pre-wrap
   word-wrap: break-word
+.table
+  min-width: 200px
+  border-collapse: collapse
 .halMsg
   @extend %flex-row
   width: 100%
@@ -52,10 +57,19 @@ export default class TableMessage extends Vue {
   height: 48px
   border-radius: 50%
   margin: 0.5rem
-.table
-  width: 100%
-.table tr, .table th
-  width: 100%
-.item
+.halMsg .text::before
+  content: "Hal"
+  margin-top: -1.4rem
+  position: absolute
+  font-size: 0.8rem
+  color: #BBB
+.table tr
+  width: 200px
   font-family: 'Raleway', sans-serif
+.table tr.header
+  border-bottom: 1px solid #EBEBEB
+.table tr.header td
+  padding-bottom: 0.5rem
+tr:nth-of-type(2) td
+  padding-top: 0.5rem
 </style>

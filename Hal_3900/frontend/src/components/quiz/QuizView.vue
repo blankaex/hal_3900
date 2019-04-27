@@ -32,14 +32,14 @@ export default class QuizView extends Vue {
     // switch down in prev view
     this.$emit('clicked', 'true')
   }
-  remove (id) {
+  remove (id:string) {
     const host = this.$store.state.host
     fetch(`http://${host}/api/quiz/delete/${id}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      credentials: 'include',
+      credentials: 'include'
     }).then(r => r.json())
       .then(r => {
         console.log(r)
@@ -62,8 +62,8 @@ export default class QuizView extends Vue {
         this.questions = r
       })
   }
-
 }
+
 </script>
 
 <style scoped>
