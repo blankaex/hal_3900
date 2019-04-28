@@ -11,8 +11,6 @@
         <h3>{{courseCode}} Quiz Questions</h3>
         <hr>
         <QuizView :courseCode="courseCode" @clicked='toggleView()'></QuizView>
-        <p> Add a new question here! </p>
-        <QuizAdd :courseCode="courseCode" @clicked='toggleView()'></QuizAdd>
       </div>
       <div v-if="courseCode" class="card">
         <h3>{{courseCode}} Stats</h3>
@@ -26,12 +24,10 @@
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import vSelect from 'vue-select'
 import 'vue-select/src/scss/vue-select.scss'
-import QuizAdd from './quiz/QuizAdd.vue'
 import QuizView from './quiz/QuizView.vue'
 
 @Component({
   components: {
-    QuizAdd,
     QuizView,
     vSelect
   }

@@ -230,8 +230,9 @@ module.exports = class DB {
 		const filename = '../data/db_backup.json';
 		const block = await this.findAllFromCollection('block');
 		const forum = await this.findAllFromCollection('forum');
+		const courses = await this.findAllFromCollection('courses');
 
-		fs.writeFileSync(filename, JSON.stringify({block, forum}));
+		fs.writeFileSync(filename, JSON.stringify({block, forum, courses}));
 	}
 
 	/*
@@ -272,6 +273,7 @@ module.exports = class DB {
 		const items = require(backup_file);
 		this.addToCollection(items.forum, 'forum');
 		this.addToCollection(items.block, 'block');
+		this.addToCollection(items.courses, 'courses');
 	}
 
 	/*

@@ -20,11 +20,7 @@ router.post('/', async (req, res) => {
         result = await db.search({}, 'quiz');
     }
 
-	if (result.length > 0){
-        res.status(200).json(result);
-    } else {
-        res.status(400).json({'response': 'No questions found.'});
-    }
+    res.status(200).json(result);
 });
 
 // get a specific question
@@ -60,11 +56,6 @@ router.post('/delete/:id', async (req, res) => {
 
 // add a new question
 router.post('/add', async (req, res) => {
-    // admins only
-    // TODO add in this check when admin login done
-    // if(!req.session.admin)
-    //     res.status(401).json({'response': 'You are not authorized to make this request.'});
-
     // very basic error checking
     if(!req.body.questions && !req.body.courseCode) {
         res.status(400).json({'response': 'Missing body parameters: questions, courseCode'});
@@ -83,7 +74,7 @@ router.post('/add', async (req, res) => {
     const questionMap = newQuestions.map(q => {
         const question = q.question;
         const answer = q.answer;
-        return { courseCode, question, answer };
+        return {courseCode, question, answer };
     });
 
     // NOTE you will need to have NLP service account set up to use this: same process as DF service account.
@@ -92,9 +83,9 @@ router.post('/add', async (req, res) => {
     // add to db
     if (!db.connected)
         await db.connect();
-    db.addToCollection(taggedItems, 'quiz');
+    db.addToCollection(taggedItems.map(x=>{return{...x, id: uuid.v4()}}), 'quiz');
 
-    db.backupQuiz();
+    await db.backupQuiz();
 
     res.status(200).json({'response': `${questionMap.length} questions added.`});
 });

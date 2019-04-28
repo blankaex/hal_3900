@@ -4,7 +4,7 @@
       <div class="row" v-for='(question) in questions' :key='question._id'>
         <div class="text">{{question.question}}</div>
         <div class="text">{{question.answer}}</div>
-        <div class="icon"><i class="mdi mdi-minus-circle-outline" @click='remove(question._id)'></i></div>
+        <div class="icon"><i class="mdi mdi-minus-circle-outline" @click='remove(question.id)'></i></div>
       </div>
     </div>
     <p> Enter a new question in below </p>
@@ -20,8 +20,10 @@
 import { Component, Prop, Vue } from 'vue-property-decorator'
 
 interface Question {
-  _id: string,
-  courseCode: string
+  id: string,
+  courseCode: string,
+  question: string,
+  answer: string
 }
 function post (url:string, data:object):Promise<Question[]> {
   return fetch(url, {
@@ -59,9 +61,11 @@ export default class QuizView extends Vue {
             }
           ]
         })
-      }).then(res => {
-        console.log(res)
-      })
+      }).then(res => res.json())
+        .then(res => {
+          this.refresh()
+          console.log(res)
+        })
     }
   }
 
@@ -75,14 +79,17 @@ export default class QuizView extends Vue {
       credentials: 'include'
     }).then(r => r.json())
       .then(r => {
-        this.questions = this.questions.filter(x => x._id !== id)
+        this.questions = this.questions.filter(x => x.id !== id)
         console.log(r)
       })
   }
-  mounted () {
+  refresh () {
     const host = this.$store.state.host
     post(`http://${host}/api/quiz/`, { courseCode: this.courseCode })
       .then(r => { this.questions = r })
+  }
+  mounted () {
+    this.refresh()
   }
 }
 
