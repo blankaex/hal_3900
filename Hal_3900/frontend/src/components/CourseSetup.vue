@@ -114,7 +114,14 @@ export default class CourseSetup extends Vue {
     const assignment = this.assignment
     const content = this.content
 
-    const pagesToScrape = { courseCode, forum, outline, assignment, content }
+    const pagesToScrape = {
+      courseCode,
+      courseName: this.courseName,
+      forum,
+      outline,
+      assignment,
+      content
+    }
     const host = this.$store.state.host
     fetch(`http://${host}/api/admin/setup`, {
       method: 'POST',
@@ -138,7 +145,7 @@ export default class CourseSetup extends Vue {
 <style scoped lang='sass'>
 .course-setup
   width: calc(100% - 4rem)
-  margin: 0rem 2rem
+  margin: 1rem 2rem
 .course-setup hr
   width: 100%
   border: none
@@ -239,7 +246,7 @@ export default class CourseSetup extends Vue {
   outline: none
   border: none
   border-radius: 15px
-  padding: 0.3rem 0.5rem
+  padding: 0.4rem 1.2rem
   font-size: 1rem
   background: linear-gradient(to right, #F15F79, #B24592)
   color: white
