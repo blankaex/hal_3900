@@ -65,7 +65,7 @@ function socketReady (state: Store, commit: Commit):Promise<{}> {
     if (sock && (sock.readyState === sock.CLOSED || sock.readyState === sock.CLOSING)) {
       commit('log', '[ERROR] Socket is closed? Reconnecting...')
     }
-    state.socket = new WebSocket(`ws://${state.host}/talk`)
+    state.socket = new WebSocket(`ws://${state.host}/talk?transport=websocket`)
     ready = new Promise(resolve => {
       state.socket!.onopen = resolve
       state.socket!.onmessage = (res:MessageEvent) => messageHandler(commit, res)
@@ -136,7 +136,7 @@ export default new Vuex.Store<Store>({
         name: 'Refactoring with Marie Kondo'
       }
     ],
-    host: process.env.PROD ? 'backend.hal-3900.com' : 'localhost:9447',
+    host: 'localhost:9447',
     socket: null,
     activeMessage: '0',
     status: AppState.READY,

@@ -29,7 +29,7 @@ function incrementAnswer(num) {
  * for the tag up
  */
 function bumpThetha(dbConn, id, tag) {
-    const collection = dbConn.collection('block');
+    const collection = dbConn.dbConn.collection('block');
     const search = { "_id": id, "tags.name": tag };
     collection.updateOne(search, multiplyTag(1.03));
 }
@@ -39,7 +39,7 @@ function bumpThetha(dbConn, id, tag) {
  * for the tag. 
  */
 function penaliseTag(dbConn, id, tag) {
-    const collection = dbConn.collection('block');
+    const collection = dbConn.dbConn.collection('block');
     const search = { "_id": id, "tags.name": tag };
     collection.updateOne(search, multiplyTag(0.97));
 }
@@ -56,8 +56,12 @@ function penaliseTag(dbConn, id, tag) {
 module.exports = async function training(dbConn, context, best) {
     const {rawOptions, options, searchTags} = context;
     // TODO: context contains course, use it
-    searchTags.map(x => bumpThetha(dbConn, rawOptions[best]["_id"], x, 1.03));
-    [0,1,2,3].filter(i=>i != best).map(i => penaliseTag(dbConn, rawOptions[i]["_id"], x, 0.97))
+
+    searchTags.map(x => {
+        bumpThetha(dbConn, rawOptions[best]["_id"], x, 1.03);
+        [0,1,2,3].filter(i=>i != best)
+        .map(i => penaliseTag(dbConn, rawOptions[i]["_id"], x, 0.97))
+    });
     
     // If the best response was a question, increment answer relevance by 1
     if (rawOptions[best].type === "question") {
