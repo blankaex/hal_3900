@@ -1,6 +1,7 @@
 const scraper = require('./scrape.js');
 const analysis = require('./tfidf.js');
 const dataType = require('./getDataType.js');
+const dfUpdate = require('./DFUpdate.js');
 const fs = require('fs');
 
 /**
@@ -34,13 +35,15 @@ const getDataToDb = async (input, db) => {
 
     const data = await analysis.buildModel(corpusPre, corpusForum, input.courseCode);
 
-    // save tagList
-    fs.writeFileSync(`${data_folder}tagList.json`, JSON.stringify({ "tagList":data.tagList }));
+    // Update Diaglogflow with new tags
+    // fs.writeFileSync(`${data_folder}tagList.json`, JSON.stringify({ "tagList":data.tagList }));
+    await dfUpdate.updateDF(data.tagList);
+
 
     // insert data into Mongo
     await db.addToCollection(data.block, 'block');
-
     await db.addToCollection(scrapedData.forumData, 'forum');
+    await db.addToCollection([dataType.getCourse(input.courseCode, input.courseName)], 'course');
 
 };
 

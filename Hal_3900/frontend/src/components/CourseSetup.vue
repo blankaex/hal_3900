@@ -103,6 +103,7 @@ export default class CourseSetup extends Vue {
     // TODO add new courses to store
     // wrap form input as JS object matching pagesToScrape structure
     const courseCode = this.courseCode
+    const courseName = this.courseName
     const forum = this.forum
     const outline = [
       {
@@ -113,7 +114,7 @@ export default class CourseSetup extends Vue {
     const assignment = this.assignment
     const content = this.content
 
-    const pagesToScrape = { courseCode, forum, outline, assignment, content }
+    const pagesToScrape = { courseCode, courseName, forum, outline, assignment, content }
     const host = this.$store.state.host
     fetch(`http://${host}/api/admin/setup`, {
       method: 'POST',
