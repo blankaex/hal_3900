@@ -22,6 +22,7 @@
         <input type='text' name='username' v-model.trim='username' placeholder='zid or name'/>
         <button type='submit'>Get Started</button>
       </form>
+      <p> Looking for the admin page? <router-link to="admin">click here</router-link> </p>
     </div>
   </div>
 </template>
@@ -79,6 +80,12 @@ export default class Login extends Vue {
   display: flex
   flex-direction: column
   text-align: center
+.card p
+  margin-top: 2rem
+  font-family: 'Raleway', sans-serif
+  color: #777
+.card p a
+  color: #F15F79
 .card hr
   width: 80%
   border: none

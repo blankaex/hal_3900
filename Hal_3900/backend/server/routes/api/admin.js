@@ -19,6 +19,15 @@ router.get('/all', async (req, res) => {
         res.status(400).json({'response': 'No users found.'});
 });
 
+// lists all courses
+router.get('/courses', async (req, res) => {
+    if (!db.connected)
+        await db.connect();
+
+    const result = await db.search({}, 'courses');
+    res.status(200).json(result);
+});
+
 // registers user as admin
 router.post('/register', async (req, res) => {
     if (!db.connected)
@@ -66,10 +75,16 @@ router.post('/logout', async (req, res) => {
 router.post('/setup', async (req, res) => {
     // get req.body.object
     console.log(req.body.pagesToScrape);
-
-    // call the course setup code in db from here
-    await db.runDataExtraction(req.body.pagesToScrape);
-
+    try {
+        // call the course setup code in db from here
+        await db.runDataExtraction(req.body.pagesToScrape);
+        await db.addToCollection([{
+            code: req.body.courseCode,
+            name: req.body.courseName
+        }], 'courses');
+    } catch {
+        res.status(400).json({'result': 'bad request'});
+    }
     res.status(200).json({'result': 'ok'});
 });
 
