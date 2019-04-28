@@ -83,7 +83,6 @@ module.exports = class DB {
 	 */
 	async initData () {
 		this.backupQuiz();
-
 		let knownCollections = await this.dbConn.listCollections().toArray();
 		knownCollections = knownCollections.map(x=>x.name);
 		if (knownCollections.indexOf("forum") !== -1) {
@@ -231,8 +230,9 @@ module.exports = class DB {
 		const block = await this.findAllFromCollection('block');
 		const forum = await this.findAllFromCollection('forum');
 		const courses = await this.findAllFromCollection('courses');
+		const quiz = await this.findAllFromCollection('quiz');
 
-		fs.writeFileSync(filename, JSON.stringify({block, forum, courses}));
+		fs.writeFileSync(filename, JSON.stringify({block, forum, courses, quiz}));
 	}
 
 	/*
@@ -274,6 +274,7 @@ module.exports = class DB {
 		this.addToCollection(items.forum, 'forum');
 		this.addToCollection(items.block, 'block');
 		this.addToCollection(items.courses, 'courses');
+		this.addToCollection(items.quiz, 'quiz');
 	}
 
 	/*
