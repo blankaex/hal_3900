@@ -9,7 +9,7 @@ const commonList = ['the','be','to','of','and','a','in','that','have','I','it','
                     'look','only','come','came','its','over','think','also','back','use','after','how','our','ours','even','want','because',
                     'any','these','us','whats','whatever','somewhat'];
 
-var testList = ['yw','yw1','the','be'];
+//var testList = ['yw','yw1','the','be'];
 
 async function updateDF(tags) {
     // [START dialogflow_create_entity]
