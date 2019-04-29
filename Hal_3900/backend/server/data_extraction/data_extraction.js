@@ -28,23 +28,22 @@ const getDataToDb = async (input, db) => {
 
     // scrape listed pages and forum for data
     const scrapedData = await scraper.scrapeSpecified(input, data_folder);
+    console.log("Completed Data Extraction");
 
     // process data with tf-idf algorithm
     const corpusPre = scrapedData.pageData;
     const corpusForum = scrapedData.forumData.map(item => item.question);
-
     const data = await analysis.buildModel(corpusPre, corpusForum, input.courseCode);
-
-    // Update Diaglogflow with new tags
-    // fs.writeFileSync(`${data_folder}tagList.json`, JSON.stringify({ "tagList":data.tagList }));
-    await dfUpdate.updateDF(data.tagList);
-
+    console.log("Completed Keyword Analysis");
 
     // insert data into Mongo
     await db.addToCollection(data.block, 'block');
     await db.addToCollection(scrapedData.forumData, 'forum');
     await db.addToCollection([dataType.getCourse(input.courseCode, input.courseName)], 'courses');
 
+    // Update Diaglogflow with new tags
+    await dfUpdate.updateDF(data.tagList);
+    console.log("Updated DialogFlow");
 };
 
 // process data with word-bag to extract keywords

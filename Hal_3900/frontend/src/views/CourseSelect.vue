@@ -2,9 +2,9 @@
   <div class='course-select'>
     <h1 class="heading">Select a course</h1>
     <hr>
-    <div class='card' v-for="course in $store.state.courses" :key="course.code" @click="select(course.code)">
-      <h1 class='title'>{{course.code}}</h1>
-      <small>{{course.name}}</small>
+    <div class='card' v-for="course in $store.state.courses" :key="course.courseCode" @click="select(course.courseCode)">
+      <h1 class='title'>{{course.courseCode}}</h1>
+      <small>{{course.courseName}}</small>
     </div>
   </div>
 </template>

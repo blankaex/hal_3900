@@ -82,7 +82,7 @@ module.exports = class DB {
 	 * Relies on the database having already been connected to. 
 	 */
 	async initData () {
-		// this.backupQuiz();
+
 		let knownCollections = await this.dbConn.listCollections().toArray();
 		knownCollections = knownCollections.map(x=>x.name);
 		if (knownCollections.indexOf("forum") !== -1) {

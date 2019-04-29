@@ -6,7 +6,7 @@ const process = require('./process.js');
 
 const getPage = async (linkInfo) => {
 
-    const myCookie = "session=.eJwljkEOgyAQRe_C2gWDDDhehsAwtKStNqAr07tX293Py3_JO1QoTfpdzVvbZVChZjUrtCn7JAAZkYAQDVN0ZTQFio62qEFxbyVs60OW8x9Hb1OyoNEi5eQNJxk9sAEEZqcdkUfNl1dfb2l9XeImp3iCtdVbXeIz7F3aH13rF4Kaponc5wsHHDE2.D5oE4g.g8lp_jOaVVzc2GduoMj58XAB3Pw; Domain=.webcms3.cse.unsw.edu.au; HttpOnly; Path=/"; // CAN SET THIS TO ACCESS FILES BEHIND A WALL.
+    const myCookie = "session=.eJwljkEOwiAQRe_CuguGMhR6GcLAjBK1NdCujHcXdffz8l_yXipK435V69FOnlSsRa0KLZWFGKAgBgiIJofkZDYCopMVNancm8Rjv_E2_g68Fg9-dnkmAwSeSUQjccFEyWHOi7VohlcfT25939LBQxxgb_VSt3SPZ-f2R9_1C0EdvA_u_QErPTHG.D6f82w.sxKHJ0Qll5pyrr9IdNwPH-qmMSY; Domain=.webcms3.cse.unsw.edu.au; HttpOnly; Path=/"; // CAN SET THIS TO ACCESS FILES BEHIND A WALL.
 
     // This fetches the html from the page specified
     try {
@@ -17,7 +17,7 @@ const getPage = async (linkInfo) => {
 
         return html;
     } catch (err){
-        console.log("Couldn't read this url")
+        console.log("Couldn't read this url: " + linkInfo.address);
     }
 
 };

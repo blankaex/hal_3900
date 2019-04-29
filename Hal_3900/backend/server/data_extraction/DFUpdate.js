@@ -11,7 +11,7 @@ const commonList = ['the','be','to','of','and','a','in','that','have','I','it','
 
 //var testList = ['yw','yw1','the','be'];
 
-async function createEntity(projectId, entityTypeId, entityValue, synonyms) {
+async function createEntity(entities) {
     // [START dialogflow_create_entity]
     // Imports the Dialogflow library
     const dialogflow = require('dialogflow');
@@ -22,14 +22,9 @@ async function createEntity(projectId, entityTypeId, entityValue, synonyms) {
     // The path to the agent the created entity belongs to.
     const agentPath = entityTypesClient.entityTypePath(projectId, entityTypeId);
 
-    const entity = {
-        value: entityValue,
-        synonyms: synonyms,
-    };
-
     const createEntitiesRequest = {
         parent: agentPath,
-        entities: [entity],
+        entities: entities,
     };
 
     const [response] = await entityTypesClient.batchCreateEntities(
@@ -42,7 +37,12 @@ async function createEntity(projectId, entityTypeId, entityValue, synonyms) {
 
 //input: an Array of tags
 async function updateDF(tags){
-    tags.filter(x=>{return commonList.indexOf(x) === -1}).map(x=>{createEntity(projectId, entityTypeId, x, [x])})
+    const dfTags = tags.filter(x => commonList.indexOf(x) === -1);
+    const dfEntities = dfTags.map(tag => (
+        { value: tag, synonyms: [tag] }));
+
+    await createEntity(dfEntities);
+
 }
 
 

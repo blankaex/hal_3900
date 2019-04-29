@@ -69,10 +69,11 @@ router.post('/setup', async (req, res) => {
     try {
         // call the course setup code in db from here
         await db.runDataExtraction(req.body.pagesToScrape);
+        res.status(200).json({'result': 'ok'});
+
     } catch {
-        res.status(400).json({'result': 'bad request'});
+        // res.status(400).json({'result': 'bad request'});
     }
-    res.status(200).json({'result': 'ok'});
 });
 
 module.exports = router;

@@ -1,6 +1,6 @@
 const natural = require('natural');
 const TfIdf = natural.TfIdf;
-// const tfidf = new TfIdf();
+const tfidf = new TfIdf();
 const tokenizer = new natural.RegexpTokenizer({pattern: /([A-Za-z0-9]+)/});
 const dataType = require('./getDataType.js');
 
@@ -13,10 +13,11 @@ const dataType = require('./getDataType.js');
 //                 'a question'];
 
 const buildModel = (corpusPre,corpusForum,courseCode) => {
-    const tfidf = new TfIdf();
+    // const tfidf = new TfIdf();
 
     let corpus = [];
     let corpusFull = corpusPre.concat(corpusForum);
+    const corpusBoundary = corpusPre.length;
     corpusPre.map(x => x.replace(/[^\w\s]|_/g, "")).map(x => corpus.push(tokenizer.tokenize(x)));
     corpusForum.map(x => x.replace(/[^\w\s]|_/g, "")).map(x => corpus.push(tokenizer.tokenize(x)));
     //console.log(corpus);
@@ -29,14 +30,10 @@ const buildModel = (corpusPre,corpusForum,courseCode) => {
 
         // get type
         let type;
-        if (i < corpusPre.length ) type = "answer";
+        if (i < corpusBoundary ) type = "answer";
         else type = "question";
 
         // get tags
-        // TODO debug
-        // console.log(tfidf.listTerms(i));
-
-
         const tags = tfidf.listTerms(i).map(function (item){
             tagList.add(item.term);
             const name = item.term;
