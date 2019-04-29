@@ -12,6 +12,7 @@ const commonList = ['the','be','to','of','and','a','in','that','have','I','it','
 
 
 async function updateDF(tags) {
+    console.log(tags);
     // [START dialogflow_create_entity]
     // Imports the Dialogflow library
     const dialogflow = require('dialogflow');
