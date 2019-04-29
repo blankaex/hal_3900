@@ -67,7 +67,10 @@ module.exports = class Bot {
 		});
 		logger.info(`Saving Query with id ${id}`);
 		await this.db.addToCollection([context], 'query_contexts');
-		
+
+		// update query stats
+		await this.db.updateQueryStats(course, searchTags);
+
 		return options;
 	}
 
