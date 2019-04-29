@@ -1,0 +1,243 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="css/reset.css">
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/solarized.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/monokai.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+        <!-- LaTeX support -->
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+                    <h1>Hal_3900</h1>
+                    <h3>Ellen Hayden Yi Zain</h3>
+                </section>
+
+                <!-- Zain -->
+				<section>
+                    <section>
+                        <h2>Background</h2>
+                    </section>
+                    <section>
+                        <h3>Problem</h3>
+                        <blockquote class="fragment fade-up">There are too many student questions for tutors to answer.</blockquote>
+                    </section>
+                    <section>
+                        <h3>Solution</h3>
+                        <blockquote class="fragment fade-up">Let a machine answer the questions.</blockquote>
+                    </section>
+                    <section>
+                        <h3>Agile</h3>
+                        <ul>
+                            <li>Weekly Sprints
+                            <li><b>Tuesday:</b> Sprint Planning Meeting
+                            <li><b>Friday:</b> Sprint Retrospective
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>Agile</h3>
+                        <div style="display:flex; justify-content:space-around;">
+                            <img src="img/cards.png" class="stretch">
+                            <img src="img/burnup.png" class="stretch">
+                            <img src="img/burndown.png" class="stretch">
+                        </div>
+                    </section>
+                    <section>
+                        <h3>Technology Stack</h3>
+                        <div style="display:flex; justify-content:space-around;">
+                            <ul>
+                                <li><code>Node.js</code>
+                                <li><code>MongoDB</code>
+                                <li><code>Dialogflow</code>
+                                <li><code>Typescript</code>
+                                <li><code>cheerio</code>
+                                <li><code>Natural</code>
+                            </ul>
+                            <ul>
+                                <li><code>Vue.js/Vuex</code>
+                                <li><code>Sass</code>
+                                <li><code>Apache2</code>
+                                <li><code>Docker/Docker Compose</code>
+                                <li><code>Google Domains</code>
+                            </ul>
+                        </div>
+                    </section>
+                </section>
+
+                <!-- Ellen -->
+				<section>
+                    <section>
+                        <h2>Data Extraction & Processing</h2>
+                        <h3>Ellen Oates</h3>
+                    </section>
+                    <section>
+                        <h3>Purpose</h3>
+                        <ul>
+                            <li class="fragment fade-up">Chat bot requires an initial data set to be useful
+                            <li class="fragment fade-up">WebCMS is difficult to process using pre-built tools
+                            <li class="fragment fade-up">Don't want to make the user provide a data set
+                            <li class="fragment fade-up">Automatically extracts data given some key pieces of information
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>Process</h3>
+                        <ol>
+                            <li class="fragment fade-up">User inputs basic information via frontend interface
+                            <li class="fragment fade-up">Input is sent to the server and starts the scraper module
+                            <li class="fragment fade-up">Scrapes web data and recursively follows links to forum posts
+                            <li class="fragment fade-up">Parses data using cheerio by filtering different structures
+                            <li class="fragment fade-up">Analyses the data for keywords using tf-idf algorithm
+                            <li class="fragment fade-up">Data is stored with keywords in the database
+                        </ol>
+                    </section>
+                </section>
+
+                <!-- Hayden -->
+				<section>
+                    <section>
+                        <h2>Backend</h2>
+                        <h3>Hayden Le</h3>
+                    </section>
+                    <section>
+                        <h3>User API</h3>
+                        <ul>
+                            <li class="fragment fade-up">Fast login with no registering
+                            <li class="fragment fade-up">Manages session to aid learning
+                            <li class="fragment fade-up">Admin API for course staff
+                        </ul>
+                    </section>
+                    <section>
+                        <iframe src="http://hal-3900.com/#/" class="stretch"></iframe>
+                    </section>
+                    <section>
+                        <h3>Web Socket</h3>
+                        <ul>
+                            <li class="fragment fade-up">Runs on an open web socket
+                            <li class="fragment fade-up">Allows real-time chat
+                            <li class="fragment fade-up">Processes user input and responds intelligently
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>Quiz API</h3>
+                        <ul>
+                            <li class="fragment fade-up">Allows course staff to add questions
+                            <li class="fragment fade-up">Questions are divided into categories
+                            <li class="fragment fade-up">Students can request quizzes on-demand
+                        </ul>
+                    </section>
+                </section>
+
+                <!-- Zain -->
+				<section>
+                    <section>
+                        <h2>Frontend</h2>
+                        <h3>Zain Afzal</h3>
+                    </section>
+                    <section>
+                        <h3>Purpose</h3>
+                        <ul>
+                            <li class="fragment fade-up">Built to be easy to use, responsive and extensible
+                            <li class="fragment fade-up">Gives access to features that other clients don't
+                            <ul>
+                                <li class="fragment fade-up">Accepts user feedback on response quality
+                                <li class="fragment fade-up">Renders tables and images
+                                <li class="fragment fade-up">Maintains user state
+                                <li class="fragment fade-up">Administrator dashboard
+                            </ul>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>Chat Flow</h3>
+                        <ol>
+                            <li class="fragment fade-up">Renders a series of pages and loads the chat window
+                            <li class="fragment fade-up">User messages are stored in <code>Vuex</code> and sent to backend via websocket
+                            <li class="fragment fade-up">Receives a response sent by the backend through the websocket
+                            <li class="fragment fade-up">Response is stored in <code>Vuex</code> and displayed to user
+                        </ol>
+                    </section>
+                </section>
+
+                <!-- Yi -->
+				<section>
+                    <section>
+                        <h2>Natural Language Processing</h2>
+                        <h3>Wang Yi</h3>
+                    </section>
+                    <section>
+                        <h3>Query Processing</h3>
+                        <ul>
+                            <li class="fragment fade-up">Uses Dialogflow to process user queries
+                            <li class="fragment fade-up"><b>Relevant Queries:</b> Keywords and intents sent to backend
+                            <li class="fragment fade-up"><b>Other Queries:</b> Generate default responses
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>Intents</h3>
+                        <ul>
+                            <li class="fragment fade-up"><b>Course:</b> Questions relevant to the course
+                            <li class="fragment fade-up"><b>Quiz:</b> Queries regarding quizzes
+                            <li class="fragment fade-up"><b>Default:</b> Dialogflow default intents
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>Word Bag Model</h3>
+                        <ul>
+                            <li class="fragment fade-up">Extract keywords and calculate salience using tf-idf
+                            <ul>
+                                <li class="fragment fade-up">\(tfidf_{i,j} = tf_{i,j} \times idf_{i}\)
+                                <li class="fragment fade-up">\(tf_{i,j} = \frac{n_{i,j}}{\sum_{k}^{} n_{k,j}}\)
+                                <li class="fragment fade-up">\(idf_{i} = lg \frac{|D|}{|\{j: t_{i} \in d_{j}\}|}\)
+                            </ul>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>Data Flow</h3>
+                        <img src="img/diagram.jpg" class="stretch">
+                    </section>
+                    <section>
+                        <h3>Example</h3>
+                        <img src="img/example.jpg" class="stretch">
+                    </section>
+                </section>
+
+                <!-- Everyone -->
+				<section>
+                    <h2>Demo</h2>
+                </section>
+			</div>
+		</div>
+
+		<script src="js/reveal.js"></script>
+
+		<script>
+			Reveal.initialize({
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true }
+				]
+			});
+		</script>
+	</body>
+</html>
