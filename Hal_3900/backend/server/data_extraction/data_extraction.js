@@ -55,7 +55,7 @@ const getQuizTags = async (quizArray, courseCode) => {
     const data = await analysis.buildModel(corpusPre, corpusForum, courseCode);
 
     const blockArray = data.block;
-    console.log(blockArray[0].tags);
+    // console.log(blockArray[0].tags);
     return quizArray.map((element, index) => dataType.getQuizObject(courseCode, element.question, element.answer, blockArray[index].tags));
 };
 

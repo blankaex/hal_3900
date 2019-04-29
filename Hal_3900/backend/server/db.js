@@ -114,9 +114,7 @@ module.exports = class DB {
 		if (searchTags.length > 0) {
 			candidates = candidates.filter(item => {
 				// check if any tags on the candidate match the searchTags
-				console.log(item.question);
 				return item.tags.some((tag) => {
-					console.log(tag.name);
 					return searchTags.indexOf(tag.name.toLowerCase()) >= 0;
 				});
 			})

@@ -80,7 +80,6 @@ router.post('/add', async (req, res) => {
 
     // get keywords for the quiz questions
     const taggedItems = await data_extraction.getQuizTags(questionMap, courseCode);
-
     // add to database
     if (!db.connected)
         await db.connect();
