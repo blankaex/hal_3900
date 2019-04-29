@@ -12,11 +12,17 @@
 
 \subsection{Example Usage}
 This is an example use case based on the first user story described in section 2.1.2.
-% TODO: screenshot
-% \includegraphics[width=\textwidth]{log.jpg}
+
+The course administrator registers an account, and then logs in via the front end. They are greeted with the setup dashboard, where they provide links to web pages that will be included in the bot's data set.
+
+\includegraphics[width=\textwidth]{data-input.png}
+
+Once the form is submitted, the data scraper module will process the pages and extract data. This data will be stored in the database and is ready for use.
+
+\includegraphics[width=\textwidth]{data-log.png}
 
 \subsection{Technical Details}
-The frontend is developed in \code{Vue.js} using \code{typescript}. This helps enforce data types within \code{javascript}, to ensure that the input sent to the backend is valid.
+The frontend is developed in \code{Vue.js} using \code{TypeScript}. This helps enforce data types within \code{JavaScript}, to ensure that the input sent to the backend is valid.
 
 The server is created with \code{Node.js}. The data extraction makes use of asynchronous \code{Node.js} to reduce the amount of time spent in blocking processes such as api calls and filesystem/\code{http} calls. This is particularly important because it would otherwise cause the server to block and fail to process requests. Instead of having to spawn a new process, \code{Node.js} is able to manage all running processes and allow the data extraction module to run in the background.
 
