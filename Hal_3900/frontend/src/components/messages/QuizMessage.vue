@@ -1,13 +1,10 @@
 <template>
   <div class="quizMsg">
     <img src="../../assets/hal.png">
-    <div v-if="message.body.question" class="text"
+    <div v-if="message.body && message.body.question" class="text"
          :style="{'background': getGradient(message.from)}">{{message.body.question}}</div>
-<!--    TODO: "see answer" button reveals answer below-->
-    <div v-if="!showingAnswer">
-      <button type="button" @click="showAnswer()">Show Answer</button>
-    </div>
-<!--    TODO: "next question" button loads next quiz Q if exists,  end of quiz message if last one-->
+    <div v-else class="text"
+      :style="{'background': getGradient(message.from)}">The Admin hasn't set any quiz questions for this course</div>
     <div v-if="showingAnswer && message.body.answer" class="text"
          :style="{'background': getGradient(message.from)}">{{message.body.answer}}</div>
   </div>

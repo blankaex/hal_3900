@@ -215,6 +215,9 @@ export default new Vuex.Store<Store>({
     },
     courseDump (state, payload) {
       state.courses = payload
+    },
+    wipe (state) {
+      state.messages = [state.messages[0]]
     }
   },
   actions: {

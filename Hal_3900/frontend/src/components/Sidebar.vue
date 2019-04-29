@@ -45,6 +45,7 @@ export default class Sidebar extends Vue {
     localStorage.removeItem('user')
     localStorage.removeItem('course')
     this.$store.commit('logout')
+    this.$store.commit('wipe')
     this.$router.push({ name: 'login' })
   }
 }

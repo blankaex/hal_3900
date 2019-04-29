@@ -29,7 +29,7 @@ import QuizMessage from './messages/QuizMessage.vue'
 export default class Message extends Vue {
   @Prop() message: any
   mounted () {
-    console.log(this.$store.state.messages)
+
   }
 }
 </script>
