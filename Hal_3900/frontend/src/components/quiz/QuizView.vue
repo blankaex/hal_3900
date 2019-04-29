@@ -150,6 +150,7 @@ p
   color: #F15F79
 .newQuestions input[type='text']
   padding: 0.2rem 0.5rem
+  width: 38%
   border-radius: 8px
   border: 2px solid #EBEBEB
   color: #444

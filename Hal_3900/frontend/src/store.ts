@@ -237,7 +237,7 @@ export default new Vuex.Store<Store>({
     init ({ state, commit }) {
       const host = state.host
       get(`http://${host}/api/admin/courses`)
-        .then(r=>commit('courseDump', r))
+        .then(r => commit('courseDump', r))
     }
   }
 })
