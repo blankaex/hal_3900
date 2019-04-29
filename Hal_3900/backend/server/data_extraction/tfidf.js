@@ -1,6 +1,5 @@
 const natural = require('natural');
 const TfIdf = natural.TfIdf;
-const tfidf = new TfIdf();
 const tokenizer = new natural.RegexpTokenizer({pattern: /([A-Za-z0-9]+)/});
 const dataType = require('./getDataType.js');
 
@@ -13,7 +12,7 @@ const dataType = require('./getDataType.js');
 //                 'a question'];
 
 const buildModel = (corpusPre,corpusForum,courseCode) => {
-    // const tfidf = new TfIdf();
+    const tfidf = new TfIdf();
 
     let corpus = [];
     let corpusFull = corpusPre.concat(corpusForum);

@@ -15,7 +15,7 @@ const fs = require('fs');
 
 const getDataToDb = async (input, db) => {
 
-    // // set up course directory
+    // set up course directory
     const data_folder = `../data/${input.courseCode}/`;
     try {
         fs.mkdirSync(data_folder, {recursive: true});

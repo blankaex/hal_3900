@@ -5,7 +5,7 @@ const updateQuizStats = async (db, course, searchTags) => {
 
     let result = await db.findByCourseCode(course, "courseStats");
     if (result.length === 0) {
-        await db.makeNewFrequencyCount(course);
+        await makeNewFrequencyCount(db, course);
         result = await db.findByCourseCode(course, "courseStats");
     }
     const quizCounts = result[0].quizCounts;
@@ -40,7 +40,7 @@ updateQueryStats = async (db, course, searchTags) => {
 
     let result = await db.findByCourseCode(course, "courseStats");
     if (result.length === 0) {
-        await db.makeNewFrequencyCount(course);
+        await makeNewFrequencyCount(db, course);
         result = await db.findByCourseCode(course, "courseStats");
     }
     const queryCounts = result[0].queryCounts;
@@ -71,7 +71,7 @@ updateQueryStats = async (db, course, searchTags) => {
 const countMissedQuery = async (db, course) => {
     let result = await db.findByCourseCode(course, "courseStats");
     if (result.length === 0) {
-        await db.makeNewFrequencyCount(course);
+        await makeNewFrequencyCount(db, course);
         result = await db.findByCourseCode(course, "courseStats");
     }
     const missedQuery = result[0].missedQuery;
