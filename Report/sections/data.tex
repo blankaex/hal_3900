@@ -1,14 +1,27 @@
 \section{Data Scraping \& Processing}
-
-\subsection{Input \& Output}
-% describe input & output
-% what happens after receiving input
-% how does it produce the output
+\subsection{Process}
+\begin{enumerate}
+    \item{User provides input to the simple interface to set up a course.}
+    \item{Input is sent to the server and starts the scraper module.}
+    \item{Module scrapes the \code{HTML} from the provided webpages, and also follows forum links recursively to collect data of individual posts.}
+    \item{Our custom data extraction algorithm filters the different structures on the page and extracts the relevant text.}
+    \item{The data is analysed for keywords using the tf-idf algorithm.}
+    \item{The data and its corresponding keywords are inserted into the database.}
+    \item{An interactive model of the dataset appears on the webpage once the course is ready.}
+\end{enumerate}
 
 \subsection{Example Usage}
-% include 1-2 screenshots
+This is an example use case based on the first user story described in section 2.1.2.
+% TODO: screenshot
+% \includegraphics[width=\textwidth]{log.jpg}
 
 \subsection{Technical Details}
-% refer to appendix
+The frontend is developed in \code{Vue.js} using \code{typescript}. This helps enforce data types within \code{javascript}, to ensure that the input sent to the backend is valid.
+
+The server is created with \code{Node.js}. The data extraction makes use of asynchronous \code{Node.js} to reduce the amount of time spent in blocking processes such as api calls and filesystem/\code{http} calls. This is particularly important because it would otherwise cause the server to block and fail to process requests. Instead of having to spawn a new process, \code{Node.js} is able to manage all running processes and allow the data extraction module to run in the background.
+
+We also use the \code{cheerio js} library, as it provides tools to parse \code{HTML} into usable data.
+
+\code{MongoDB} is used for the database. It is the most appropriate software to handle the unstructured data that we deal with.
 
 \newpage

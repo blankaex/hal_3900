@@ -73,12 +73,24 @@
 \includegraphics[width=\textwidth]{architecture-diagram.png}
 
 \subsubsection{Data Scraping \& Processing}
+The bot needs to be initialised when a new course is created. Without any initial data, it will take a significant amount of time before the bot has been trained to a sufficient degree such that it can give meaningful responses to students.
+
+To solve this issue, we developed our own system to scrape and process the data on webcms3. There is a simple interface where the course administrator(s) can input the course code, name, forum and links to pages of content. Our data extraction module recursively follows these links to process and add the data to a database, to create an initial working data set.
+
+It was necessary for us to build this component so that users could be onboarded with minimum hassle. This creates a very low barrier of entry, as the user only needs to provide a small amount of information, and the server will take care of the heavy lifting. Furthermore, webcms3 content is difficult to parse with prebuilt, generic web scraping tools due to its lack of ids and labels, hence the need to build our own tool from scratch.
 
 \subsubsection{Extensible Backend}
-% Our bot was built entirely from scratch, with limited dependency on external APIs. We have constructed a backend in \code{Javascript} using \code{Node.js}. This runs on an \code{EC2} instance on Amazon Web Services (AWS). The backend is responsible for a number of tasks, including but not limited to processing user queries, generating intelligent responses, managing user sessions and providing access to the relevant databases for user accounts and quiz questions.
+Our bot was built entirely from scratch, with limited dependency on external APIs. The backend is responsible for a number of tasks, including but not limited to processing user queries, generating intelligent responses, managing user sessions and providing access to the relevant databases for user accounts and quiz questions. These tasks can be classfied into one of two loose categories: chat bot and internal API.
 
-% We also developed a web frontend for our bot using \code{Vue.js}. 
+The chat bot is effectively the brain and bulk of our system, made to handle user queries. They are processed for keywords and intents to figure out what the user is asking about. Responses are generated accordingly, and are sent back to the user via the web interface, completing one iteration the interaction. This allows students to ask questions about the course content and logistics and receive correct information in a timely manner. The chat bot also provides the ability for students to ask for quizzes, which aid their study and help them revise with official, instructor-endorsed material.
+
+The internal API is a subset of the backend that manages features that complement the functionality of the chat bot. Requests are made to the internal API on the backend via the frontend when the user interacts with the web interface. This enables features such as registering user accounts and adding quiz questions to the database. User state is managed to create personal instances of the bot for each student, which keeps track of frequent questions and problem areas. Adding quiz questions is part of the admin API, which gives course administrators the power to manage the bot for their course.
 
 \subsubsection{Interactive User Interface}
+As briefly mentioned in section 1.3.3, our frontend was built from the ground up. It was designed to be easy to use, aesthetically pleasing and extendable. To this end, we could develop additional features for our system that would not be possible if we were to use an existing chat platform, such as Facebook Messenger or Slack.
+
+We have implemented a wide array of additional features that are only possible because of our custom frontend. For instance, the chat bot can ask for feedback on the quality of its response, and directly interact with the backend to adjust the weighting of the data in the database. It can also render tables and show images, and maintain a user state as mentioned in section 2.2.3.
+
+Another section of our frontend is the administrator dashboard. This is the interface that allows course administrators to interact with the system and complete actions provided by the internal API. This includes inputting data (both to expand the bot's dataset, and in the form of quiz questions for students), as well as view information and statistics that the bot has collected.
 
 \newpage
