@@ -4,9 +4,8 @@ const router = express.Router();
 const DB = require('../../db');
 const db = new DB();
 const data_extraction = require('../../data_extraction/data_extraction.js');
-// const analyzer = require('../../data_extraction/analyze');
 
-// get all questions
+// get all quiz questions by course code
 router.post('/', async (req, res) => {
     if (!db.connected)
         await db.connect()
@@ -23,7 +22,7 @@ router.post('/', async (req, res) => {
     res.status(200).json(result);
 });
 
-// get a specific question
+// get a specific question by id
 router.get('/:id', async (req, res) => {
     if (!db.connected)
         await db.connect();
@@ -54,9 +53,9 @@ router.post('/delete/:id', async (req, res) => {
     }
 })
 
-// add a new question
+// add a list of new questions for a specified course
 router.post('/add', async (req, res) => {
-    // very basic error checking
+    // error checking
     if(!req.body.questions && !req.body.courseCode) {
         res.status(400).json({'response': 'Missing body parameters: questions, courseCode'});
         return;
@@ -68,24 +67,24 @@ router.post('/add', async (req, res) => {
         return;
     }
 
+    // get parameters from the request
     const courseCode = req.body.courseCode;
     const newQuestions = req.body.questions;
-    // create objects
+
+    // map questions list into quiz database objects
     const questionMap = newQuestions.map(q => {
         const question = q.question;
         const answer = q.answer;
         return {courseCode, question, answer };
     });
 
-    // NOTE you will need to have NLP service account set up to use this: same process as DF service account.
+    // get keywords for the quiz questions
     const taggedItems = await data_extraction.getQuizTags(questionMap, courseCode);
 
-    // add to db
+    // add to database
     if (!db.connected)
         await db.connect();
     db.addToCollection(taggedItems.map(x=>{return{...x, id: uuid.v4()}}), 'quiz');
-
-    await db.backupQuiz();
 
     res.status(200).json({'response': `${questionMap.length} questions added.`});
 });

@@ -92,13 +92,12 @@ module.exports = class Bot {
 		try {
 			const intent = result.intent.displayName;
 			let options;
+			let searchTags = responses[0].queryResult.parameters.fields.word_bag.listValue.values;
+			searchTags = searchTags.map(x=>x.stringValue);
 			if (intent === 'quiz'){
-				options = await this.db.getQuizQuestions();
+				options = await this.db.getQuizQuestions(course, searchTags);
 			} else {
-				let searchTags = responses[0].queryResult.parameters.fields.word_bag.listValue.values;
-				searchTags = searchTags.map(x=>x.stringValue);
 				options = await this.generateOptions(course, searchTags, intent);
-
 				options = options.map(x => { return { ...x, question: msg } });
 			}
 			return {

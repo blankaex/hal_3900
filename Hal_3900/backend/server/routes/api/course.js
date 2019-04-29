@@ -8,10 +8,12 @@ router.get('/', async (req, res) => {
     if (!db.connected){
         await db.connect();
     }
-    const result = db.search({}, 'course');
+    const result = await db.search({}, 'courses');
+    console.log(result);
     res.status(200).json(result);
 });
 
 // get course stats by course code
 
 
+module.exports = router;

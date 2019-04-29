@@ -43,19 +43,19 @@ const getDataToDb = async (input, db) => {
     // insert data into Mongo
     await db.addToCollection(data.block, 'block');
     await db.addToCollection(scrapedData.forumData, 'forum');
-    await db.addToCollection([dataType.getCourse(input.courseCode, input.courseName)], 'course');
+    await db.addToCollection([dataType.getCourse(input.courseCode, input.courseName)], 'courses');
 
 };
 
+// process data with word-bag to extract keywords
 const getQuizTags = async (quizArray, courseCode) => {
-    // TODO test this function for tagging quiz questions.
-    // process data with tf-idf algorithm
-    const corpusPre = quizArray.map(i => i.question);
+    const corpusPre = quizArray.map(i => i.question.toLowerCase());
     const corpusForum = [];
 
     const data = await analysis.buildModel(corpusPre, corpusForum, courseCode);
 
     const blockArray = data.block;
+    console.log(blockArray[0].tags);
     return quizArray.map((element, index) => dataType.getQuizObject(courseCode, element.question, element.answer, blockArray[index].tags));
 };
 
