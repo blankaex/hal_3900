@@ -2,6 +2,7 @@ const MongoClient = require('mongodb').MongoClient;
 const fs = require('fs');
 const logger = require('log4js').getLogger('Database');
 const dataExtraction = require('./data_extraction/data_extraction.js');
+const stats = require('./stats.js');
 logger.level = 'info';
 
 module.exports = class DB {
@@ -70,10 +71,11 @@ module.exports = class DB {
 	 * pagesToScrape must be a js object formatted as per spec in wiki
 	 */
 	async runDataExtraction (pagesToScrape) {
-		if (!this.connected)
+		if (!this.connected) {
 			await this.connect();
+		}
 
-		 await dataExtraction.getDataToDb(pagesToScrape, this);
+		await dataExtraction.getDataToDb(pagesToScrape, this);
 	}
 	
 	/*
@@ -120,89 +122,10 @@ module.exports = class DB {
 			})
 		}
 		// get stats or make if not exists
-		await this.updateQuizStats(course, searchTags);
+		await stats.updateQuizStats(this, course, searchTags);
 
 		return candidates;
 	}
-
-	async updateQuizStats(course, searchTags){
-		let result = await this.findByCourseCode(course, "courseStats");
-		if (result.length === 0) {
-			await this.makeNewFrequencyCount(course);
-			result = await this.findByCourseCode(course, "courseStats");
-		}
-		console.log(result[0]);
-		const quizCounts = result[0].quizCounts;
-		const quizTotal = result[0].quizTotal;
-		// update count for these tags
-		searchTags.forEach(tag => {
-			const tagIndex = quizCounts.findIndex(item => item.tag === tag);
-			if (tagIndex === -1){
-				// create new
-				const count = 1;
-				quizCounts.push({tag , count});
-			} else {
-				const count = quizCounts[tagIndex].count + 1;
-				quizCounts.splice(tagIndex, 1, {tag, count});
-			}
-		});
-		// update in db
-		this.dbConn.collection("courseStats").updateOne(
-			{courseCode : course},
-			{$set : {
-					quizCounts: quizCounts,
-					quizTotal: quizTotal + 1
-				}
-			});
-	}
-
-	async updateQueryStats(course, searchTags){
-		let result = await this.findByCourseCode(course, "courseStats");
-		if (result.length === 0) {
-			await this.makeNewFrequencyCount(course);
-			result = await this.findByCourseCode(course, "courseStats");
-		}
-		console.log(result[0]);
-		const queryCounts = result[0].queryCounts;
-		const queryTotal = result[0].queryTotal;
-		// update count for these tags
-		searchTags.forEach(tag => {
-			const tagIndex = queryCounts.findIndex(item => item.tag === tag);
-			if (tagIndex === -1){
-				// create new
-				const count = 1;
-				queryCounts.push({tag , count});
-			} else {
-				const count = queryCounts[tagIndex].count + 1;
-				queryCounts.splice(tagIndex, 1, {tag, count});
-			}
-		});
-		// update in db
-		this.dbConn.collection("courseStats").updateOne(
-			{courseCode : course},
-			{$set : {
-					queryCounts: queryCounts,
-					queryTotal: queryTotal + 1
-				}
-			});
-	}
-
-	/*
-	 * Create a new course frequency counter
-	 * Assumes one does not already exist for the course
-	 */
-	async makeNewFrequencyCount(courseCode){
-		const newObject = {
-			courseCode,
-			"queryCounts": [], // count times keyword present in query
-			"quizCounts": [], // count times keyword present in quiz request
-			"queryTotal": 0, // count total times bot asked questions
-			"missedQuery": 0, // count total times bot didn't understand
-			"quizTotal": 0  // count total times bot asked for quiz
-		};
-		await this.addToCollection([newObject], "courseStats");
-	}
-
 
 	/*
 	 * Given a collection name will return a array of all 
@@ -240,8 +163,9 @@ module.exports = class DB {
 		const forum = await this.findAllFromCollection('forum');
 		const courses = await this.findAllFromCollection('courses');
 		const quiz = await this.findAllFromCollection('quiz');
+		const stats = await this.findAllFromCollection('courseStats');
 
-		fs.writeFileSync(filename, JSON.stringify({block, forum, courses, quiz}));
+		fs.writeFileSync(filename, JSON.stringify({block, forum, courses, quiz, stats}));
 	}
 
 	/*
@@ -254,6 +178,7 @@ module.exports = class DB {
 		this.addToCollection(items.block, 'block');
 		this.addToCollection(items.courses, 'courses');
 		this.addToCollection(items.quiz, 'quiz');
+		this.addToCollection(items.stats, 'courseStats');
 	}
 
 };
