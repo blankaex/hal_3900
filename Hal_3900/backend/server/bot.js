@@ -39,17 +39,55 @@ module.exports = class Bot {
 		}
 		logger.info(`search for query id ${queryId}`);
 		const all = await this.db.search(query, 'query_contexts');
-		await training(this.db, all[0], choice);
+		const context = all[0];
+		const courseQuery = {
+			'courseCode': {
+				$eq: context.course
+			}
+		}
+		const results = await this.db.search(courseQuery, 'courses');
+		
+		const {trainingSensitivity} = results[0];
+		logger.info("Training with sensitivity "+trainingSensitivity)
+		await training(this.db, context, choice, trainingSensitivity);
+	}
+
+	async quizTrain(course, payload) {
+		const username = payload.user;
+		const gotRight = payload.correct;
+
+		let query = { zid: { $eq: username } };
+		let results = await this.db.search(query, 'users');	
+		if (results.length <= 0)
+			return
+		const user = results[0];
+
+		if (!('profile' in user)) user.profile = {};
+		if (!(course in user.profile)) user.profile[course] = {};
+		
+		query = {
+			id: {
+				$eq: payload.questionId
+			}
+		};
+		results = await this.db.search(query,'quiz');
+		const question = results[0];
+		for (const tag of question.tags) {
+			if (!(tag.name in user.profile[course])) {
+				user.profile[course][tag.name] = 1;
+			}
+			// increase the importance of tags the user sucks at
+			user.profile[course][tag.name] *= gotRight ? 0.97 : 1.03;
+		}
+		// update
+		logger.info(user)
+		const collection = this.db.dbConn.collection('users');
+		collection.updateOne({ _id: user._id }, { $set: user })
 	}
 
 	async getCandidates(course, tags) {
 		let candidates = await this.db.findByCourseCode(course, 'block');
-		
-		// for (const tag of tags) {
-		// 	const matches = collection.filter(c => hasTag(c, tag));
-		// 	candidates = candidates.concat(matches);
-		// };
-		console.log(candidates.length);
+
 		if (tags.length > 0) {
 			candidates = candidates.filter(item => {
 				// check if any tags on the candidate match the searchTags
@@ -83,11 +121,20 @@ module.exports = class Bot {
 		// update query stats
 		await stats.updateQueryStats(this.db, course, searchTags);
 
-
+		// get confidence threshold
+		const results = await this.db.search({courseCode: {$eq: course}},'courses');
+		const {confidenceThreshold} = results[0];
+		
+		let i = 0;
+		for (const option of context.rawOptions) {
+			logger.info(options[i], option._score);
+			if (option._score >= confidenceThreshold) return [options[i]];
+			i++;
+		}
 		return options;
 	}
 
-	async query(course, msg) {
+	async query(course, msg, username) {
 		const request = {
 			session: this.DF.sessionPath,
 			queryInput: {
@@ -112,7 +159,7 @@ module.exports = class Bot {
 			// search for responses
 			let options;
 			if (intent === 'quiz'){
-				options = await this.db.getQuizQuestions(course, searchTags);
+				options = await this.db.getQuizQuestions(searchTags, course, username);
 			} else {
 				options = await this.generateOptions(course, searchTags, intent);
 				options = options.map(x => { return { ...x, question: msg } });

@@ -1,15 +1,33 @@
 <template>
   <div v-if="courseCode" class='statsList'>
-    <div>
-      <p>Total Student Queries: {{stats.queryTotal}}</p>
-      <p>Total Student Quizzes: {{stats.quizTotal}}</p>
-      <p>Total questions unanswered by bot: {{stats.missedQuery}}</p>
+    <div v-if="courseCode" class="card">
+      <h3>{{courseCode}} Student Interactions</h3>
+      <hr>
+      <div class="container">
+        <PieChart v-if="loaded" :pieNums="[stats.quizTotal, stats.queryTotal, stats.missedQuery]"></PieChart>
+      </div>
+    </div>
+    <div v-if="courseCode" class="card">
+      <h3>{{courseCode}} Frequently asked question keywords</h3>
+      <hr>
+      <div class="container">
+        <BarChart v-if="loaded" :tagCounts="stats.queryCounts"></BarChart>
+      </div>
+    </div>
+    <div v-if="courseCode" class="card">
+      <h3>{{courseCode}} Frequently asked quiz keywords:</h3>
+      <hr>
+      <div class="container">
+        <BarChart v-if="loaded" :tagCounts="stats.quizCounts"></BarChart>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang='ts'>
 import { Component, Prop, Vue } from 'vue-property-decorator'
+import PieChart from "./stats/PieChart.vue";
+import BarChart from "./stats/BarChart.vue";
 
 interface Stats {
   queryCounts: [],
@@ -29,10 +47,15 @@ function post (url:string, data:object):Promise<Stats> {
     body: JSON.stringify(data)
   }).then(r => r.json())
 }
-
-@Component
+@Component({
+  components: {
+    BarChart,
+    PieChart
+  }
+})
 export default class StatsView extends Vue {
   @Prop() courseCode: any
+  loaded: boolean=false
   stats: Stats = {
     queryCounts: [],
     quizCounts: [],
@@ -51,6 +74,7 @@ export default class StatsView extends Vue {
         this.stats.queryTotal = r.queryTotal
         this.stats.quizTotal = r.quizTotal
         this.stats.missedQuery = r.missedQuery
+        this.loaded = true
       })
   }
   mounted () {
@@ -61,65 +85,33 @@ export default class StatsView extends Vue {
 </script>
 
 <style scoped lang="sass">
-  .statsList
-    width: 100%
-    margin-top: 1rem
-  p
-    color: #555
-    margin-bottom: 1rem
-  .scrollable
-    width: calc(100% - 1rem)
-    height: 250px
-    padding: 0.5rem
-    overflow: scroll
-    border: 1px solid #EBEBEB
-    border-radius: 15px
-    margin-bottom: 1rem
-    background: rgba(0,0,0,0.02)
-  .add
-    width: 100%
-    border-radius: 15px
-    border: none
-    background: rgba(0,0,0,0.05)
-    color: #444
-    cursor: pointer
-    transition: all 0.2s
-  .add:hover
-    box-shadow: 0 2px 3px rgba(0,0,0,0.19), 0 1px 2px rgba(0,0,0,0.23)
-  .mdi.mdi-minus-circle-outline, .card.content .mdi.mdi-minus-circle-outline
-    color: #777
-    cursor: pointer
-    font-size: 1.1rem
-  .mdi.mdi-minus-circle-outline:hover, .card.content .mdi.mdi-minus-circle-outline:hover
-    color: #F15F79
-  .row
-    width: 100%
-    display: flex
-  .row .text
-    width: calc(45% - 2rem)
-    padding: 0.3rem 1rem
-    border-right: 1px solid #BBB
-    color: #444
-  .row .icon
-    width: calc(10%-2rem)
-    padding: 0rem 1rem
-  .newQuestions
-    width: 100%
-    display: flex
-    align-items: center
-  .newQuestions i
-    color: #777
-    font-size: 1.3rem
-    cursor: pointer
-  .newQuestions i:hover
-    color: #F15F79
-  .newQuestions input[type='text']
-    padding: 0.2rem 0.5rem
-    border-radius: 8px
-    border: 2px solid #EBEBEB
-    color: #444
-    margin-right: 0.5rem
-  .newQuestions input[type='text']:focus
-    outline: none
-    border-color: #F15F79
+.statsList
+  @extend %flex-row
+  width: 100%
+  margin-top: 1rem
+  justify-content: space-around
+  flex-wrap: wrap
+p
+  color: #555
+  margin-bottom: 1rem
+.card
+  width: 500px
+  overflow: scroll
+  padding: 1rem
+  margin-top: 1rem
+  background: white
+  border-radius: 10px
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)
+  display: flex
+  flex-direction: column
+.card h3
+  margin: 0px
+  font-weight: 100
+hr
+  width: 100%
+  border: none
+  outline: none
+  height: 3px
+  border-radius: 10px
+  background: linear-gradient(to right, #F15F79, #B24592)
 </style>

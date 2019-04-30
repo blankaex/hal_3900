@@ -82,6 +82,9 @@ export default class Chat extends Vue {
   width: calc(100% - 2rem)
   margin-left: 1rem
   margin-right: 1rem
+@media only screen and (max-width: 849px)
+  .chat
+    margin-right: calc(1rem + 75px)
 .messages
   width: 100%
   max-height: 100%

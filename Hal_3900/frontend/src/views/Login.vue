@@ -80,6 +80,12 @@ export default class Login extends Vue {
   display: flex
   flex-direction: column
   text-align: center
+@media only screen and (max-width: 450px)
+  .card
+    width: 100vw
+    height: 100vh
+    box-shadow: none
+    justify-content: center
 .card p
   margin-top: 2rem
   font-family: 'Raleway', sans-serif
