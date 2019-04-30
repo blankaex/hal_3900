@@ -1,8 +1,8 @@
 <template>
   <div class="halMsg">
     <img src="../../assets/hal.png">
-    <div v-if="message.type == 'simple'" class="text"
-      :style="{'background': getGradient(message.from)}">{{message.body}}</div>
+    <div class="text"
+      :style="{'background': getGradient(message.from)}">{{text}}</div>
   </div>
 </template>
 
@@ -13,6 +13,7 @@ import { BotResponse, Theme } from './../types'
 @Component
 export default class HalMessage extends Vue {
   @Prop() message:any
+  @Prop() text!:string
 
   getGradient () {
     const theme:Theme = this.$store.state.theme

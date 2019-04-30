@@ -19,6 +19,48 @@ router.get('/all', async (req, res) => {
         res.status(400).json({'response': 'No users found.'});
 });
 
+// get all settings
+router.get('/settings/:course', async (req, res) => {
+    if (!db.connected)
+        await db.connect();
+    const course = req.params.course;
+    const query = {
+        courseCode: {
+            $eq: course
+        }
+    }
+    const results = await db.search(query, 'courses')
+    if (results.length <= 0) {
+        res.status(400).json({'error': 'unknown course'})
+        return
+    }
+    const result = results[0];
+    
+    res.status(200).json({
+        'confidence': result.confidenceThreshold,
+        'sensitivity': result.trainingSensitivity
+    });
+});
+
+// update settings
+router.post('/settings', async (req, res) => {
+    if (!db.connected)
+        await db.connect();
+    const course = req.body.courseCode;
+    const query = {
+        courseCode: {
+            $eq: course
+        }
+    }
+    const update = {
+        confidenceThreshold: req.body.confidence, 
+        trainingSensitivity: req.body.sensitivity 
+    };
+    const collection = db.dbConn.collection('courses');
+    collection.updateOne(query, { $set: update })
+    res.status(200).json({'ok':'ok'})
+});
+
 // registers user as admin
 router.post('/register', async (req, res) => {
     if (!db.connected)
@@ -73,6 +115,8 @@ router.post('/setup', async (req, res) => {
         const courseDetails = {
             courseCode: req.body.courseCode,
             courseName: req.body.courseName,
+            confidenceThreshold: 0.1,
+            trainingSensitivity: 0.3
         }
         await db.addToCollection([courseDetails],'courses');
         res.status(200).json({'result': 'ok'});
