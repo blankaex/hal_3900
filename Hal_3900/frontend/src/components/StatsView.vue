@@ -4,14 +4,12 @@
       <p>Total Student Queries: {{stats.queryTotal}}</p>
       <p>Total Student Quizzes: {{stats.quizTotal}}</p>
       <p>Total questions unanswered by bot: {{stats.missedQuery}}</p>
-      <PieChart></PieChart>
     </div>
   </div>
 </template>
 
 <script lang='ts'>
 import { Component, Prop, Vue } from 'vue-property-decorator'
-import PieChart from './stats/PieChart.vue'
 
 interface Stats {
   queryCounts: [],
@@ -32,11 +30,7 @@ function post (url:string, data:object):Promise<Stats> {
   }).then(r => r.json())
 }
 
-@Component({
-  components: {
-    PieChart
-  }
-})
+@Component
 export default class StatsView extends Vue {
   @Prop() courseCode: any
   stats: Stats = {
