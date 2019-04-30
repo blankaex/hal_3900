@@ -44,12 +44,7 @@ module.exports = class Bot {
 
 	async getCandidates(course, tags) {
 		let candidates = await this.db.findByCourseCode(course, 'block');
-		
-		// for (const tag of tags) {
-		// 	const matches = collection.filter(c => hasTag(c, tag));
-		// 	candidates = candidates.concat(matches);
-		// };
-		console.log(candidates.length);
+
 		if (tags.length > 0) {
 			candidates = candidates.filter(item => {
 				// check if any tags on the candidate match the searchTags

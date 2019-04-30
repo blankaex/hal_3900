@@ -1,12 +1,6 @@
-<template>
-  <div>
-    <canvas id="pie-chart"></canvas>
-  </div>
-</template>
-
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
-import { Bar, mixins } from 'vue-chartjs'
+import { Pie } from 'vue-chartjs'
 
 interface Dataset {
   label: string,
@@ -16,22 +10,26 @@ interface Dataset {
 
 interface PieData {
   labels: string[],
-    datasets: Dataset[]
+  datasets: Dataset[]
 }
 
-@Component
-export default class PieChart extends Bar {
+@Component({
+  extends: Pie,
+})
+export default class PieChart extends Vue<Pie> {
+  @Prop() pieNums: number[]
   pieData: PieData={
-    labels: ['quiz', 'query', 'missed'],
+    labels: ['quiz', 'query', 'unanswered'],
     datasets: [
       { label: 'Student Interactions',
-        backgroundColor: ['#41B883', '#E46651', '#00D8FF'],
+        backgroundColor: ['#4363d8', '#911eb4', '#f032e6'],
         data: [1, 1, 1]
       }
     ]
   }
 
   mounted () {
+    this.pieData.datasets[0].data = this.pieNums
     this.renderChart(this.pieData)
   }
 }
