@@ -8,7 +8,10 @@
     \item{The data is analysed for keywords using the tf-idf algorithm.}
     \item{The data and its corresponding keywords are inserted into the database.}
     \item{An interactive model of the dataset appears on the webpage once the course is ready.}
+    \item{Entities are updated automatically in Dialogflow to include new keywords, so our bot can recognise new requests from students}
 \end{enumerate}
+
+\includegraphics[width=\textwidth]{extraction.png}
 
 \subsection{Example Usage}
 This is an example use case based on the first user story described in section 2.1.2.
@@ -19,7 +22,9 @@ The course administrator registers an account, and then logs in via the front en
 
 Once the form is submitted, the data scraper module will process the pages and extract data. This data will be stored in the database and is ready for use.
 
-\includegraphics[width=\textwidth]{data-log.png}
+\begin{center}
+    \includegraphics[width=10cm]{data-log.png}
+\end{center}
 
 \subsection{Technical Details}
 The frontend is developed in \code{Vue.js} using \code{TypeScript}. This helps enforce data types within \code{JavaScript}, to ensure that the input sent to the backend is valid.

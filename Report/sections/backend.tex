@@ -3,7 +3,7 @@
 \subsubsection{Process}
 \begin{enumerate}
     \item{The user sends a query to the chat bot via the web interface.}
-    \item{The chat bot backend extracts the keywords and intents from the query.}
+    \item{The chat bot sends the query to Dialogflow to extract the keywords and intents.}
     \item{It will then search the database to find candidate responses.}
     \item{A score is calculated for each candidate based on its theta value and salience.}
     \item{The candidate with the highest score is considered the best answer.}
@@ -25,17 +25,42 @@ The user then asks "What is fork?" This query is also processed and the intent i
 \end{center}
 
 \subsubsection{Technical Details}
-The salience value for keywords is calculated using the tf-idf algorithm. 
+The chat bot is retrieval-based and functions on two layers. The initial layer is the Dialogflow component. It handles the natural language processing of the query and extracts keywords, as well as dealing with responses for non-relevant questions. Dialogflow was chosen as it is a known, reliable module and has core NLP features such as small talk, which help our bot appear more human. It also has an API for communication with our backend, which suited our needs perfectly.
+
+The second layer of our chat bot is the bag of words model. This was designed to process only relevant queries, once the keywords have been extracted by Dialogflow in the first layer. As we don't rely on a set of training data, our system cannot be pre-trained. Thus, any deep learning module such as LSTM would not work in our case. The bag of words model was deemed the most appropriate for our use case, as it is able to retrieve data points without any prior training.
+
+This was chosen over the Google Cloud NLP's keyword extraction module because the latter occasionally missed important tags, and also because it calculated the salience such that the sum of one data point will be one. This is not ideal for our system, as long sentences will tend to have a lower salience and be less likely to be presented to users. Instead, the tf-idf algorithm that we implemented suits our use case better, as it does not miss any tags for our data points, and also assigns a lower salience to common words, which helps us calculate accurate scores for each data point.
 
 \subsection{Internal APIs}
 \subsubsection{Process}
 \begin{enumerate}
-    \item{}
+    \item{The backend API runs in its own instance, separate from the frontend.}
+    \item{The user makes a request via the interface on the frontend.}
+    \item{The frontend sends an \code{HTTP} request to the API with the details of the user's request.}
+    \item{The API receives the request and routes it appropriately.}
+    \item{The corresponding function is called and handles the user's request.}
+    \item{An \code{HTTP} response is sent back to the frontend based on the behaviour of the function.}
+    \item{The frontend displays an appropriate response to the user based on the response it receives.}
 \end{enumerate}
 
 \subsubsection{Usage}
+The internal API is accessed when a user wants to register. When accessing the homepage, the user will see a registration form. Using this, they can choose a name and confirm it by pressing the button.
+
+\begin{center}
+    \includegraphics[width=7cm]{register.jpg}
+\end{center}
+
+The \code{Get Started} button sends an \code{HTTP POST} request to the internal API at a specific URL. The backend router associates this with the function to register or log in a user. The function runs, and checks if the user already exists. If they do, their previous session will be loaded. Otherwise, a new session will be created for the user. The API then sends an \code{HTTP} response back to the frontend and the user can proceed to use the system.
+
+\begin{center}
+    \includegraphics[width=\textwidth]{welcome.png}
+\end{center}
 
 \subsubsection{Technical Details}
-% refer to appendix
-We have constructed a backend in \code{Javascript} using \code{Node.js}. This runs on an \code{EC2} instance on Amazon Web Services (AWS). 
+The backend is primarily constructed using \code{Node.js} in \code{TypeScript}. It was chosen due to its high amount of usage in the industry and abundance of packages and documentation that could be taken advantage of. One of the main advantages of using \code{Node.js} over something like \code{Django} for example, is the availability of an easy-to-use web socket implementation. This allowed us to easily create a real-time chat system, which is part of our core functionality.
+
+\code{Express.js} and \code{express-session} were used to handle routing and user sessions, respectively. Considering there was already a reliable implementation of these core but basic features, we did not see a need to create our own. Similarly, \code{express-ws} was used to deal with the web socket functionality that we needed.
+
+\code{TypeScript} was chosen mainly for development purposes. It helped to ensure our code was robust and error free by enforcing data types to avoid common \code{JavaScript} errors.
+
 \newpage
