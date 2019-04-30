@@ -14,11 +14,11 @@ interface PieData {
 }
 
 @Component({
-  extends: Pie,
+  extends: Pie
 })
-export default class PieChart extends Vue<Pie> {
-  @Prop() pieNums: number[]
-  pieData: PieData={
+export default class PieChart extends Vue {
+  @Prop() pieNums: number[] = []
+  pieData: PieData ={
     labels: ['quiz', 'query', 'unanswered'],
     datasets: [
       { label: 'Student Interactions',
@@ -30,7 +30,8 @@ export default class PieChart extends Vue<Pie> {
 
   mounted () {
     this.pieData.datasets[0].data = this.pieNums
-    this.renderChart(this.pieData)
+    const me:any = this
+    me.renderChart(this.pieData)
   }
 }
 </script>

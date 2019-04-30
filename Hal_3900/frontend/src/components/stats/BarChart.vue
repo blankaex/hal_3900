@@ -13,10 +13,10 @@ import { Bar } from 'vue-chartjs'
     datasets: Dataset[]
   }
 
-  @Component({
-    extends: Bar,
-  })
-export default class BarChart extends Vue<Bar> {
+@Component({
+  extends: Bar
+})
+export default class BarChart extends Vue {
   @Prop() tagCounts: any // tagcounts[i].count and .tag
   barData: BarData={
     labels: [],
@@ -27,7 +27,7 @@ export default class BarChart extends Vue<Bar> {
       }
     ]
   }
-  options: {
+  options = {
     scales: {
       yAxes: [{
         ticks: {
@@ -38,19 +38,20 @@ export default class BarChart extends Vue<Bar> {
   }
   mounted () {
     // sort results and take top 10
-    this.tagCounts = this.tagCounts.sort((a, b) => {
+    this.tagCounts = this.tagCounts.sort((a:any, b:any) => {
       if (a.count < b.count) return 1
       if (a.count > b.count) return -1
       return 0
     })
-    if (this.tagCounts.length > 10){
+    if (this.tagCounts.length > 10) {
       this.tagCounts = this.tagCounts.slice(0, 10)
     }
     // input to dataset
-    this.barData.labels = this.tagCounts.map(item => item.tag)
-    this.barData.datasets[0].data = this.tagCounts.map(item => item.count)
+    this.barData.labels = this.tagCounts.map((item:any) => item.tag)
+    this.barData.datasets[0].data = this.tagCounts.map((item:any) => item.count)
     this.barData.datasets[0].data.push(0)
-    this.renderChart(this.barData, this.options)
+    const me:any = this
+    me.renderChart(this.barData, this.options)
   }
 }
 </script>
