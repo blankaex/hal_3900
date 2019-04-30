@@ -104,18 +104,33 @@ module.exports = class DB {
 	/*
 	 * get quiz questions
 	 */
-	async getQuizQuestions(tags, intent, courseCode) {
-		// TODO need to add courseCode param in: unused rn
-		const candidates = await this.findAllFromCollection('quiz');
-		// console.log(candidates);
-		// TODO filter by tags
+	scoreQuizQuestion (tags, c) {
+		const tagNames = tags.map(x => x.name);
+		let score = 0.0;
+		for (const t of c.tags) {
+			if (tagNames.includes(t.name)) {
+				score += t.thetha;
+			}
+		}
+		logger.info(c)
+		return score;
+	}
 
-		// if (candidates.length > 0){
-		// 	// choose 1 at random
-		// 	// or choose a list if we know how many
-		//
-		// }
-
+	async getQuizQuestions(tags, courseCode) {
+		const query = {
+			courseCode: {
+				$eq: courseCode
+			}
+		};
+		let candidates = await this.search(query, 'quiz');
+		candidates = candidates.map(x => {
+			return {
+				...x,
+				'_score': this.scoreQuizQuestion(tags, x)
+			}
+		})
+		// sort by score
+		candidates = candidates.sort((a, b) => b._score - a._score);
 		return candidates;
 
 	}
