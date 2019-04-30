@@ -7,7 +7,7 @@ const commonList = ['the','be','to','of','and','a','in','that','have','I','it','
                     'their','what','so','up','out','if','about','who','get','which','go','went','got','gotten','me','when','can','like',
                     'just','him','know','knew','take','toke','taken','into','your','some','could','them','see','saw','other','then','now',
                     'look','only','come','came','its','over','think','also','back','use','after','how','our','ours','even','want','because',
-                    'any','these','us','whats','whatever','somewhat'];
+                    'any','these','us','whats','whatever','somewhat','quiz','test','exercise'];
 
 //var testList = ['yw','yw','the',' ',' ','  '];
 
