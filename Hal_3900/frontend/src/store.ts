@@ -86,7 +86,7 @@ function socketReady (state: Store, commit: Commit):Promise<{}> {
   return ready
 }
 
-function msg (course: string|null, payload: string, username:string):string {
+function msg (course: string|null, payload: string, username:string|null):string {
   return JSON.stringify({
     type: 'message',
     course,

@@ -39,7 +39,17 @@ module.exports = class Bot {
 		}
 		logger.info(`search for query id ${queryId}`);
 		const all = await this.db.search(query, 'query_contexts');
-		await training(this.db, all[0], choice);
+		const context = all[0];
+		const courseQuery = {
+			'courseCode': {
+				$eq: context.course
+			}
+		}
+		const results = await this.db.search(courseQuery, 'courses');
+		
+		const {trainingSensitivity} = results[0];
+		logger.info("Training with sensitivity "+trainingSensitivity)
+		await training(this.db, context, choice, trainingSensitivity);
 	}
 
 	async quizTrain(course, payload) {
@@ -105,6 +115,16 @@ module.exports = class Bot {
 		// update query stats
 		await stats.updateQueryStats(this.db, course, searchTags);
 
+		// get confidence threshold
+		const results = await this.db.search({courseCode: {$eq: course}},'courses');
+		const {confidenceThreshold} = results[0];
+		
+		let i = 0;
+		for (const option of context.rawOptions) {
+			logger.info(options[i], option._score);
+			if (option._score >= confidenceThreshold) return [options[i]];
+			i++;
+		}
 		return options;
 	}
 

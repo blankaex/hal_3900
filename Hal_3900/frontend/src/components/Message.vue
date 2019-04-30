@@ -1,8 +1,9 @@
 <template>
   <div class="message">
-    <HalMessage v-if="message.type === 'simple' && message.from === 'bot' && message.body.substr(0,1) !== '['" :message="message"></HalMessage>
+    <HalMessage v-if="message.type === 'simple' && message.from === 'bot' && message.body.substr(0,1) !== '['" :message="message" :text="message.body"></HalMessage>
     <UserMessage v-if="message.type === 'simple' && message.from === 'user'" :message="message"></UserMessage>
-    <OptionsMessage v-if="message.type === 'options'" :message="message"></OptionsMessage>
+    <OptionsMessage v-if="message.type === 'options' && message.body.length > 1" :message="message"></OptionsMessage>
+    <HalMessage v-if="message.type === 'options' && message.body.length == 1" :message="message" :text="message.body[0].text"></HalMessage>
     <TableMessage v-if="message.type === 'table'" :table="message.body" :msg="message"></TableMessage>
     <QuizMessage v-if="message.type === 'quiz'" :message="message"></QuizMessage>
   </div>
