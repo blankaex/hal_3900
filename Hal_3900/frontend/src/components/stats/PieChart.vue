@@ -17,7 +17,7 @@ interface PieData {
   extends: Pie
 })
 export default class PieChart extends Vue {
-  @Prop() pieNums: number[] = []
+  @Prop() pieNums!: number[]
   pieData: PieData ={
     labels: ['quiz', 'query', 'unanswered'],
     datasets: [

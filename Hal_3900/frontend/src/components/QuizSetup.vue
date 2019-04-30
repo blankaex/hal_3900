@@ -36,7 +36,7 @@
         </div>
       </div>
     </div>
-    <StatsView :courseCode="courseCode" :key="courseCode"></StatsView>
+    <StatsView v-if="courseCode" :courseCode="courseCode" :key="courseCode"></StatsView>
   </div>
 </template>
 
