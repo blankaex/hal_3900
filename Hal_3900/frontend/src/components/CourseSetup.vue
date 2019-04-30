@@ -29,25 +29,27 @@
             <div class='listItem' v-for='(item, index) in assignment' :key="index">
               <input type='text' v-model.trim='item.name' placeholder='name'/>
               <input type='text' v-model.trim='item.address' placeholder='URL'/>
-              <i class="mdi mdi-plus-circle-outline" type='button' v-on:click='removeAssignment(index)'></i>
+              <i class="mdi mdi-minus-circle-outline" type='button' v-on:click='removeAssignment(index)'></i>
             </div>
           </div>
           <button class="add" type='button' v-on:click='addAssignment()'>+</button>
         </div>
         <div class='card content'>
-          <h3>content pages</h3>
+          <h3>Content pages</h3>
           <hr><br>
           <div class="scrollable">
             <div class='listItem' v-for='(item, index) in content' :key="index">
               <input type="text" v-model.trim='item.name' placeholder='name'/>
               <input type="text" v-model.trim='item.address' placeholder='URL'/>
-              <button type='button' v-on:click='removeContent(index)'>-</button>
+              <i class="mdi mdi-minus-circle-outline" type='button' v-on:click='removeContent(index)'></i>
             </div>
           </div>
           <button class="add" type='button' v-on:click='addContent()'>+</button>
         </div>
         </div>
-    <button type='submit' v-on:click='sendSetup()'>GO</button>
+    <div class="action-set">
+      <button type='submit' v-on:click='sendSetup()'>Submit Course</button>
+    </div>
   </div>
 </div>
 </template>
@@ -100,9 +102,9 @@ export default class CourseSetup extends Vue {
   }
 
   sendSetup () {
-    // TODO add new courses to store
     // wrap form input as JS object matching pagesToScrape structure
     const courseCode = this.courseCode
+    const courseName = this.courseName
     const forum = this.forum
     const outline = [
       {
@@ -113,7 +115,8 @@ export default class CourseSetup extends Vue {
     const assignment = this.assignment
     const content = this.content
 
-    const pagesToScrape = { courseCode, forum, outline, assignment, content }
+    const pagesToScrape = { courseCode, courseName, forum, outline, assignment, content }
+
     const host = this.$store.state.host
     fetch(`http://${host}/api/admin/setup`, {
       method: 'POST',
@@ -137,7 +140,7 @@ export default class CourseSetup extends Vue {
 <style scoped lang='sass'>
 .course-setup
   width: calc(100% - 4rem)
-  margin: 0rem 2rem
+  margin: 1rem 2rem
 .course-setup hr
   width: 100%
   border: none
@@ -209,8 +212,10 @@ export default class CourseSetup extends Vue {
   margin-right: 0.5rem
 
 .card.assignments .mdi.mdi-minus-circle-outline, .card.content .mdi.mdi-minus-circle-outline
-  color: #444
-
+  color: #777
+  cursor: pointer
+.card.assignments .mdi.mdi-minus-circle-outline:hover, .card.content .mdi.mdi-minus-circle-outline:hover
+  color: #F15F79
 .card.assignments input[type='text']:focus, .card.content input[type='text']:focus
   outline: none
   border-color: #F15F79
@@ -224,6 +229,26 @@ export default class CourseSetup extends Vue {
   border-radius: 15px
   margin-bottom: 1rem
   background: rgba(0,0,0,0.02)
-button:focus
+
+.action-set
+  width: calc(100%-4rem)
+  margin: 0rem 2rem
+  margin-top: 2rem
+  display: flex
+  align-items: center
+  justify-content: flex-end
+.action-set button
+  outline: none
+  border: none
+  border-radius: 15px
+  padding: 0.4rem 1.2rem
+  font-size: 1rem
+  background: linear-gradient(to right, #F15F79, #B24592)
+  color: white
+  cursor: pointer
+  transition: all 0.3s cubic-bezier(.25,.8,.25,1)
+.action-set button:hover
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)
+.action-set button:focus
   outline: none
 </style>

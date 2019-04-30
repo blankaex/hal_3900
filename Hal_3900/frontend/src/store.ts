@@ -53,6 +53,16 @@ function errorHandler (commit: Commit, res: Event) {
   console.dir(res)
 }
 
+function get (url:string):Promise<Response> {
+  return fetch(url, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    credentials: 'include'
+  }).then(r => r.json())
+}
+
 /*
  * This is how we do lazy loading, until the first request is sent
  * the websocket is not connected.
@@ -115,26 +125,7 @@ export default new Vuex.Store<Store>({
     ],
     quiz: [],
     courses: [
-      {
-        code: 'COMP1521',
-        name: 'Intro to OS'
-      },
-      {
-        code: 'COMP1511',
-        name: 'Introduction to programming'
-      },
-      {
-        code: 'COMP3131',
-        name: 'Compiler Theory and Design'
-      },
-      {
-        code: 'COMP1000',
-        name: 'How not to cry'
-      },
-      {
-        code: 'COMP0000',
-        name: 'Refactoring with Marie Kondo'
-      }
+
     ],
     host: 'localhost:9447',
     socket: null,
@@ -221,6 +212,9 @@ export default new Vuex.Store<Store>({
         timestamp: moment(),
         message: payload
       })
+    },
+    courseDump (state, payload) {
+      state.courses = payload
     }
   },
   actions: {
@@ -239,6 +233,11 @@ export default new Vuex.Store<Store>({
       socketReady(state, commit)
         .then(() => state.socket!.send(training(state.course, payload)))
       commit('log', `sent training data: ${payload}`)
+    },
+    init ({ state, commit }) {
+      const host = state.host
+      get(`http://${host}/api/course/`)
+        .then(r => commit('courseDump', r))
     }
   }
 })
