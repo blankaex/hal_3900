@@ -4,6 +4,7 @@ COPY . /app/web
 WORKDIR /app/web/server
 
 RUN npm install
+RUN npm rebuild
 
 EXPOSE 9447
 ENV PROD='1'
