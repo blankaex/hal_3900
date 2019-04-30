@@ -45,6 +45,7 @@ export default class Sidebar extends Vue {
     localStorage.removeItem('user')
     localStorage.removeItem('course')
     this.$store.commit('logout')
+    this.$store.commit('wipe')
     this.$router.push({ name: 'login' })
   }
 }
@@ -53,6 +54,7 @@ export default class Sidebar extends Vue {
 <style scoped lang="sass">
 .sidebar
   @extend %flex-row
+  position: default
   justify-content: flex-start
   border-top-left-radius: 10px
   border-bottom-left-radius: 10px
@@ -64,6 +66,25 @@ export default class Sidebar extends Vue {
   transition: all 0.5s
 .sidebar.open
   margin-right: 0%
+
+@media only screen and (max-width: 849px)
+  .sidebar
+    position: absolute
+    width: 90vw
+    height: 100vh
+    margin-right: 0px
+    top: 0
+    bottom: 0
+    right: calc(-90vw + 50px)
+  .sidebar.open
+    right: 0
+@media only screen and (min-width: 850px) and (max-width: 1000px)
+  .sidebar
+    position: default
+    width: 100%
+    margin-right: calc(-100% + 100px)
+  .sidebar.open
+    margin-right: 0%
 .menu
   display: flex
   justify-content: space-between

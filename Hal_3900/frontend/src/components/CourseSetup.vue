@@ -209,6 +209,7 @@ export default class CourseSetup extends Vue {
   border-radius: 8px
   border: 2px solid #EBEBEB
   color: #444
+  width: 38%
   margin-right: 0.5rem
 
 .card.assignments .mdi.mdi-minus-circle-outline, .card.content .mdi.mdi-minus-circle-outline

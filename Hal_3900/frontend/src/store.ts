@@ -23,7 +23,6 @@ function messageHandler (commit: Commit, res: MessageEvent) {
     from: 'bot',
     body: resObj.data.response
   })
-
   if (resObj.data.intent === 'quiz') {
     // TODO handle quizzing stuff
     commit('log', `got quiz questions: `)
@@ -87,10 +86,11 @@ function socketReady (state: Store, commit: Commit):Promise<{}> {
   return ready
 }
 
-function msg (course: string|null, payload: string):string {
+function msg (course: string|null, payload: string, username:string|null):string {
   return JSON.stringify({
     type: 'message',
     course,
+    username,
     error: false,
     text: payload
   })
@@ -102,6 +102,15 @@ function training (course: string|null, payload: string):string {
     error: false,
     course,
     choice: payload
+  })
+}
+
+function quizTraining (course: string|null, payload: object):string {
+  return JSON.stringify({
+    type: 'quizTraining',
+    error: false,
+    course,
+    payload
   })
 }
 
@@ -139,15 +148,15 @@ export default new Vuex.Store<Store>({
       }
     ],
     theme: {
-      primary: '#F15F79',
-      secondary: '#B24592',
+      primary: '#B24592',
+      secondary: '#F15F79',
       primaryGradient: ['#FFB75E', '#ED8F03'],
       secondaryGradient: ['#F15F79', '#B24592']
     },
     themes: [
       {
-        primary: '#F15F79',
-        secondary: '#B24592',
+        primary: '#B24592',
+        secondary: '#F15F79',
         primaryGradient: ['#FFB75E', '#ED8F03'],
         secondaryGradient: ['#F15F79', '#B24592']
       },
@@ -215,13 +224,16 @@ export default new Vuex.Store<Store>({
     },
     courseDump (state, payload) {
       state.courses = payload
+    },
+    wipe (state) {
+      state.messages = [state.messages[0]]
     }
   },
   actions: {
     sendMessage ({ commit, state }, payload) {
       commit('changeStatus', AppState.PENDING)
       socketReady(state, commit)
-        .then(() => state.socket!.send(msg(state.course, payload)))
+        .then(() => state.socket!.send(msg(state.course, payload, state.user.name)))
       commit('storeMessage', {
         type: 'simple',
         from: 'user',
@@ -233,6 +245,10 @@ export default new Vuex.Store<Store>({
       socketReady(state, commit)
         .then(() => state.socket!.send(training(state.course, payload)))
       commit('log', `sent training data: ${payload}`)
+    },
+    sendQuizTraining ({ state, commit }, payload) {
+      socketReady(state, commit)
+        .then(() => state.socket!.send(quizTraining(state.course, payload)))
     },
     init ({ state, commit }) {
       const host = state.host

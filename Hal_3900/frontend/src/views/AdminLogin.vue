@@ -116,6 +116,12 @@ export default class Login extends Vue {
   flex-direction: column
   text-align: center
   transition: all 0.3s
+@media only screen and (max-width: 450px)
+  .card
+    width: 100vw
+    height: 100vh
+    box-shadow: none
+    justify-content: center
 .card.errored
   box-shadow: 0 10px 20px rgba(241, 95, 121, 0.4), 0 6px 6px rgba(241, 95, 121, 0.45)
 .card hr

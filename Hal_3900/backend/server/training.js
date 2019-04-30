@@ -28,20 +28,20 @@ function incrementAnswer(num) {
  * Given a id and a tag will bump the thetha value
  * for the tag up
  */
-function bumpThetha(dbConn, id, tag) {
+function bumpThetha(dbConn, id, tag, val) {
     const collection = dbConn.dbConn.collection('block');
     const search = { "_id": id, "tags.name": tag };
-    collection.updateOne(search, multiplyTag(1.03));
+    collection.updateOne(search, multiplyTag(val));
 }
 
 /*
  * Given a id and a tag will bump down then thetha value
  * for the tag. 
  */
-function penaliseTag(dbConn, id, tag) {
+function penaliseTag(dbConn, id, tag, val) {
     const collection = dbConn.dbConn.collection('block');
     const search = { "_id": id, "tags.name": tag };
-    collection.updateOne(search, multiplyTag(0.97));
+    collection.updateOne(search, multiplyTag(val));
 }
 
 /*
@@ -53,14 +53,14 @@ function penaliseTag(dbConn, id, tag) {
  *     best       - The index of the best answer the user chose
  *     tags       - The original SearchTags
  */
-module.exports = async function training(dbConn, context, best) {
+module.exports = async function training(dbConn, context, best, sensitivity) {
     const {rawOptions, options, searchTags} = context;
     // TODO: context contains course, use it
 
     searchTags.map(x => {
-        bumpThetha(dbConn, rawOptions[best]["_id"], x, 1.03);
+        bumpThetha(dbConn, rawOptions[best]["_id"], x, 1 + sensitivity);
         [0,1,2,3].filter(i=>i != best)
-        .map(i => penaliseTag(dbConn, rawOptions[i]["_id"], x, 0.97))
+        .map(i => penaliseTag(dbConn, rawOptions[i]["_id"], x, 1 - sensitivity))
     });
     
     // If the best response was a question, increment answer relevance by 1
