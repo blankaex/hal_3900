@@ -4,12 +4,14 @@
       <p>Total Student Queries: {{stats.queryTotal}}</p>
       <p>Total Student Quizzes: {{stats.quizTotal}}</p>
       <p>Total questions unanswered by bot: {{stats.missedQuery}}</p>
+      <PieChart></PieChart>
     </div>
   </div>
 </template>
 
 <script lang='ts'>
 import { Component, Prop, Vue } from 'vue-property-decorator'
+import PieChart from './stats/PieChart.vue'
 
 interface Stats {
   queryCounts: [],
@@ -30,8 +32,12 @@ function post (url:string, data:object):Promise<Stats> {
   }).then(r => r.json())
 }
 
-@Component
-export default class QuizView extends Vue {
+@Component({
+  components: {
+    PieChart
+  }
+})
+export default class StatsView extends Vue {
   @Prop() courseCode: any
   stats: Stats = {
     queryCounts: [],
@@ -42,6 +48,7 @@ export default class QuizView extends Vue {
   }
 
   refresh () {
+    // retrieve stats for course
     const host = this.$store.state.host
     post(`http://${host}/api/course/stats`, { courseCode: this.courseCode })
       .then(r => {
