@@ -7,42 +7,34 @@ const commonList = ['the','be','to','of','and','a','in','that','have','I','it','
                     'their','what','so','up','out','if','about','who','get','which','go','went','got','gotten','me','when','can','like',
                     'just','him','know','knew','take','toke','taken','into','your','some','could','them','see','saw','other','then','now',
                     'look','only','come','came','its','over','think','also','back','use','after','how','our','ours','even','want','because',
-                    'any','these','us'];
+                    'any','these','us','whats','whatever','somewhat'];
 
-//var testList = ['yw','yw1','the','be'];
+//var testList = ['yw','yw','the',' ',' ','  '];
 
-async function createEntity(projectId, entityTypeId, entityValue, synonyms) {
+async function updateDF(tags) {
     // [START dialogflow_create_entity]
     // Imports the Dialogflow library
-    const dialogflow = require('dialogflow');
 
     // Instantiates clients
     const entityTypesClient = new dialogflow.EntityTypesClient();
-
     // The path to the agent the created entity belongs to.
     const agentPath = entityTypesClient.entityTypePath(projectId, entityTypeId);
+    let entity = [];
+    tags.filter(x=>{return commonList.indexOf(x) === -1}).map(x=>x.replace(/\s+/g, "")).filter(x=>{return x!== ''}).map(x => {entity.push({value:x,synonyms:[x]})});
+    if(entity.length !== 0) {
+        const createEntitiesRequest = {
+            parent: agentPath,
+            entities: entity,
+        };
+        //entity.map(x=>{if (x.value==='')console.log(entity.indexOf(x))});
+        const [response] = await entityTypesClient.batchCreateEntities(
+            createEntitiesRequest
+        );
+        // console.log('Created entity type:');
+        // console.log(response);
+    }
 
-    const entity = {
-        value: entityValue,
-        synonyms: synonyms,
-    };
-
-    const createEntitiesRequest = {
-        parent: agentPath,
-        entities: [entity],
-    };
-
-    const [response] = await entityTypesClient.batchCreateEntities(
-        createEntitiesRequest
-    );
-    console.log('Created entity type:');
-    console.log(response);
     // [END dialogflow_create_entity]
-}
-
-//input: an Array of tags
-async function updateDF(tags){
-    tags.filter(x=>{return commonList.indexOf(x) === -1}).map(x=>{createEntity(projectId, entityTypeId, x, [x])})
 }
 
 

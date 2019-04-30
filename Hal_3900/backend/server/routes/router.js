@@ -16,4 +16,8 @@ module.exports = function(app)
     // Admin API endpoint
     const admin = require('./api/admin');
     app.use('/api/admin', admin)
+
+    // Course API endpoint
+    const course = require('./api/course');
+    app.use('/api/course', course)
 }

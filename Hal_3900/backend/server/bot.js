@@ -4,6 +4,7 @@ const uuid = require('uuid');
 const DFconfig = require('./DFServiceAccount_wordbag.json');
 const training = require('./training');
 const { performIR } = require('./ir');
+const stats = require('./stats.js');
 const logger = require('log4js').getLogger('Bot');
 logger.level = 'info';
 
@@ -67,7 +68,10 @@ module.exports = class Bot {
 		});
 		logger.info(`Saving Query with id ${id}`);
 		await this.db.addToCollection([context], 'query_contexts');
-		
+
+		// update query stats
+		await stats.updateQueryStats(this.db, course, searchTags);
+
 		return options;
 	}
 
@@ -83,11 +87,17 @@ module.exports = class Bot {
 		};
 
 		// process the user's request and return an instance of DetectIntentResponse
+		// console.log(request);
 		const responses = await this.DF.sessionClient.detectIntent(request);
 		const result = responses[0].queryResult;
 
-		try {
+		if (result.action === '') {    // do custom fulfillment for the query
+			// get parameters from DialogFlow object
 			const intent = result.intent.displayName;
+			let searchTags = responses[0].queryResult.parameters.fields.word_bag.listValue.values;
+			searchTags = searchTags.map(x=>x.stringValue);
+
+			// search for responses
 			let options;
 			let searchTags = responses[0].queryResult.parameters.fields.word_bag.listValue.values;
 			searchTags = searchTags.map(x=>x.stringValue);
@@ -102,8 +112,13 @@ module.exports = class Bot {
 				options,
 				intent: result.intent ? result.intent.displayName : '[UNKNOWN]'
 			};
-		} catch (err) {
-			logger.error(err);
+		} else {    // Use Dialogflow fulfillment
+			console.log(result.action);
+
+			// count unknown queries in course stats
+			if (result.action === "input.unknown") {
+				stats.countMissedQuery(this.db, course);
+			}
 			return {
 				response: result.fulfillmentText,
 				options: null,

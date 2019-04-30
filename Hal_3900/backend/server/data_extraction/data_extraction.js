@@ -1,6 +1,7 @@
 const scraper = require('./scrape.js');
 const analysis = require('./tfidf.js');
 const dataType = require('./getDataType.js');
+const dfUpdate = require('./DFUpdate.js');
 const fs = require('fs');
 
 /**
@@ -14,7 +15,7 @@ const fs = require('fs');
 
 const getDataToDb = async (input, db) => {
 
-    // // set up course directory
+    // set up course directory
     const data_folder = `../data/${input.courseCode}/`;
     try {
         fs.mkdirSync(data_folder, {recursive: true});
@@ -27,32 +28,33 @@ const getDataToDb = async (input, db) => {
 
     // scrape listed pages and forum for data
     const scrapedData = await scraper.scrapeSpecified(input, data_folder);
+    console.log("Completed Data Extraction");
 
     // process data with tf-idf algorithm
     const corpusPre = scrapedData.pageData;
     const corpusForum = scrapedData.forumData.map(item => item.question);
-
     const data = await analysis.buildModel(corpusPre, corpusForum, input.courseCode);
-
-    // save tagList
-    fs.writeFileSync(`${data_folder}tagList.json`, JSON.stringify({ "tagList":data.tagList }));
+    console.log("Completed Keyword Analysis");
 
     // insert data into Mongo
     await db.addToCollection(data.block, 'block');
-
     await db.addToCollection(scrapedData.forumData, 'forum');
+    await db.addToCollection([dataType.getCourse(input.courseCode, input.courseName)], 'courses');
 
+    // Update Diaglogflow with new tags
+    await dfUpdate.updateDF(data.tagList);
+    console.log("Updated DialogFlow");
 };
 
+// process data with word-bag to extract keywords
 const getQuizTags = async (quizArray, courseCode) => {
-    // TODO test this function for tagging quiz questions.
-    // process data with tf-idf algorithm
-    const corpusPre = quizArray.map(i => i.question);
+    const corpusPre = quizArray.map(i => i.question.toLowerCase());
     const corpusForum = [];
 
     const data = await analysis.buildModel(corpusPre, corpusForum, courseCode);
 
     const blockArray = data.block;
+    // console.log(blockArray[0].tags);
     return quizArray.map((element, index) => dataType.getQuizObject(courseCode, element.question, element.answer, blockArray[index].tags));
 };
 

@@ -37,4 +37,8 @@ const getQuizObject = (courseCode, question, answer, tags=[]) => {
     return {courseCode, question, answer, tags};
 };
 
-module.exports = {getTag, getAnswer, getBlock, getGrouped, getForumObject, getQuizObject};
+const getCourse = (courseCode, courseName) => {
+    return {courseCode, courseName};
+};
+
+module.exports = {getTag, getAnswer, getBlock, getGrouped, getForumObject, getQuizObject, getCourse};
