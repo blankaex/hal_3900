@@ -23,7 +23,6 @@ function messageHandler (commit: Commit, res: MessageEvent) {
     from: 'bot',
     body: resObj.data.response
   })
-
   if (resObj.data.intent === 'quiz') {
     // TODO handle quizzing stuff
     commit('log', `got quiz questions: `)
@@ -139,15 +138,15 @@ export default new Vuex.Store<Store>({
       }
     ],
     theme: {
-      primary: '#F15F79',
-      secondary: '#B24592',
+      primary: '#B24592',
+      secondary: '#F15F79',
       primaryGradient: ['#FFB75E', '#ED8F03'],
       secondaryGradient: ['#F15F79', '#B24592']
     },
     themes: [
       {
-        primary: '#F15F79',
-        secondary: '#B24592',
+        primary: '#B24592',
+        secondary: '#F15F79',
         primaryGradient: ['#FFB75E', '#ED8F03'],
         secondaryGradient: ['#F15F79', '#B24592']
       },
