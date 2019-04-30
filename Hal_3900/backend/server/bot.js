@@ -42,6 +42,39 @@ module.exports = class Bot {
 		await training(this.db, all[0], choice);
 	}
 
+	async quizTrain(course, payload) {
+		const username = payload.user;
+		const gotRight = payload.correct;
+
+		let query = { zid: { $eq: username } };
+		let results = await this.db.search(query, 'users');	
+		if (results.length <= 0)
+			return
+		const user = results[0];
+
+		if (!('profile' in user)) user.profile = {};
+		if (!(course in user.profile)) user.profile[course] = {};
+		
+		query = {
+			id: {
+				$eq: payload.questionId
+			}
+		};
+		results = await this.db.search(query,'quiz');
+		const question = results[0];
+		for (const tag of question.tags) {
+			if (!(tag.name in user.profile[course])) {
+				user.profile[course][tag.name] = 1;
+			}
+			// increase the importance of tags the user sucks at
+			user.profile[course][tag.name] *= gotRight ? 0.97 : 1.03;
+		}
+		// update
+		logger.info(user)
+		const collection = this.db.dbConn.collection('users');
+		collection.updateOne({ _id: user._id }, { $set: user })
+	}
+
 	async getCandidates(course, tags) {
 		let candidates = [];		
 		let collection = await this.db.findByCourseCode(course, 'block');
@@ -75,7 +108,7 @@ module.exports = class Bot {
 		return options;
 	}
 
-	async query(course, msg) {
+	async query(course, msg, username) {
 		const request = {
 			session: this.DF.sessionPath,
 			queryInput: {
@@ -100,7 +133,7 @@ module.exports = class Bot {
 			// search for responses
 			let options;
 			if (intent === 'quiz'){
-				options = await this.db.getQuizQuestions(searchTags, course);
+				options = await this.db.getQuizQuestions(searchTags, course, username);
 			} else {
 				options = await this.generateOptions(course, searchTags, intent);
 				options = options.map(x => { return { ...x, question: msg } });

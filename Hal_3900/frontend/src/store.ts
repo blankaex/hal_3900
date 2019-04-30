@@ -86,10 +86,11 @@ function socketReady (state: Store, commit: Commit):Promise<{}> {
   return ready
 }
 
-function msg (course: string|null, payload: string):string {
+function msg (course: string|null, payload: string, username:string):string {
   return JSON.stringify({
     type: 'message',
     course,
+    username,
     error: false,
     text: payload
   })
@@ -101,6 +102,15 @@ function training (course: string|null, payload: string):string {
     error: false,
     course,
     choice: payload
+  })
+}
+
+function quizTraining (course: string|null, payload: object):string {
+  return JSON.stringify({
+    type: 'quizTraining',
+    error: false,
+    course,
+    payload
   })
 }
 
@@ -223,7 +233,7 @@ export default new Vuex.Store<Store>({
     sendMessage ({ commit, state }, payload) {
       commit('changeStatus', AppState.PENDING)
       socketReady(state, commit)
-        .then(() => state.socket!.send(msg(state.course, payload)))
+        .then(() => state.socket!.send(msg(state.course, payload, state.user.name)))
       commit('storeMessage', {
         type: 'simple',
         from: 'user',
@@ -235,6 +245,10 @@ export default new Vuex.Store<Store>({
       socketReady(state, commit)
         .then(() => state.socket!.send(training(state.course, payload)))
       commit('log', `sent training data: ${payload}`)
+    },
+    sendQuizTraining ({ state, commit }, payload) {
+      socketReady(state, commit)
+        .then(() => state.socket!.send(quizTraining(state.course, payload)))
     },
     init ({ state, commit }) {
       const host = state.host

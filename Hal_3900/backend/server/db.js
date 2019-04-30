@@ -5,6 +5,15 @@ const dataExtraction = require('./data_extraction/data_extraction.js');
 const stats = require('./stats.js');
 logger.level = 'info';
 
+// Stolen from 
+// https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
 module.exports = class DB {
 
 	constructor () {
@@ -105,34 +114,59 @@ module.exports = class DB {
 	/*
 	 * get quiz questions
 	 */
-	scoreQuizQuestion (tags, c) {
+	scoreQuizQuestion (tags, c, profileTags) {
 		let score = 0.0;
+		let tagScore = 0.0;
 		for (const t of c.tags) {
+			tagScore = 0.0;
 			if (tags.includes(t.name.toLowerCase())) {
-				score += t.theta;
+				tagScore = t.theta;
 			}
+			for (const tagName of Object.keys(profileTags)) {
+				if (tagName.toLowerCase() == t.name.toLowerCase()) {
+					logger.info(`Bumping tag ${t.name} by ${profileTags[tagName]}`)
+					tagScore *= profileTags[tagName];
+				}
+			}
+			score += tagScore;
 		}
+		
 		return score;
 	}
 
-	async getQuizQuestions(tags, courseCode) {
+	async getQuizQuestions(tags, courseCode, username) {
 		tags = tags.map(x => x.toLowerCase())
 		const query = {
 			courseCode: {
 				$eq: courseCode
 			}
 		};
+		const userQuery = {
+			zid: {
+				$eq: username
+			}
+		}
 		let candidates = await this.search(query, 'quiz');
+		let results = await this.search(userQuery, 'users');
+		let profile = {};
+		if ('profile' in results[0]) profile = results[0].profile;
+		let profileTags = {};
+		if (courseCode in profile) profileTags = profile[courseCode];
 		candidates = candidates.map(x => {
 			return {
 				...x,
-				'_score': this.scoreQuizQuestion(tags, x)
+				'_score': this.scoreQuizQuestion(tags, x, profileTags)
 			}
 		})
 		// sort by score
 		candidates = candidates.sort((a, b) => b._score - a._score);
+		// if no tags were supplied jumble the list
+		if (tags.length <= 0) {
+			shuffleArray(candidates);
+		}
 		// get stats or make if not exists
 		await stats.updateQuizStats(this, courseCode, tags);
+		
 		return candidates;
 	}
 

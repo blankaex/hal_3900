@@ -39,7 +39,6 @@ export default class QuizMessage extends Vue {
       questionId: this.message.body.id,
       correct: result
     })
-    // TODO: send quiz training to backend
   }
 
   getPrimary () {
