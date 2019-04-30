@@ -12,13 +12,6 @@
         <hr>
         <QuizView :courseCode="courseCode" :key="courseCode"></QuizView>
       </div>
-      <div v-if="courseCode" class="card" :key="courseCode">
-        <h3>{{courseCode}} Stats</h3>
-        <hr>
-        <StatsView :courseCode="courseCode" :key="courseCode"></StatsView>
-      </div>
-    </div>
-    <div class="row-center">
       <div v-if="courseCode" class="card settings" :key="courseCode">
         <h3>{{courseCode}} Settings</h3>
         <hr>
@@ -43,6 +36,7 @@
         </div>
       </div>
     </div>
+    <StatsView :courseCode="courseCode" :key="courseCode"></StatsView>
   </div>
 </template>
 
