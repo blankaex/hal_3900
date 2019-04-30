@@ -1,6 +1,10 @@
 <template>
-  <div v-if="courseCode" class='questionsList'>
-    <div ></div>
+  <div v-if="courseCode" class='statsList'>
+    <div>
+      <p>Total Student Queries: {{stats.queryTotal}}</p>
+      <p>Total Student Quizzes: {{stats.quizTotal}}</p>
+      <p>Total questions unanswered by bot: {{stats.missedQuery}}</p>
+    </div>
   </div>
 </template>
 
@@ -38,10 +42,15 @@ export default class QuizView extends Vue {
   }
 
   refresh () {
-    console.log('hello');
     const host = this.$store.state.host
     post(`http://${host}/api/course/stats`, { courseCode: this.courseCode })
-      .then(r => { console.log(r) })
+      .then(r => {
+        this.stats.queryCounts = r.queryCounts
+        this.stats.quizCounts = r.quizCounts
+        this.stats.queryTotal = r.queryTotal
+        this.stats.quizTotal = r.quizTotal
+        this.stats.missedQuery = r.missedQuery
+      })
   }
   mounted () {
     this.refresh()
@@ -51,7 +60,7 @@ export default class QuizView extends Vue {
 </script>
 
 <style scoped lang="sass">
-  .questionsList
+  .statsList
     width: 100%
     margin-top: 1rem
   p
