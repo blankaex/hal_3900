@@ -25,6 +25,7 @@ interface Question {
   question: string,
   answer: string
 }
+
 function post (url:string, data:object):Promise<Question[]> {
   return fetch(url, {
     method: 'POST',

@@ -4,17 +4,18 @@
     <hr>
     <p>Select a course from the dropdown to add quiz questions and see information about the course</p>
     <div class="selector-container">
-      <v-select v-model='courseCode' :options='$store.state.courses' label='courseCode' :reduce='course => course.courseCode' />
+      <v-select v-model='courseCode' @click="selectionChange()" :options='$store.state.courses' label='courseCode' :reduce='course => course.courseCode' />
     </div>
     <div class="row">
       <div v-if="courseCode" class="card">
         <h3>{{courseCode}} Quiz Questions</h3>
         <hr>
-        <QuizView :courseCode="courseCode" @clicked='toggleView()'></QuizView>
+        <QuizView :courseCode="courseCode" :key="courseCode"></QuizView>
       </div>
-      <div v-if="courseCode" class="card">
+      <div v-if="courseCode" class="card" :key="courseCode">
         <h3>{{courseCode}} Stats</h3>
         <hr>
+        <StatsView :courseCode="courseCode" :key="courseCode"></StatsView>
       </div>
     </div>
   </div>
@@ -25,21 +26,18 @@ import { Vue, Component, Prop } from 'vue-property-decorator'
 import vSelect from 'vue-select'
 import 'vue-select/src/scss/vue-select.scss'
 import QuizView from './quiz/QuizView.vue'
+import StatsView from './StatsView.vue'
 
 @Component({
   components: {
     QuizView,
+    StatsView,
     vSelect
   }
 })
 
 export default class QuizSetup extends Vue {
-  isAdding: boolean=false
   courseCode: string=''
-
-  toggleView () {
-    this.isAdding = !this.isAdding
-  }
 }
 </script>
 
