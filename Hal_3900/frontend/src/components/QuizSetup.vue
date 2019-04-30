@@ -4,7 +4,7 @@
     <hr>
     <p>Select a course from the dropdown to add quiz questions and see information about the course</p>
     <div class="selector-container">
-      <v-select v-model='courseCode' @click="selectionChange()" :options='$store.state.courses' label='courseCode' :reduce='course => course.courseCode' />
+      <v-select v-model='courseCode' :options='$store.state.courses.map(x => x.courseCode)' label='courseCode' />
     </div>
     <div class="row">
       <div v-if="courseCode" class="card">

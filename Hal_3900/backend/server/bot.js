@@ -99,8 +99,6 @@ module.exports = class Bot {
 
 			// search for responses
 			let options;
-			let searchTags = responses[0].queryResult.parameters.fields.word_bag.listValue.values;
-			searchTags = searchTags.map(x=>x.stringValue);
 			if (intent === 'quiz'){
 				options = await this.db.getQuizQuestions(searchTags, course);
 			} else {

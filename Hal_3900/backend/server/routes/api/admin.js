@@ -69,6 +69,12 @@ router.post('/setup', async (req, res) => {
     try {
         // call the course setup code in db from here
         await db.runDataExtraction(req.body.pagesToScrape);
+        // add course to database
+        const courseDetails = {
+            courseCode: req.body.courseCode,
+            courseName: req.body.courseName,
+        }
+        await db.addToCollection([courseDetails],'courses');
         res.status(200).json({'result': 'ok'});
 
     } catch {

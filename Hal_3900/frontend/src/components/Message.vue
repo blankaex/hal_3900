@@ -1,6 +1,6 @@
 <template>
   <div class="message">
-    <HalMessage v-if="message.type === 'simple' && message.from === 'bot'" :message="message"></HalMessage>
+    <HalMessage v-if="message.type === 'simple' && message.from === 'bot' && message.body.substr(0,1) !== '['" :message="message"></HalMessage>
     <UserMessage v-if="message.type === 'simple' && message.from === 'user'" :message="message"></UserMessage>
     <OptionsMessage v-if="message.type === 'options'" :message="message"></OptionsMessage>
     <TableMessage v-if="message.type === 'table'" :table="message.body" :msg="message"></TableMessage>

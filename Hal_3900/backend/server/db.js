@@ -106,18 +106,17 @@ module.exports = class DB {
 	 * get quiz questions
 	 */
 	scoreQuizQuestion (tags, c) {
-		const tagNames = tags.map(x => x.name);
 		let score = 0.0;
 		for (const t of c.tags) {
-			if (tagNames.includes(t.name)) {
-				score += t.thetha;
+			if (tags.includes(t.name.toLowerCase())) {
+				score += t.theta;
 			}
 		}
-		logger.info(c)
 		return score;
 	}
 
 	async getQuizQuestions(tags, courseCode) {
+		tags = tags.map(x => x.toLowerCase())
 		const query = {
 			courseCode: {
 				$eq: courseCode

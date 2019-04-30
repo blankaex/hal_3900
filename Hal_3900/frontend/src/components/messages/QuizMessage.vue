@@ -29,18 +29,22 @@ export default class QuizMessage extends Vue {
   showingAnswer: boolean=false
 
   trainQuiz (result:boolean) {
-    // TODO: figure out what the main topic is
     this.$store.commit('storeMessage', {
       type: 'simple',
       from: 'bot',
-      body: result ? 'Good job!' : 'Aw well, maybe you need a bit more practice with ____'
+      body: result ? 'Good job!' : 'Good try! Keep practicing'
+    })
+    this.$store.dispatch('sendQuizTraining', {
+      user: this.$store.state.user.name,
+      questionId: this.message.body.id,
+      correct: result
     })
     // TODO: send quiz training to backend
   }
 
   getPrimary () {
     return {
-      color: this.$store.state.theme.secon
+      color: this.$store.state.theme.secondary
     }
   }
 

@@ -9,7 +9,6 @@ router.get('/', async (req, res) => {
         await db.connect();
     }
     const result = await db.search({}, 'courses');
-    console.log(result);
     res.status(200).json(result);
 });
 
