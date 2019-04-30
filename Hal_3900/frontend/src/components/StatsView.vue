@@ -1,15 +1,24 @@
 <template>
   <div v-if="courseCode" class='statsList'>
     <div>
-      <p>Total Student Queries: {{stats.queryTotal}}</p>
-      <p>Total Student Quizzes: {{stats.quizTotal}}</p>
-      <p>Total questions unanswered by bot: {{stats.missedQuery}}</p>
+      <p>Student Interactions: </p>
+      <PieChart v-if="loaded" :pieNums="[stats.quizTotal, stats.queryTotal, stats.missedQuery]"></PieChart>
+    </div>
+    <div>
+      <p>Frequently asked question keywords: </p>
+      <BarChart v-if="loaded" :tagCounts="stats.queryCounts"></BarChart>
+    </div>
+    <div>
+      <p>Frequently asked quiz keywords: </p>
+      <BarChart v-if="loaded" :tagCounts="stats.quizCounts"></BarChart>
     </div>
   </div>
 </template>
 
 <script lang='ts'>
 import { Component, Prop, Vue } from 'vue-property-decorator'
+import PieChart from "./stats/PieChart.vue";
+import BarChart from "./stats/BarChart.vue";
 
 interface Stats {
   queryCounts: [],
@@ -29,10 +38,15 @@ function post (url:string, data:object):Promise<Stats> {
     body: JSON.stringify(data)
   }).then(r => r.json())
 }
-
-@Component
-export default class QuizView extends Vue {
+@Component({
+  components: {
+    BarChart,
+    PieChart
+  }
+})
+export default class StatsView extends Vue {
   @Prop() courseCode: any
+  loaded: boolean=false
   stats: Stats = {
     queryCounts: [],
     quizCounts: [],
@@ -42,6 +56,7 @@ export default class QuizView extends Vue {
   }
 
   refresh () {
+    // retrieve stats for course
     const host = this.$store.state.host
     post(`http://${host}/api/course/stats`, { courseCode: this.courseCode })
       .then(r => {
@@ -50,6 +65,7 @@ export default class QuizView extends Vue {
         this.stats.queryTotal = r.queryTotal
         this.stats.quizTotal = r.quizTotal
         this.stats.missedQuery = r.missedQuery
+        this.loaded = true
       })
   }
   mounted () {

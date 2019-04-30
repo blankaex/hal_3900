@@ -86,13 +86,16 @@ module.exports = class Bot {
 	}
 
 	async getCandidates(course, tags) {
-		let candidates = [];		
-		let collection = await this.db.findByCourseCode(course, 'block');
-		
-		for (const tag of tags) {
-			const matches = collection.filter(c => hasTag(c, tag));
-			candidates = candidates.concat(matches);
-		};
+		let candidates = await this.db.findByCourseCode(course, 'block');
+
+		if (tags.length > 0) {
+			candidates = candidates.filter(item => {
+				// check if any tags on the candidate match the searchTags
+				return item.tags.some((tag) => {
+					return tags.indexOf(tag.name) >= 0;
+				});
+			})
+		}
 
 		return candidates
 	}
@@ -102,6 +105,9 @@ module.exports = class Bot {
 		let { options, context } = await performIR(this.db, course, searchTags, candidates, intent);
 		const id = uuid.v4();
 		context["_id"] = id;
+
+		// filter duplicate options text out
+		options = [...new Set(options)];
 
 		options = options.map(x => {
 			return {
