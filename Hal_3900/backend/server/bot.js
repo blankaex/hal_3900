@@ -127,6 +127,7 @@ module.exports = class Bot {
 		
 		let i = 0;
 		for (const option of context.rawOptions) {
+			if (option === undefined) continue;
 			logger.info(options[i], option._score);
 			if (option._score >= confidenceThreshold) return [options[i]];
 			i++;

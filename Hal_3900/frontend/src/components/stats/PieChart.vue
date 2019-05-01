@@ -21,7 +21,8 @@ export default class PieChart extends Vue {
   pieData: PieData ={
     labels: ['quiz', 'query', 'unanswered'],
     datasets: [
-      { label: 'Student Interactions',
+      {
+        label: 'Student Interactions',
         backgroundColor: ['#4363d8', '#911eb4', '#f032e6'],
         data: [1, 1, 1]
       }
