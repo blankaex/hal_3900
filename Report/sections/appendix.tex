@@ -38,25 +38,173 @@ The license for each of the dependencies is provided with the software to comply
 
 \subsection{Installation Manual}
 
+\textbf{Connect to the already running site}
+
+The website is running on a AWS instance currently and can be observed by connecting
+to it with the followng private key to \code{ec2-user@54.215.240.112}. This box is also live
+at the address \code{hal-3900.com}.
+
+\begin{verbatim}
+-----BEGIN OPENSSH PRIVATE KEY-----
+b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAABFwAAAAdzc2gtcn
+NhAAAAAwEAAQAAAQEAr1r+/1bmOHP45RgIw9a7fqty1hPfQOmQ8MR7FFz6eWHd04f82iGP
+Q7QRNmh7d1q+dwRGSU1TwWl2l0L/7+wP/pLHtBb2e6A6YaZE632H1RllZEa10aqOJnu4He
+4wYnIaEJqUywAqgJJseh/FJRfJtgqaEL3Ew9R8K86ns5I+fX28ukLqjDMg6BYYgLrNex75
+IJhrY71MCnCAMc7slRuv46iVuXpGoEs6439Frxek2rvvBPfbCkMiXp1Z/oVnvAWHuV5ekM
+gOL2ZEXFOpRNJIi4dnjSCbcOMtf0ffdD0H519JNnffiZmFo3842+eiyxFDfegtqpJzXmzc
+acA2BN5VTwAAA9jf/YaT3/2GkwAAAAdzc2gtcnNhAAABAQCvWv7/VuY4c/jlGAjD1rt+q3
+LWE99A6ZDwxHsUXPp5Yd3Th/zaIY9DtBE2aHt3Wr53BEZJTVPBaXaXQv/v7A/+kse0FvZ7
+oDphpkTrfYfVGWVkRrXRqo4me7gd7jBichoQmpTLACqAkmx6H8UlF8m2CpoQvcTD1Hwrzq
+ezkj59fby6QuqMMyDoFhiAus17HvkgmGtjvUwKcIAxzuyVG6/jqJW5ekagSzrjf0WvF6Ta
+u+8E99sKQyJenVn+hWe8BYe5Xl6QyA4vZkRcU6lE0kiLh2eNIJtw4y1/R990PQfnX0k2d9
++JmYWjfzjb56LLEUN96C2qknNebNxpwDYE3lVPAAAAAwEAAQAAAQBJV8L940fJZuA8WdAY
+sTCcq3MNjSQ8jzRbL6LXAoiUylUwi1k7lvvH8oGcgxjY8/Bj8TrAoAIfDFBYteI8ZDzQWm
+4CqfQQAxVIEHYVFN0CSWv6BAU6G573A5ofkqdUFatHNJB1U61zN0r9zVn0yL1KUabcx7KL
+wczpuba0yb8vVv0zBvxOVqN8z40tRbbIRjYnQYlp0r5Uh6ttynXW8HL/GI3vMAT3HWo30Y
+EP04im8p/o6p1KDppod+OhW2qatVHSvR7m1lOyRBQEeRB2HNeZybqn2hfcyeHWPJtvs5Ub
+XnrXOqGW/lKcxpgz6ouvAlH26ctB6QjTofNgoOIQrudBAAAAgQClhVqtpMaVV+tU9w/S2t
+kmOvrpCyCHuk+tgpTpuPZvwLKILHbh1bXO6+bwZ1n/I8VGj5/G6c9j1ZZBJzZe/7Hrv//x
+uHPC0KQCLaX9mBvxIStMh2sz8nNUV+GPcTawkpnKXlnsSgGa2A0q1+05XGCjfvEv+92mur
+7JSlHkXe2B8AAAAIEA404P+MaQ7jyypKQ7QqXcjKJXvfLynIZbJoi/3urh4UcsEQPc6u/K
+OC6J+Fdtf/2hm/q1HePSiaX8Jxb94wMMPomJtvra6uigLXuaEMluIbG6Ph1CTQOBXYbr1+
+QqiMeTdEGBD6fDsPs5GV5rb+RYgQGC2ANByZvv/gPFPs19JG8AAACBAMV+DdYRjav23lSA
+ZRfF1LrC+WcmR/1idjyXlgKMJCP1TFPGGVhyjX5/UNZ/Hh/fOsei6pCAf/b5EXTdnrLxEQ
+C2lDBN5j2K3Ai7o0Z4yF/oetAeoynDIPRO7klKPfRG7Cc9Lj4ZVI8/IUUwL5xf0xjJ0i7G
+2eqKUr0urggAzQ0hAAAAHHphaW5AWmFpbnMtTWFjQm9vay1Qcm8ubG9jYWwBAgMEBQY=
+-----END OPENSSH PRIVATE KEY-----
+\end{verbatim}
+
+All the code is within the \code{capstone-project-hal_3900} folder, you will need upgrade yourself to root user 
+to see the docker images running.
+
+\textbf{Running it locally}
+
+\begin{enumerate}
+	\item{Download and install docker}
+	\item{Download and install docker-compose}
+	\item{Clone the git repo}
+	\item{\code{\$ cd capstone-project-hal_3900/Hal_3900}}
+	\item{\code{\$ docker-compose build}}
+	\item{\code{\$ docker-compose up}}
+\end{enumerate}
+
 \subsection{Usage Manual}
 
+\textbf{How to ask a question}
+\begin{enumerate}
+	\item {Go to site}
+	\item {Type in zid or username into text field}
+	\item {Click get started}
+	\item {Choose a course}
+	\item {Type a question}
+	\item {Get a confident answer or a set of 4 possible answers}
+	\item {You may click on the radio button next to a response to pick the best answer to help the bot learn. This is optional}
+\end{enumerate}
+
+\textbf{How to get quiz question}
+\begin{enumerate}
+	\item {Go to site}
+	\item {Type in zid or username into text field}
+	\item {Click get started}
+	\item {Choose comp1521}
+	\item {Type 'quiz me' or 'quiz me on <topic>' such as 'quiz me on processes'}
+	\item {Get a quiz question with a hidden answer you can reveal by clicking on the eye icon }
+	\item {You may click on yes or no underneath the quiz question asking you if you got it right to help train the bot about your skills and weaknesses. This is optional}
+\end{enumerate}
+
+\textbf{How to add/remove a quiz question}
+\begin{enumerate}
+	\item {Go to site}
+	\item {Click on 'click here' after 'Looking for the admin login?'}
+	\item {Register with any username and password}
+	\item {Underneath 'Course Management' click on the dropdown and select COMP1521}
+	\item {Underneath 'COMP1521 quiz questions' add a question and answer in the text box at the bottom of the card}
+	\item {Click on the plus icon to add the question}
+	\item {You may click on the minus icon next to any item in the question view to also remove it from the quiz set}
+\end{enumerate}
+
+\textbf{How to view course statistics}
+\begin{enumerate}
+	\item {Go to site}
+	\item {Click on 'click here' after 'Looking for the admin login?'}
+	\item {Register with any username and password}
+	\item {Underneath 'Course Management' see a set of cards and labelled graphs outlining various metrics of the bots use}
+\end{enumerate}
+
+\textbf{How to adjust the bot's settings}
+\begin{enumerate}
+	\item {Go to site}
+	\item {Click on 'click here' after 'Looking for the admin login?'}
+	\item {Underneath 'Course Management' click on the dropdown and select COMP1521}
+	\item {Underneath the 'COMP1521 Settings' card find the confidence thresholdwhich can be adjusted to reduce or increase the score data points need to be considered the correct answer for a question}
+	\item {Underneath the 'COMP1521 Settings' card find the training sensitivty which can be adjusted to reduce or increase how dramatically a single feedback item adjusts the relevant tags values}
+	\item {Drag the slider for either item to adjust the value and click save to submit the new values to the database}
+\end{enumerate}
+
+\textbf{How to launch new course}
+\begin{enumerate}
+	\item {Go to site}
+	\item {Click on 'click here' after 'Looking for the admin login?'}
+	\item {Register with any username and password}
+	\item {Underneath 'Set up a new course' at the bottom of the page find a set of input fields}
+	\item {Enter 'COMP1531' into the Course Code Field}
+	\item {Enter 'Software Engineering Fundamentals' into the Course Name Field}
+	\item {Enter \code{https://webcms3.cse.unsw.edu.au/COMP1531/18s2/forums/} into the Course Forum Link}
+	\item {Enter \code{https://webcms3.cse.unsw.edu.au/COMP1531/18s2/outline} into the Course Outline Link}
+	\item {Enter 'Group Project' into the first assignments name field}
+	\item {Enter \code{https://webcms3.cse.unsw.edu.au/static/uploads/course/COMP1531/18s2/6699946af50e333982f75ee950d3a6ff4e7f0002f0007b44f0292cf6331612b4/18s2_group_project_specification.html} into the first assignments link field}
+	\item {Enter 'tutorial_1' into the first content pages name field}
+	\item {Enter \code{https://webcms3.cse.unsw.edu.au/static/uploads/course/COMP1531/18s2/56d53d7e237e58b41efbd2f87bd2e0571b577bf69f0d1ac8fbda8429ef9b3350/1531_week_01_Tutorial.html} into the first content pages link field}	
+	\item {Click 'Submit Course' at the bottom of the page ONCE}
+	\item {Please allow 5 minutes for the backend to scrape all the pages and commit the data}
+\end{enumerate}
+
 \subsection{Source Code Structure}
-Our root directory contains a number of directories. Each corresponds to a certain component of our system. They can be thought of as a collection of standalone modules. These are \textbf{Backend}, \textbf{Frontend}, \textbf{Data\_Extraction}, \textbf{Database}, \textbf{Dialogflow} and \textbf{IR}.
+Our root directory contains a number of directories. Each corresponds to a certain component of our system. They can be thought of as a collection of standalone modules. These are \textbf{Backend}, \textbf{Frontend}, \textbf{Data\_Extraction}, \textbf{Database} and \textbf{Dialogflow}.
 
 \textbf{Backend}
 
-\code{index.js} is the main file for the backend which gets run when the system starts. All other files are its modules. \code{bot.js} contains the actual chat bot module, described in section 4.1.
+\code{Dockerfile} dockerfile to install and launch the backend in a isolated container
 
-\code{router} contains files that deal with the routes of the backend. \code{routes/talk.js} is the module that handles the web socket that the chat bot runs on. \code{routes/router.js} defines all of the routes (paths) for access, including the web socket and all of the API paths.
+\code{server/index.js} is the main file for the backend which gets run when the system starts. All other files are its modules. \code{server/bot.js} contains the actual chat bot module, described in section 4.1.
 
-The API modules are stored in \code{routes/api}. \code{routes/api/users.js} handles the API functions for users (fetching users, logging in/registering) and \code{routes/api/quiz.js} contains the API functions dealing with the quiz feature.
+\code{server/router} contains files that deal with the routes of the backend. \code{server/routes/talk.js} is the module that handles the web socket that the chat bot runs on. \code{server/routes/router.js} defines all of the routes (paths) for access, including the web socket and all of the API paths.
+
+The API modules are stored in \code{server/routes/api}. \code{server/routes/api/users.js} handles the API functions for users (fetching users, logging in/registering) and \code{server/routes/api/quiz.js} contains the API functions dealing with the quiz feature.
 
 \textbf{Frontend}
 
+\code{Dockerfile} dockerfile to install and launch the frontend in a isolated container
+
+\code{src/store.ts} is the vuex store for the frontend which defines all the information the frontend has on hand, any update to this central store will trigger relevant items to update.
+
+\code{src/views} contains all the pages the frontend has
+
+\code{src/components} contains all the reusable components that various pages on the frontend use
+
+\code{src/components/messages} contains all the possible message types which the frontend can display
+
 \textbf{Data\_Extraction}
+
+\code{src/data_extraction/data_extraction.js} is the main file for extracting course data and putting it in the Database
+
+\code{src/data_extraction/scrape.js} retrieves the course webpages and sends off the html for processing
+
+\code{src/data_extraction/process.js} takes the html from webpages and extracts all the relevant text from course pages and forum posts
+
+\code{src/data_extraction/tfidf.js} is main file to build model and calculate sailences of tags, also returns tag list to update the dialogflow project 
+
+\code{src/data_extraction/DFUpdate.js} update entities for the dialogflow project according to the input tag list
+
+\code{src/data_extraction/DFOperation.js} is used to access the dialogflow project to check intents and entities
+
+\code{src/data_extraction/getDataType.js} is used to construct data objects in a set schema
 
 \textbf{Database}
 
+\code{Dockerfile} dockerfile to lauch a mongodb instance within the internal docker network.
+
 \textbf{Dialogflow}
 
-\textbf{IR}
+\code{webhook/firebaseFulfillment/index.js} make the dialogflow project returns an array of keywords
+
