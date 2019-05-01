@@ -30,4 +30,6 @@ Another roadblock we hit was during deployment. Our frontend and backend run on 
 \subsection{Improvements}
 One of the main deficiencies of our current system is that it relies on a predetermined list of keywords. If it receives queries that do not contain words in this list, it will be unable to handle the request. In its current state, the system is unable to provide any meaningful information about this beyond counting the number of occurrences. For further development, it would be possible to parse the user input periodically with our wordbag algorithm to potentially create new entities for Dialogflow.
 
+Another area for improvement is the course statistics. The current implementation is quite basic and only keeps track of a cumulative set of data over the duration of the course. It would be more beneficial to course staff to provide options for this, such as tracking them by week. This could further be extended to generate notifications for course staff, for example by requesting more time be spent on topics students are having trouble with (perhaps by highlighting quiz questions that were frequently answered incorrectly).
+
 \newpage

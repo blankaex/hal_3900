@@ -36,6 +36,27 @@ The primary technologies used in development of this system can be found below, 
 
 The license for each of the dependencies is provided with the software to comply with the requirements of their use. The dependency manager \code{npm} handles this in deployment.
 
-\subsection{Manual}
+\subsection{Installation Manual}
+
+\subsection{Usage Manual}
 
 \subsection{Source Code Structure}
+Our root directory contains a number of directories. Each corresponds to a certain component of our system. They can be thought of as a collection of standalone modules. These are \textbf{Backend}, \textbf{Frontend}, \textbf{Data\_Extraction}, \textbf{Database}, \textbf{Dialogflow} and \textbf{IR}.
+
+\textbf{Backend}
+
+\code{index.js} is the main file for the backend which gets run when the system starts. All other files are its modules. \code{bot.js} contains the actual chat bot module, described in section 4.1.
+
+\code{router} contains files that deal with the routes of the backend. \code{routes/talk.js} is the module that handles the web socket that the chat bot runs on. \code{routes/router.js} defines all of the routes (paths) for access, including the web socket and all of the API paths.
+
+The API modules are stored in \code{routes/api}. \code{routes/api/users.js} handles the API functions for users (fetching users, logging in/registering) and \code{routes/api/quiz.js} contains the API functions dealing with the quiz feature.
+
+\textbf{Frontend}
+
+\textbf{Data\_Extraction}
+
+\textbf{Database}
+
+\textbf{Dialogflow}
+
+\textbf{IR}
