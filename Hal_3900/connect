@@ -1,0 +1,3 @@
+#/bin/bash
+
+ssh -i key ec2-user@54.215.240.112
