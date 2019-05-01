@@ -1,0 +1,34 @@
+\section{Conclusion}
+\subsection{How Existing Problems Were Addressed}
+Section 1 highlights three main problems with the existing system of hiring tutors to answer student questions. Our solution addresses all of these problems to a high degree.
+
+\subsubsection{Responses to students are delayed.}
+When a student wants to ask about something related to the course, they would typically have to email their tutor or a lecturer, or post on the course forum. Alternatively, they would have to wait until a lecture or tutorial to ask the question in person. As course staff are not constantly available, there is often a time lag between when a question comes up and when it is answered, which ranges from hours to days.
+
+Our system solves this problem by virtue of being a chat bot. It is hosted live on an \code{EC2} instance from Amazon Web Services, and is running around the clock. Students can ask questions at any time of the day, and receive an instantaneous response, effectively eliminating any and all human delay.
+
+\subsubsection{Tutors have a limited amount of time.}
+Casual tutors are typically only paid for one hour of associated work per class. Lecturers are also not expected to spend every waking moment attending to their course. As such, there are often times when many student queries go unanswered due to lack of time, or also simple negligence. This is true especially in times of spikes in question frequency, particularly around exam period or assignment due dates.
+
+This problem has also been addressed by our system. Our bot is able to process any reasonable number of student queries, as it opens a separate web socket for each connection. This allows it to respond to all queries it receives without fail.
+
+\subsubsection{Hiring tutors costs money.}
+With growing cohort size, it becomes difficult to fund a large number of tutors to handle an exponentially growing number of student queries. Many courses are already having trouble with funding and have had to cut back on the number of tutors they hire, or the amount of work they assign to them.
+
+Similarly, this problem is also solved by our system. The only upkeep cost for our system is a few dollars of AWS credits (several hundred of which are given to academic staff for free, from Amazon). The system is effectively free to run, and does not even contribute to the electricity bill due to it being hosted by Amazon. Despite this, it is able to handle a large proportion of the work that previously required paid tutors.
+
+\subsection{Challenges}
+The first challenge we faced when developing our system came about when we were looking for a solution to process the data from the required source, webcms3. As mentioned in section 2.2.2, the structure of the data on the webpage proved difficult to extract, and we had to build our own solution to address this issue. The details of this solution can be found in section 3.
+
+We were also using Google NLP originally, but as our data set grew larger, we noticed a significant decrease in performance. This affected the real time experience that we wanted to deliver to users, so we ended up designing our own NLP algorithm. This algorithm is described in section 4.1.
+
+Another roadblock we hit was during deployment. Our frontend and backend run on \code{hal-3900.com} and \code{backend.hal-3900.com} respectively, but both reference a different server. To resolve this, we needed to configure \code{Apache} to direct the traffic of each domain to the corresponding \code{Docker} container. This posed issues as \code{Apache} assumed an \code{HTTP} protocol, but web sockets run on an entirely different protocol. After much struggle, we managed to solve this by rewriting a rule to specifically find the web socket endpoint and change its protocol to \code{ws}.
+
+\subsection{Improvements}
+One of the main deficiencies of our current system is that it relies on a predetermined list of keywords. If it receives queries that do not contain words in this list, it will be unable to handle the request. In its current state, the system is unable to provide any meaningful information about this beyond counting the number of occurrences. For further development, it would be possible to parse the user input periodically with our wordbag algorithm to potentially create new entities for Dialogflow.
+
+Another area for improvement is the course statistics. The current implementation is quite basic and only keeps track of a cumulative set of data over the duration of the course. It would be more beneficial to course staff to provide options for this, such as tracking them by week. This could further be extended to generate notifications for course staff, for example by requesting more time be spent on topics students are having trouble with (perhaps by highlighting quiz questions that were frequently answered incorrectly).
+
+The chat bot is also somewhat limited by its provided data set. We chose to only use course data given in webcms3, as we only wanted to include information officially endorsed by the course  conveners. Using external data sources also introduces a lot of noise (irrelevant data), which would affect the accuracy of our bot's responses. However, this has the drawback of restricting the amount of data the bot has access to. In the future, it would be be useful to include the option to add additional data sources.
+
+\newpage
