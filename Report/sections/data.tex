@@ -33,6 +33,11 @@ The server is created with \code{Node.js}. The data extraction makes use of asyn
 
 We also use the \code{cheerio js} library, as it provides tools to parse \code{HTML} into usable data.
 
+To extract tags (keywords) from text data, we used the bag of words model with the tf-idf algorithm. This generated tags by only considering the frequency of words in the entire set of text data, and allowed us to calculate the salience (importance) of each tag to each individual text data point. Each tag receives two scores: salience (the importance of the tag according to the tf-idf algorithm), and theta (a trainable value which is initialized as the same value as salience).
+
+This was chosen over the Google Cloud NLP's keyword extraction module because the latter occasionally missed important tags, and also because it calculated the salience such that the sum of one data point will be one. This is not ideal for our system, as long sentences will tend to have a lower salience and be less likely to be presented to users. Instead, the tf-idf algorithm that we implemented suits our use case better, as it does not miss any tags for our data points, and also assigns a lower salience to common words, which helps us calculate accurate scores for each data point.
+
+
 \code{MongoDB} is used for the database. It is the most appropriate software to handle the unstructured data that we deal with.
 
 \newpage
